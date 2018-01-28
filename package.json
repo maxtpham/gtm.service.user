@@ -1,0 +1,63 @@
+{
+  "name": "@tm/service.user",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "files": [
+    "bin",
+    "config",
+    "*.sh"
+  ],
+  "scripts": {
+    "clean": "rimraf bin/*",
+    "build": "npm run clean && npm up && tsc",
+    "b": "npm run build",
+    "debug": "ts-node --nolazy --inspect-brk=5858 src/index.ts",
+    "start": "if-env NODE_ENV=production && npm run start:prd || npm run start:dev",
+    "start:dev": "cross-env-shell NODE_ENV=development \"nodemon --watch src/**/*.ts --watch swagger/**/*.ts --watch config/*.json --exec ts-node src/index.ts\"",
+    "start:prd": "cross-env-shell NODE_ENV=production \"node bin/src/index.js\"",
+    "test": "if-env NODE_ENV=production && npm run test:prd || npm run test:dev",
+    "test:dev": "cross-env-shell NODE_ENV=development \"ts-node tests/index.ts\"",
+    "test:prd": "cross-env-shell NODE_ENV=production \"node bin/tests/index.js\"",
+    "swaggen": "rimraf ../tm.lib.client.user/src/swagger/* && call ./node_modules/@tm/lib.service/tool/swagger-codegen ./node_modules/@tm/lib.service/tool ./swagger/output/swagger.json ../tm.lib.client.user/src/swagger",
+    "swagger": "tsoa swagger && tsoa routes && npm run swaggen"
+  },
+  "keywords": [],
+  "author": "MyBestBook.NET",
+  "license": "UNLICENSED",
+  "repository": {
+    "url": "https://github.com/thanhptr/tm.service.user.git"
+  },
+  "devDependencies": {
+    "@types/config": "0.0.32",
+    "@types/debug": "0.0.29",
+    "@types/deep-equal": "^1.0.1",
+    "@types/express": "^4.11.0",
+    "@types/jsonwebtoken": "^7.2.5",
+    "@types/mongoose": "^4.7.34",
+    "@types/node": "^8.5.9",
+    "@types/passport": "^0.3.5",
+    "@types/reflect-metadata": "0.0.5",
+    "nodemon": "^1.14.11",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.2"
+  },
+  "dependencies": {
+    "@tm/lib.common": "git+ssh://git@github.com/thanhptr/tm.lib.common.git",
+    "@tm/lib.service": "git+ssh://git@github.com/thanhptr/tm.lib.service.git",
+    "@tm/lib.service.auth": "git+ssh://git@github.com/thanhptr/tm.lib.service.auth.git",
+    "config": "^1.29.2",
+    "cross-env": "^5.1.3",
+    "deep-equal": "^1.0.1",
+    "express": "^4.16.2",
+    "if-env": "^1.0.4",
+    "inversify": "^4.10.0",
+    "inversify-express-utils": "^5.2.1",
+    "jsonwebtoken": "^8.1.1",
+    "mongoose": "^4.13.9",
+    "passport": "^0.4.0",
+    "reflect-metadata": "^0.1.12",
+    "rimraf": "^2.6.2",
+    "tsoa": "^1.3.6"
+  }
+}

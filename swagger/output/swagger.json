@@ -1,0 +1,182 @@
+{
+	"basePath": "/",
+	"consumes": [
+		"application/json"
+	],
+	"definitions": {
+		"MapOfBoolean": {
+			"properties": {},
+			"type": "object",
+			"additionalProperties": {
+				"type": "boolean"
+			}
+		},
+		"JwtToken": {
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "User's display name "
+				},
+				"session": {
+					"type": "string"
+				},
+				"user": {
+					"type": "string"
+				},
+				"scope": {
+					"$ref": "#/definitions/MapOfBoolean",
+					"description": "List of scope or null is all scope (*) "
+				},
+				"expires": {
+					"type": "string",
+					"format": "date-time",
+					"description": "Valid until "
+				}
+			},
+			"required": [
+				"name",
+				"session",
+				"user",
+				"scope",
+				"expires"
+			],
+			"type": "object"
+		}
+	},
+	"info": {
+		"title": "@tm/service.user",
+		"version": "1.0.0",
+		"license": {
+			"name": "UNLICENSED"
+		}
+	},
+	"paths": {
+		"/api/v1/system/version": {
+			"post": {
+				"operationId": "SystemApiGetVersion",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "string"
+						}
+					}
+				},
+				"description": "Get current system version info ",
+				"tags": [
+					"System"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/v1/system/loggedin": {
+			"get": {
+				"operationId": "SystemApiGetLoggedin",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				},
+				"description": "Check loggedin status ",
+				"tags": [
+					"System"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/v1/session/current": {
+			"get": {
+				"operationId": "SessionApiGetCurrent",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/JwtToken"
+						}
+					}
+				},
+				"description": "Check current session info ",
+				"tags": [
+					"Session"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/v1/role/{id}": {
+			"get": {
+				"operationId": "RoleApiGetEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "object"
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		}
+	},
+	"produces": [
+		"application/json"
+	],
+	"swagger": "2.0",
+	"securityDefinitions": {
+		"jwt": {
+			"type": "oauth2",
+			"authorizationUrl": "/swagger/authorization/google",
+			"tokenUrl": "/swagger/token/google",
+			"flow": "accessCode",
+			"scopes": {
+				"admin": "Grants read and write access to administrative information",
+				"write": "Grants write access",
+				"read": "Grants read access"
+			}
+		}
+	}
+}

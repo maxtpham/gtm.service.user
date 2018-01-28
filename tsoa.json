@@ -1,0 +1,29 @@
+{
+    "swagger": {
+        "basePath": "/",
+        "entryFile": "./src/index.ts",
+        "outputDirectory": "./swagger/output",
+        "securityDefinitions": {
+            "jwt": {
+                "type": "oauth2",
+                "authorizationUrl": "/swagger/authorization/google",
+                "tokenUrl": "/swagger/token/google",
+                "flow": "accessCode",
+                "scopes": {
+                    "admin": "Grants read and write access to administrative information",
+                    "write": "Grants write access",
+                    "read": "Grants read access"
+                }
+            }
+        }
+    },
+    "routes": {
+        "basePath": "/"
+        ,"entryFile": "./src/index.ts"
+        ,"routesDir": "./swagger/output"
+        ,"middleware": "express"
+        ,"iocModule": "./swagger/index.ts"
+        ,"middlewareTemplate": "./node_modules/@tm/lib.service/tool/express.ts.handlebars"
+        ,"authenticationModule": "./swagger/index.ts"
+    }
+}
