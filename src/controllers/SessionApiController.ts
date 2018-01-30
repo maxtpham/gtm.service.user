@@ -8,7 +8,7 @@ import { Security, Tags } from "tsoa";
 import { JwtToken } from '@tm/lib.service.auth';
 
 @injectableSingleton(SessionApiController)
-@Route('api/v1/session')
+@Route('api/user/v1/session')
 export class SessionApiController extends ApiController {
 
     /** Check current session info */

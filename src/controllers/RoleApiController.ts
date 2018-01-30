@@ -9,7 +9,7 @@ import { JwtToken } from '@tm/lib.service.auth';
 import { RoleRepository, RoleRepositoryTYPE } from '../repositories/RoleRepository';
 
 @injectableSingleton(RoleApiController)
-@Route('api/v1/role')
+@Route('api/user/v1/role')
 export class RoleApiController extends ApiController {
     @inject(RoleRepositoryTYPE) private RoleRepository: RoleRepository;
 

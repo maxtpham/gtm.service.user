@@ -22,7 +22,7 @@ const models = {
     },
 };
 function RegisterRoutes(app) {
-    app.post('/api/v1/system/version', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.post('/api/user/v1/system/version', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {};
         let validatedArgs = [];
         try {
@@ -35,7 +35,7 @@ function RegisterRoutes(app) {
         const promise = controller.getVersion.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/v1/system/loggedin', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.get('/api/user/v1/system/loggedin', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
@@ -50,7 +50,7 @@ function RegisterRoutes(app) {
         const promise = controller.getLoggedin.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/v1/session/current', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.get('/api/user/v1/session/current', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
@@ -65,7 +65,7 @@ function RegisterRoutes(app) {
         const promise = controller.getCurrent.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/v1/role/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.get('/api/user/v1/role/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
         };

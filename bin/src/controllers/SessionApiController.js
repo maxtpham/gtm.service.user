@@ -42,7 +42,7 @@ __decorate([
 ], SessionApiController.prototype, "getCurrent", null);
 SessionApiController = SessionApiController_1 = __decorate([
     lib_common_1.injectableSingleton(SessionApiController_1),
-    tsoa_1.Route('api/v1/session')
+    tsoa_1.Route('api/user/v1/session')
 ], SessionApiController);
 exports.SessionApiController = SessionApiController;
 var SessionApiController_1;

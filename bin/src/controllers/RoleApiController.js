@@ -46,7 +46,7 @@ __decorate([
 ], RoleApiController.prototype, "getEntity", null);
 RoleApiController = RoleApiController_1 = __decorate([
     lib_common_1.injectableSingleton(RoleApiController_1),
-    tsoa_1.Route('api/v1/role')
+    tsoa_1.Route('api/user/v1/role')
 ], RoleApiController);
 exports.RoleApiController = RoleApiController;
 var RoleApiController_1;

@@ -22,7 +22,7 @@ const models: TsoaRoute.Models = {
 };
 
 export function RegisterRoutes(app: any) {
-    app.post('/api/v1/system/version',
+    app.post('/api/user/v1/system/version',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -41,7 +41,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getVersion.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/v1/system/loggedin',
+    app.get('/api/user/v1/system/loggedin',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -61,7 +61,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getLoggedin.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/v1/session/current',
+    app.get('/api/user/v1/session/current',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -81,7 +81,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getCurrent.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/v1/role/:id',
+    app.get('/api/user/v1/role/:id',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {

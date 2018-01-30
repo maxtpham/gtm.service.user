@@ -55,7 +55,7 @@ __decorate([
 ], SystemApiController.prototype, "getLoggedin", null);
 SystemApiController = SystemApiController_1 = __decorate([
     lib_common_1.injectableSingleton(SystemApiController_1),
-    tsoa_1.Route('api/v1/system')
+    tsoa_1.Route('api/user/v1/system')
 ], SystemApiController);
 exports.SystemApiController = SystemApiController;
 var SystemApiController_1;

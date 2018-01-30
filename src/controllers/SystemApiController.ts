@@ -8,7 +8,7 @@ import { Security, Tags } from "tsoa";
 import { JwtToken } from '@tm/lib.service.auth';
 
 @injectableSingleton(SystemApiController)
-@Route('api/v1/system')
+@Route('api/user/v1/system')
 export class SystemApiController extends ApiController {
 
     /** Get current system version info */
