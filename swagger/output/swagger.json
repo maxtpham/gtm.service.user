@@ -53,7 +53,7 @@
 	"paths": {
 		"/api/user/v1/system/version": {
 			"post": {
-				"operationId": "SystemApiGetVersion",
+				"operationId": "GetVersion",
 				"produces": [
 					"application/json"
 				],
@@ -79,7 +79,7 @@
 		},
 		"/api/user/v1/system/loggedin": {
 			"get": {
-				"operationId": "SystemApiGetLoggedin",
+				"operationId": "GetLoggedin",
 				"produces": [
 					"application/json"
 				],
@@ -105,7 +105,7 @@
 		},
 		"/api/user/v1/session/current": {
 			"get": {
-				"operationId": "SessionApiGetCurrent",
+				"operationId": "GetCurrent",
 				"produces": [
 					"application/json"
 				],
@@ -131,7 +131,7 @@
 		},
 		"/api/user/v1/role/{id}": {
 			"get": {
-				"operationId": "RoleApiGetEntity",
+				"operationId": "GetEntity",
 				"produces": [
 					"application/json"
 				],
