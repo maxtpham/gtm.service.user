@@ -58,6 +58,7 @@
     "passport": "^0.4.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
-    "tsoa": "thanhptr/tsoa"
+    "tsoa": "thanhptr/tsoa",
+    "yarn": "^1.3.2"
   }
 }

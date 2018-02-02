@@ -19,6 +19,28 @@ const models: TsoaRoute.Models = {
             "expires": { "dataType": "datetime", "required": true },
         },
     },
+    "RoleEntity": {
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "scope": { "dataType": "string" },
+            "_id": { "dataType": "any", "required": true },
+            "created": { "dataType": "datetime" },
+            "updated": { "dataType": "datetime" },
+            "deleted": { "dataType": "datetime" },
+        },
+    },
+    "RoleViewWithPagination": {
+        "properties": {
+            "roles": { "dataType": "array", "array": { "ref": "RoleEntity" }, "required": true },
+            "totalItems": { "dataType": "double", "required": true },
+        },
+    },
+    "RoleView": {
+        "properties": {
+            "code": { "dataType": "string", "required": true },
+            "scope": { "dataType": "string", "required": true },
+        },
+    },
 };
 
 export function RegisterRoutes(app: any) {
@@ -81,6 +103,28 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getCurrent.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.get('/api/user/v1/role',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                query: { "in": "query", "name": "query", "dataType": "string" },
+                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<RoleApiController>(RoleApiController);
+
+
+            const promise = controller.getEntities.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
     app.get('/api/user/v1/role/:id',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
@@ -99,6 +143,67 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.getEntity.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/role',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                roleView: { "in": "body", "name": "roleView", "required": true, "ref": "RoleView" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<RoleApiController>(RoleApiController);
+
+
+            const promise = controller.createEntity.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.put('/api/user/v1/role/:id',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+                roleView: { "in": "body", "name": "roleView", "required": true, "ref": "RoleView" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<RoleApiController>(RoleApiController);
+
+
+            const promise = controller.updateEntity.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.delete('/api/user/v1/role/:id',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<RoleApiController>(RoleApiController);
+
+
+            const promise = controller.deleteEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
 

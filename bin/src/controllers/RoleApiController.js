@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -24,11 +27,59 @@ const lib_service_1 = require("@tm/lib.service");
 const tsoa_2 = require("tsoa");
 const RoleRepository_1 = require("../repositories/RoleRepository");
 let RoleApiController = RoleApiController_1 = class RoleApiController extends lib_service_1.ApiController {
+    /** Get Roles */
+    getEntities(query, pageNumber, itemCount) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let queryToEntities = !!query ? { code: query, scope: query, deleted: null } : { deleted: null };
+            let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            if (roles) {
+                let roleTotalItem = yield this.RoleRepository.find({});
+                let roleViews = { roles, totalItems: roleTotalItem.length };
+                return Promise.resolve(roleViews);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
+    /** Get Role by Id */
     getEntity(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let role = yield this.RoleRepository.findOneById(id);
             if (role) {
                 return Promise.resolve(role);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
+    /** Create New Role */
+    createEntity(roleView) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let role = yield this.RoleRepository.save({ name: roleView.code, scope: roleView.scope });
+            if (role) {
+                return Promise.resolve(yield this.RoleRepository.findOneById(role._id));
+            }
+            if (role instanceof Error) {
+                return Promise.reject('Error');
+            }
+        });
+    }
+    /** Update Role */
+    updateEntity(id, roleView) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { name: roleView.code, scope: roleView.scope });
+            if (role) {
+                return Promise.resolve(yield this.RoleRepository.findOneById(role._id));
+            }
+            if (role instanceof Error) {
+                return Promise.reject('Error');
+            }
+        });
+    }
+    /** Delete Role */
+    deleteEntity(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: new Date() });
+            if (role) {
+                return Promise.resolve();
             }
             return Promise.reject(`Not found.`);
         });
@@ -39,11 +90,38 @@ __decorate([
     __metadata("design:type", Object)
 ], RoleApiController.prototype, "RoleRepository", void 0);
 __decorate([
+    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Get(),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:returntype", Promise)
+], RoleApiController.prototype, "getEntities", null);
+__decorate([
     tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Get('{id}'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RoleApiController.prototype, "getEntity", null);
+__decorate([
+    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Post(),
+    __param(0, tsoa_1.Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], RoleApiController.prototype, "createEntity", null);
+__decorate([
+    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Put('{id}'),
+    __param(1, tsoa_1.Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], RoleApiController.prototype, "updateEntity", null);
+__decorate([
+    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Delete('{id}'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RoleApiController.prototype, "deleteEntity", null);
 RoleApiController = RoleApiController_1 = __decorate([
     lib_common_1.injectableSingleton(RoleApiController_1),
     tsoa_1.Route('api/user/v1/role')

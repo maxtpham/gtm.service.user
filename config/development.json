@@ -1,8 +1,9 @@
 {
+    "host": "sc.dev",
     "port": 3001,
     "mongo": "mongodb://localhost/test",
-    "cors": [ "http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://localhost:3004", "http://localhost:3005", "http://localhost:4000", "http://localhost:4001", "http://localhost:4002", "http://localhost:4003", "http://localhost:4004", "http://localhost:4005" ],
-    "returnUrl": "http://localhost:3000/bin/dev/",
+    "cors": [ "http://sc.dev:3000", "http://sc.dev:3001", "http://sc.dev:3002", "http://sc.dev:3003", "http://sc.dev:3004", "http://sc.dev:3005", "http://sc.dev:4000", "http://sc.dev:4001", "http://sc.dev:4002", "http://sc.dev:4003", "http://sc.dev:4004", "http://sc.dev:4005" ],
+    "returnUrl": "http://sc.dev:3000/bin/dev/",
     "auth": {
         "google": {
             "options": {

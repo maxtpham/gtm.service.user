@@ -41,6 +41,72 @@
 				"expires"
 			],
 			"type": "object"
+		},
+		"RoleEntity": {
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"scope": {
+					"type": "string"
+				},
+				"_id": {
+					"type": "object"
+				},
+				"created": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"updated": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"deleted": {
+					"type": "string",
+					"format": "date-time"
+				}
+			},
+			"required": [
+				"name",
+				"_id"
+			],
+			"type": "object"
+		},
+		"RoleViewWithPagination": {
+			"properties": {
+				"roles": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/RoleEntity"
+					}
+				},
+				"totalItems": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"roles",
+				"totalItems"
+			],
+			"type": "object"
+		},
+		"RoleView": {
+			"properties": {
+				"code": {
+					"type": "string",
+					"description": "role code "
+				},
+				"scope": {
+					"type": "string",
+					"description": "role scope "
+				}
+			},
+			"required": [
+				"code",
+				"scope"
+			],
+			"type": "object"
 		}
 	},
 	"info": {
@@ -129,6 +195,86 @@
 				"parameters": []
 			}
 		},
+		"/api/user/v1/role": {
+			"get": {
+				"operationId": "GetEntities",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/RoleViewWithPagination"
+						}
+					}
+				},
+				"description": "Get Roles ",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "pageNumber",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/RoleEntity"
+						}
+					}
+				},
+				"description": "Create New Role ",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "roleView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/RoleView"
+						}
+					}
+				]
+			}
+		},
 		"/api/user/v1/role/{id}": {
 			"get": {
 				"operationId": "GetEntity",
@@ -139,10 +285,78 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"type": "object"
+							"$ref": "#/definitions/RoleEntity"
 						}
 					}
 				},
+				"description": "Get Role by Id ",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/RoleEntity"
+						}
+					}
+				},
+				"description": "Update Role ",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "roleView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/RoleView"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete Role ",
 				"tags": [
 					"Role"
 				],
