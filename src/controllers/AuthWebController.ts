@@ -88,7 +88,7 @@ export class AuthWebController extends WebController {
                 try {
                     const sessionEntity = await this.SessionRepository.findOneById(session.id);
                     const jwtToken = this.AuthService.toJwtToken(sessionEntity);
-                    const cookieValue = jwt.sign(jwtToken, (<IOAuth2Config>config).jwt.secret, { expiresIn: Math.round((jwtToken.expires.getTime() - new Date().getTime()) / 1000) });
+                    const cookieValue = jwt.sign(jwtToken, (<IOAuth2Config>config).jwt.secret, { expiresIn: Math.round((jwtToken.expires - Date.now()) / 1000) });
                     res.send(cookieValue);
                 } catch (e) {
                     console.error(`Error while building the jwt token from userSession: ${session.id}`, e);

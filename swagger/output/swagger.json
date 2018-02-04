@@ -28,8 +28,8 @@
 					"description": "List of scope or null is all scope (*) "
 				},
 				"expires": {
-					"type": "string",
-					"format": "date-time",
+					"type": "number",
+					"format": "double",
 					"description": "Valid until "
 				}
 			},
@@ -54,16 +54,16 @@
 					"type": "object"
 				},
 				"created": {
-					"type": "string",
-					"format": "date-time"
+					"type": "number",
+					"format": "double"
 				},
 				"updated": {
-					"type": "string",
-					"format": "date-time"
+					"type": "number",
+					"format": "double"
 				},
 				"deleted": {
-					"type": "string",
-					"format": "date-time"
+					"type": "number",
+					"format": "double"
 				}
 			},
 			"required": [

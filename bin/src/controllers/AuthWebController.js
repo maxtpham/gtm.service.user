@@ -92,7 +92,7 @@ let AuthWebController = class AuthWebController extends lib_service_1.WebControl
                     try {
                         const sessionEntity = yield this.SessionRepository.findOneById(session.id);
                         const jwtToken = this.AuthService.toJwtToken(sessionEntity);
-                        const cookieValue = jwt.sign(jwtToken, AppConfig_1.default.jwt.secret, { expiresIn: Math.round((jwtToken.expires.getTime() - new Date().getTime()) / 1000) });
+                        const cookieValue = jwt.sign(jwtToken, AppConfig_1.default.jwt.secret, { expiresIn: Math.round((jwtToken.expires - Date.now()) / 1000) });
                         res.send(cookieValue);
                     }
                     catch (e) {

@@ -48,7 +48,7 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
             scope: this.toJwtScope(session.scope),
             session: session._id.toHexString(),
             user: session.userId.toHexString(),
-            expires: new Date(session.created.getTime() + (session.expiresIn || 2592000) * 1000) // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
+            expires: (session.created + (session.expiresIn || 2592000) * 1000) // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
         };
     }
     toJwtScope(sessionScope) {
@@ -72,7 +72,7 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
         return __awaiter(this, void 0, void 0, function* () {
             // Find the session with provided accessToken then restore in case user lost the current working token,but Provider still detect then return old token
             let session = yield this.SessionRepository.findOneAndUpdate({ code: accessToken }, {
-                updated: new Date(),
+                updated: Date.now(),
                 provider: {
                     refresh_token: refreshToken,
                     expires_in: providerSession.expires_in

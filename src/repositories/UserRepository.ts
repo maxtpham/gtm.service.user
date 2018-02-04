@@ -27,8 +27,8 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
 
     public async getByProfile(profile: passport.Profile): Promise<UserEntity> {
         // Find & update the user by code (profile.id)
-        const tempUser = <UserEntity>{ updated: new Date(), profiles: { } };
-        tempUser.updated = new Date();
+        const tempUser = <UserEntity>{ updated: Date.now(), profiles: { } };
+        tempUser.updated = Date.now();
         tempUser.name = profile.displayName;
         tempUser.profiles[profile.provider] = (<any>profile)._json;
         let user: UserEntity;
@@ -38,12 +38,12 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             let updatedUser: UserEntity = <UserEntity>{ };
             if (users[0].name !== tempUser.name) {
                 updatedUser.name = tempUser.name;
-                updatedUser.updated = new Date();
+                updatedUser.updated = Date.now();
             }
             if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], tempUser.profiles[profile.provider], { strict: true })) {
                 updatedUser.profiles = { };
                 updatedUser.profiles[profile.provider] = tempUser.profiles[profile.provider];
-                updatedUser.updated = new Date();
+                updatedUser.updated = Date.now();
             }
             user = !updatedUser.updated ? users[0] : await (<UserRepository>this).findOneAndUpdate({ _id: users[0]._id }, updatedUser);
             if (updatedUser.updated) {

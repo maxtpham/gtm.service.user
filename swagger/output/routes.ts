@@ -16,7 +16,7 @@ const models: TsoaRoute.Models = {
             "session": { "dataType": "string", "required": true },
             "user": { "dataType": "string", "required": true },
             "scope": { "ref": "MapOfBoolean", "required": true },
-            "expires": { "dataType": "datetime", "required": true },
+            "expires": { "dataType": "double", "required": true },
         },
     },
     "RoleEntity": {
@@ -24,9 +24,9 @@ const models: TsoaRoute.Models = {
             "name": { "dataType": "string", "required": true },
             "scope": { "dataType": "string" },
             "_id": { "dataType": "any", "required": true },
-            "created": { "dataType": "datetime" },
-            "updated": { "dataType": "datetime" },
-            "deleted": { "dataType": "datetime" },
+            "created": { "dataType": "double" },
+            "updated": { "dataType": "double" },
+            "deleted": { "dataType": "double" },
         },
     },
     "RoleViewWithPagination": {

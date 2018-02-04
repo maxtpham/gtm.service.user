@@ -34,8 +34,8 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
     getByProfile(profile) {
         return __awaiter(this, void 0, void 0, function* () {
             // Find & update the user by code (profile.id)
-            const tempUser = { updated: new Date(), profiles: {} };
-            tempUser.updated = new Date();
+            const tempUser = { updated: Date.now(), profiles: {} };
+            tempUser.updated = Date.now();
             tempUser.name = profile.displayName;
             tempUser.profiles[profile.provider] = profile._json;
             let user;
@@ -45,12 +45,12 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
                 let updatedUser = {};
                 if (users[0].name !== tempUser.name) {
                     updatedUser.name = tempUser.name;
-                    updatedUser.updated = new Date();
+                    updatedUser.updated = Date.now();
                 }
                 if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], tempUser.profiles[profile.provider], { strict: true })) {
                     updatedUser.profiles = {};
                     updatedUser.profiles[profile.provider] = tempUser.profiles[profile.provider];
-                    updatedUser.updated = new Date();
+                    updatedUser.updated = Date.now();
                 }
                 user = !updatedUser.updated ? users[0] : yield this.findOneAndUpdate({ _id: users[0]._id }, updatedUser);
                 if (updatedUser.updated) {

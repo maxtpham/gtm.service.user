@@ -46,7 +46,7 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
             scope: this.toJwtScope(session.scope),
             session: (<mongoose.Types.ObjectId>session._id).toHexString(),
             user: session.userId.toHexString(),
-            expires: new Date(session.created.getTime() + (session.expiresIn || 2592000) * 1000) // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
+            expires: (session.created + (session.expiresIn || 2592000) * 1000) // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
         };
     }
 
@@ -70,7 +70,7 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
     public async createSession(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile): Promise<SessionEntity> {
         // Find the session with provided accessToken then restore in case user lost the current working token,but Provider still detect then return old token
         let session = await this.SessionRepository.findOneAndUpdate({ code: accessToken }, <SessionEntity>{
-            updated: new Date(),
+            updated: Date.now(),
             provider: {
                 refresh_token: refreshToken,
                 expires_in: providerSession.expires_in

@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@tm/lib.common@git+ssh://git@github.com/thanhptr/tm.lib.common.git":
+"@tm/lib.common@thanhptr/tm.lib.common":
   version "1.0.0"
-  resolved "git+ssh://git@github.com/thanhptr/tm.lib.common.git#ae53d95dd73eb33f5e52ba80f0b3ea4dbcd816d0"
+  resolved "https://codeload.github.com/thanhptr/tm.lib.common/tar.gz/f8b07922bfa6860d4e2c1540a52be58c6ea78c1d"
   dependencies:
     inversify "^4.10.0"
     inversify-binding-decorators "^3.2.0"
@@ -12,12 +12,12 @@
     reflect-metadata "^0.1.12"
     rimraf "^2.6.2"
 
-"@tm/lib.service.auth@git+ssh://git@github.com/thanhptr/tm.lib.service.auth.git":
+"@tm/lib.service.auth@thanhptr/tm.lib.service.auth":
   version "1.0.0"
-  resolved "git+ssh://git@github.com/thanhptr/tm.lib.service.auth.git#a2d052ae47150f8a7daf628a161b550c94d78c62"
+  resolved "https://codeload.github.com/thanhptr/tm.lib.service.auth/tar.gz/7008a67453bd056f081993330c82895b7a89376d"
   dependencies:
-    "@tm/lib.common" "git+ssh://git@github.com/thanhptr/tm.lib.common.git"
-    "@tm/lib.service" "git+ssh://git@github.com/thanhptr/tm.lib.service.git"
+    "@tm/lib.common" thanhptr/tm.lib.common
+    "@tm/lib.service" thanhptr/tm.lib.service
     express "^4.16.2"
     jsonwebtoken "^8.1.1"
     passport "^0.4.0"
@@ -30,13 +30,13 @@
     rimraf "^2.6.2"
     swagger-ui-dist "^3.9.3"
 
-"@tm/lib.service@git+ssh://git@github.com/thanhptr/tm.lib.service.git":
+"@tm/lib.service@thanhptr/tm.lib.service":
   version "1.0.0"
-  resolved "git+ssh://git@github.com/thanhptr/tm.lib.service.git#8f4fcf5a2c10f39b47ca74baca009ea7d833fc04"
+  resolved "https://codeload.github.com/thanhptr/tm.lib.service/tar.gz/efca0696430a7f4160922c9f1461c57f29ee0c7b"
   dependencies:
-    "@tm/lib.common" "git+ssh://git@github.com/thanhptr/tm.lib.common.git"
+    "@tm/lib.common" thanhptr/tm.lib.common
     body-parser "^1.18.2"
-    config "^1.29.2"
+    config "^1.29.4"
     cookie-parser "^1.4.3"
     express "^4.16.2"
     inversify "^4.10.0"
@@ -89,8 +89,8 @@
     "@types/node" "*"
 
 "@types/express@*", "@types/express@^4.11.0":
-  version "4.11.0"
-  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.11.0.tgz#234d65280af917cb290634b7a8d6bcac24aecbad"
+  version "4.11.1"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.11.1.tgz#f99663b3ab32d04cb11db612ef5dd7933f75465b"
   dependencies:
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "*"
@@ -146,6 +146,14 @@
   dependencies:
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
+
+"@types/strip-bom@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/strip-bom/-/strip-bom-3.0.0.tgz#14a8ec3956c2e81edb7520790aecf21c290aebd2"
+
+"@types/strip-json-comments@0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@types/strip-json-comments/-/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
 
 abbrev@1:
   version "1.1.1"
@@ -707,7 +715,7 @@ center-align@^0.1.1:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
 
-chalk@^2.0.0, chalk@^2.0.1:
+chalk@^2.0.1, chalk@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.3.0.tgz#b5ea48efc9c1793dccc9b4767c93914d3f2d52ba"
   dependencies:
@@ -808,9 +816,9 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
-config@^1.29.2:
-  version "1.29.2"
-  resolved "https://registry.yarnpkg.com/config/-/config-1.29.2.tgz#2ebdc92639eb9d06fffd302f1ee32e2ad0e94e11"
+config@^1.29.2, config@^1.29.4:
+  version "1.29.4"
+  resolved "https://registry.yarnpkg.com/config/-/config-1.29.4.tgz#1b42752ed86b363fc4025960569fd74978862a92"
   dependencies:
     json5 "0.4.0"
     os-homedir "1.0.2"
@@ -2059,8 +2067,8 @@ lodash.once@^4.0.0:
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
 
 lodash@^4.13.1, lodash@^4.14.0:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+  version "4.17.5"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
 
 log-ok@^0.1.1:
   version "0.1.1"
@@ -2182,8 +2190,8 @@ mime@1.4.1:
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.4.1.tgz#121f9ebc49e3766f311a76e1fa1c8003c4b03aa6"
 
 mimic-fn@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-1.1.0.tgz#e667783d92e89dbd342818b5230b9d62a672ad18"
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-1.2.0.tgz#820c86a39334640e99516928bd03fca88057d022"
 
 minimatch@^3.0.0, minimatch@^3.0.2, minimatch@^3.0.4:
   version "3.0.4"
@@ -2323,8 +2331,8 @@ node-pre-gyp@^0.6.39:
     tar-pack "^3.4.0"
 
 nodemon@^1.14.11:
-  version "1.14.11"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.14.11.tgz#cc0009dd8d82f126f3aba50ace7e753827a8cebc"
+  version "1.14.12"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.14.12.tgz#fe059424b15ebdb107696287a558d9cf53a63999"
   dependencies:
     chokidar "^2.0.0"
     debug "^3.1.0"
@@ -3075,11 +3083,11 @@ source-map-resolve@^0.5.0:
     source-map-url "^0.4.0"
     urix "^0.1.0"
 
-source-map-support@^0.4.0:
-  version "0.4.18"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.18.tgz#0286a6de8be42641338594e97ccea75f0a2c585f"
+source-map-support@^0.5.0:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.3.tgz#2b3d5fff298cfa4d1afd7d4352d569e9a0158e76"
   dependencies:
-    source-map "^0.5.6"
+    source-map "^0.6.0"
 
 source-map-url@^0.4.0:
   version "0.4.0"
@@ -3094,6 +3102,10 @@ source-map@^0.4.4:
 source-map@^0.5.6, source-map@~0.5.1:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
+
+source-map@^0.6.0:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
 
 spdx-correct@~1.0.0:
   version "1.0.2"
@@ -3313,25 +3325,27 @@ tough-cookie@>=2.3.3, tough-cookie@~2.3.0, tough-cookie@~2.3.3:
   dependencies:
     punycode "^1.4.1"
 
-ts-node@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-3.3.0.tgz#c13c6a3024e30be1180dd53038fc209289d4bf69"
+ts-node@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-4.1.0.tgz#36d9529c7b90bb993306c408cd07f7743de20712"
   dependencies:
     arrify "^1.0.0"
-    chalk "^2.0.0"
+    chalk "^2.3.0"
     diff "^3.1.0"
     make-error "^1.1.1"
     minimist "^1.2.0"
     mkdirp "^0.5.1"
-    source-map-support "^0.4.0"
-    tsconfig "^6.0.0"
+    source-map-support "^0.5.0"
+    tsconfig "^7.0.0"
     v8flags "^3.0.0"
     yn "^2.0.0"
 
-tsconfig@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/tsconfig/-/tsconfig-6.0.0.tgz#6b0e8376003d7af1864f8df8f89dd0059ffcd032"
+tsconfig@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/tsconfig/-/tsconfig-7.0.0.tgz#84538875a4dc216e5c4a5432b3a4dec3d54e91b7"
   dependencies:
+    "@types/strip-bom" "^3.0.0"
+    "@types/strip-json-comments" "0.0.30"
     strip-bom "^3.0.0"
     strip-json-comments "^2.0.0"
 
