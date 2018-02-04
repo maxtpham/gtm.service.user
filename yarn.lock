@@ -14,7 +14,7 @@
 
 "@tm/lib.service.auth@thanhptr/tm.lib.service.auth":
   version "1.0.0"
-  resolved "https://codeload.github.com/thanhptr/tm.lib.service.auth/tar.gz/7008a67453bd056f081993330c82895b7a89376d"
+  resolved "https://codeload.github.com/thanhptr/tm.lib.service.auth/tar.gz/b3ac38168dc0799972041d7ea0f65becc32e7af0"
   dependencies:
     "@tm/lib.common" thanhptr/tm.lib.common
     "@tm/lib.service" thanhptr/tm.lib.service
