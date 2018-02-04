@@ -19,7 +19,14 @@ export class RoleApiController extends ApiController {
     @Tags('Role') @Security('jwt') @Get()
     public async getEntities( @Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
         : Promise<RoleViewWithPagination> {
-        let queryToEntities = !!query ? { code: query, scope: query, deleted: null } : { deleted: null };
+        let queryToEntities = !!query ? {
+            $and: [
+                { $or: [{ name: query }, { scope: query }] },
+                {
+                    deleted: null
+                }
+            ]
+        } : { deleted: null };
         let roles = await this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
         if (roles) {
             let roleTotalItem = await this.RoleRepository.find({});
