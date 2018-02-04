@@ -14,7 +14,7 @@
 
 "@tm/lib.service.auth@thanhptr/tm.lib.service.auth":
   version "1.0.0"
-  resolved "https://codeload.github.com/thanhptr/tm.lib.service.auth/tar.gz/7008a67453bd056f081993330c82895b7a89376d"
+  resolved "https://codeload.github.com/thanhptr/tm.lib.service.auth/tar.gz/b3ac38168dc0799972041d7ea0f65becc32e7af0"
   dependencies:
     "@tm/lib.common" thanhptr/tm.lib.common
     "@tm/lib.service" thanhptr/tm.lib.service
@@ -32,7 +32,7 @@
 
 "@tm/lib.service@thanhptr/tm.lib.service":
   version "1.0.0"
-  resolved "https://codeload.github.com/thanhptr/tm.lib.service/tar.gz/efca0696430a7f4160922c9f1461c57f29ee0c7b"
+  resolved "https://codeload.github.com/thanhptr/tm.lib.service/tar.gz/a77b779d7ca0af4a5b4b22de541a983e4b0db6f2"
   dependencies:
     "@tm/lib.common" thanhptr/tm.lib.common
     body-parser "^1.18.2"
