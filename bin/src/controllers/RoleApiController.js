@@ -30,7 +30,14 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
     /** Get Roles */
     getEntities(query, pageNumber, itemCount) {
         return __awaiter(this, void 0, void 0, function* () {
-            let queryToEntities = !!query ? { code: query, scope: query, deleted: null } : { deleted: null };
+            let queryToEntities = !!query ? {
+                $and: [
+                    { $or: [{ name: query }, { scope: query }] },
+                    {
+                        deleted: null
+                    }
+                ]
+            } : { deleted: null };
             let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
             if (roles) {
                 let roleTotalItem = yield this.RoleRepository.find({});
