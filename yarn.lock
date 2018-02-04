@@ -32,7 +32,7 @@
 
 "@tm/lib.service@thanhptr/tm.lib.service":
   version "1.0.0"
-  resolved "https://codeload.github.com/thanhptr/tm.lib.service/tar.gz/efca0696430a7f4160922c9f1461c57f29ee0c7b"
+  resolved "https://codeload.github.com/thanhptr/tm.lib.service/tar.gz/a670ef75319058bf4ca3daaf5ea297f56eecd8db"
   dependencies:
     "@tm/lib.common" thanhptr/tm.lib.common
     body-parser "^1.18.2"

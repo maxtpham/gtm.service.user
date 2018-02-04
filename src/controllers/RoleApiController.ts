@@ -29,8 +29,8 @@ export class RoleApiController extends ApiController {
         } : { deleted: null };
         let roles = await this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
         if (roles) {
-            let roleTotalItem = await this.RoleRepository.find({});
-            let roleViews = <RoleViewWithPagination>{ roles, totalItems: roleTotalItem.length };
+            let roleTotalItem = await this.RoleRepository.count({ deleted: null });
+            let roleViews = <RoleViewWithPagination>{ roles, totalItems: roleTotalItem };
             return Promise.resolve(roleViews);
         }
         return Promise.reject(`Not found.`);
