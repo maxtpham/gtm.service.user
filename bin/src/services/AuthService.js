@@ -18,8 +18,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
-const lib_common_1 = require("@tm/lib.common");
-const lib_service_1 = require("@tm/lib.service");
+const lib_common_1 = require("@gtm/lib.common");
+const lib_service_1 = require("@gtm/lib.service");
 const SessionRepository_1 = require("../repositories/SessionRepository");
 const UserRepository_1 = require("../repositories/UserRepository");
 exports.AuthServiceTYPE = Symbol("AuthService");

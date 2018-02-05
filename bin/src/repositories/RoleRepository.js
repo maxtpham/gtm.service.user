@@ -13,9 +13,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
-const lib_common_1 = require("@tm/lib.common");
-const lib_service_1 = require("@tm/lib.service");
-const lib_service_2 = require("@tm/lib.service");
+const lib_common_1 = require("@gtm/lib.common");
+const lib_service_1 = require("@gtm/lib.service");
+const lib_service_2 = require("@gtm/lib.service");
 const RoleEntity_1 = require("../entities/RoleEntity");
 exports.RoleRepositoryTYPE = Symbol("RoleRepository");
 let RoleRepositoryImpl = class RoleRepositoryImpl extends lib_service_1.RepositoryImpl {

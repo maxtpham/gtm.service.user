@@ -4,9 +4,9 @@ import * as express from 'express';
 import * as jwt from "jsonwebtoken";
 
 import config from './../config/AppConfig';
-import { injectableNamed } from "@tm/lib.common";
-import { WebController } from "@tm/lib.service";
-import { JwtToken, IOAuth2Config } from '@tm/lib.service.auth';
+import { injectableNamed } from "@gtm/lib.common";
+import { WebController } from "@gtm/lib.service";
+import { JwtToken, IOAuth2Config } from '@gtm/lib.service.auth';
 import { SessionRepository, SessionRepositoryTYPE } from '../repositories/SessionRepository';
 import { AuthService, AuthServiceTYPE } from '../services/AuthService';
 

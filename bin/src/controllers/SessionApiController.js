@@ -20,10 +20,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_1 = require("@tm/lib.common");
+const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
 const express = require("express");
-const lib_service_1 = require("@tm/lib.service");
+const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 let SessionApiController = SessionApiController_1 = class SessionApiController extends lib_service_1.ApiController {
     /** Check current session info */

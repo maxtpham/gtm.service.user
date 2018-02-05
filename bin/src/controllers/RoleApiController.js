@@ -21,9 +21,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
-const lib_common_1 = require("@tm/lib.common");
+const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
-const lib_service_1 = require("@tm/lib.service");
+const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const RoleRepository_1 = require("../repositories/RoleRepository");
 let RoleApiController = RoleApiController_1 = class RoleApiController extends lib_service_1.ApiController {
@@ -40,8 +40,8 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
             } : { deleted: null };
             let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
             if (roles) {
-                let roleTotalItem = yield this.RoleRepository.find({});
-                let roleViews = { roles, totalItems: roleTotalItem.length };
+                let roleTotalItem = yield this.RoleRepository.count({ deleted: null });
+                let roleViews = { roles, totalItems: roleTotalItem };
                 return Promise.resolve(roleViews);
             }
             return Promise.reject(`Not found.`);

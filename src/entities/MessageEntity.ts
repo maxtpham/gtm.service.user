@@ -1,5 +1,5 @@
 import * as mongoose from "mongoose";
-import { DbEntity, DbSchema } from "@tm/lib.service"
+import { DbEntity, DbSchema } from "@gtm/lib.service"
 
 export interface MessageEntity extends DbEntity {
     userId: string;

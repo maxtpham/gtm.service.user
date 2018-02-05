@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
-import { DbEntity, DbSchema } from "@tm/lib.service"
-import * as auth from "@tm/lib.service.auth";
+import { DbEntity, DbSchema } from "@gtm/lib.service"
+import * as auth from "@gtm/lib.service.auth";
 
 /**
  * Logged in Session object

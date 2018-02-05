@@ -2,9 +2,9 @@ import { inject, injectable } from "inversify";
 import * as passport from "passport";
 import * as mongoose from "mongoose";
 
-import { injectableSingleton } from "@tm/lib.common";
-import { Service, ServiceImpl } from "@tm/lib.service";
-import { ProviderSession, JwtToken } from "@tm/lib.service.auth";
+import { injectableSingleton } from "@gtm/lib.common";
+import { Service, ServiceImpl } from "@gtm/lib.service";
+import { ProviderSession, JwtToken } from "@gtm/lib.service.auth";
 import { SessionEntity, SessionSchema } from '../entities/SessionEntity';
 import { SessionRepository, SessionRepositoryTYPE } from '../repositories/SessionRepository';
 import { UserEntity } from "../entities/UserEntity";

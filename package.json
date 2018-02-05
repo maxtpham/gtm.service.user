@@ -1,5 +1,5 @@
 {
-  "name": "@tm/service.user",
+  "name": "@gtm/service.user",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,14 +19,14 @@
     "test": "if-env NODE_ENV=production && yarn run test:prd || yarn run test:dev",
     "test:dev": "cross-env-shell NODE_ENV=development \"ts-node tests/index.ts\"",
     "test:prd": "cross-env-shell NODE_ENV=production \"node bin/tests/index.js\"",
-    "swaggen": "rimraf ../tm.lib.client.user/src/swagger/* && call ./node_modules/@tm/lib.service/tool/swagger-codegen ./node_modules/@tm/lib.service/tool ./swagger/output/swagger.json ../tm.lib.client.user/src/swagger",
+    "swaggen": "rimraf ../gtm.lib.client.user/src/swagger/* && call ./node_modules/@gtm/lib.service/tool/swagger-codegen ./node_modules/@gtm/lib.service/tool ./swagger/output/swagger.json ../tm.lib.client.user/src/swagger",
     "swagger": "tsoa swagger && tsoa routes && yarn run swaggen"
   },
   "keywords": [],
   "author": "MyBestBook.NET",
   "license": "UNLICENSED",
   "repository": {
-    "url": "https://github.com/thanhptr/tm.service.user.git"
+    "url": "https://github.com/thanhptr/gtm.service.user.git"
   },
   "devDependencies": {
     "@types/config": "0.0.32",
@@ -43,9 +43,9 @@
     "typescript": "^2.7.1"
   },
   "dependencies": {
-    "@tm/lib.common": "thanhptr/tm.lib.common",
-    "@tm/lib.service": "thanhptr/tm.lib.service",
-    "@tm/lib.service.auth": "thanhptr/tm.lib.service.auth",
+    "@gtm/lib.common": "^1.0.9",
+    "@gtm/lib.service": "^1.0.1",
+    "@gtm/lib.service.auth": "^1.0.1",
     "config": "^1.29.2",
     "cross-env": "^5.1.3",
     "deep-equal": "^1.0.1",

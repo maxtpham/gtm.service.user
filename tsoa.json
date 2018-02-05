@@ -23,7 +23,7 @@
         ,"routesDir": "./swagger/output"
         ,"middleware": "express"
         ,"iocModule": "./swagger/index.ts"
-        ,"middlewareTemplate": "./node_modules/@tm/lib.service/tool/express.ts.handlebars"
+        ,"middlewareTemplate": "./node_modules/@gtm/lib.service/tool/express.ts.handlebars"
         ,"authenticationModule": "./swagger/index.ts"
     }
 }

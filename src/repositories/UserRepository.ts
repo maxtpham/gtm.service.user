@@ -3,10 +3,10 @@ const deepEqual = require('deep-equal');
 import { inject } from "inversify";
 import * as passport from "passport";
 
-import { injectableSingleton } from "@tm/lib.common";
-import { MongoClient } from "@tm/lib.service";
-import { Repository, RepositoryImpl } from "@tm/lib.service";
-import { DefaultMongoClientTYPE } from "@tm/lib.service";
+import { injectableSingleton } from "@gtm/lib.common";
+import { MongoClient } from "@gtm/lib.service";
+import { Repository, RepositoryImpl } from "@gtm/lib.service";
+import { DefaultMongoClientTYPE } from "@gtm/lib.service";
 import { UserEntity, UserSchema } from '../entities/UserEntity';
 
 export interface UserDocument extends UserEntity, Document { }

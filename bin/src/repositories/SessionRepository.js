@@ -13,9 +13,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
-const lib_common_1 = require("@tm/lib.common");
-const lib_service_1 = require("@tm/lib.service");
-const lib_service_2 = require("@tm/lib.service");
+const lib_common_1 = require("@gtm/lib.common");
+const lib_service_1 = require("@gtm/lib.service");
+const lib_service_2 = require("@gtm/lib.service");
 const SessionEntity_1 = require("../entities/SessionEntity");
 exports.SessionRepositoryTYPE = Symbol("SessionRepository");
 let SessionRepositoryImpl = class SessionRepositoryImpl extends lib_service_1.RepositoryImpl {

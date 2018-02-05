@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata"); // TypeError: Reflect.hasOwnMetadata is not a function
-const lib_common_1 = require("@tm/lib.common");
-const common = require("@tm/lib.service");
-const auth = require("@tm/lib.service.auth");
+const lib_common_1 = require("@gtm/lib.common");
+const common = require("@gtm/lib.service");
+const auth = require("@gtm/lib.service.auth");
 const controllers = require("./controllers/index");
 const AppConfig_1 = require("./config/AppConfig");
 const AuthService_1 = require("./services/AuthService");

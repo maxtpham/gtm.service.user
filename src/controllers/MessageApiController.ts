@@ -1,11 +1,11 @@
 // import { inject } from 'inversify';
-// import { injectableSingleton } from "@tm/lib.common";
+// import { injectableSingleton } from "@gtm/lib.common";
 // import { Get, Post, Route, Body, Query, Header, Path, SuccessResponse, Controller, Request, Response, Delete, Put } from 'tsoa';
 // import * as express from 'express';
-// import { ApiController } from "@tm/lib.service";
+// import { ApiController } from "@gtm/lib.service";
 // import config from './../config/AppConfig';
 // import { Security, Tags } from "tsoa";
-// import { JwtToken } from '@tm/lib.service.auth';
+// import { JwtToken } from '@gtm/lib.service.auth';
 // import { MessageRepository, MessageRepositoryTYPE } from '../repositories/MessageRepository';
 // import { MessageView, MessageViewWithPagination } from '../views/MessageView';
 // import { MessageEntity } from '../entities/MessageEntity';

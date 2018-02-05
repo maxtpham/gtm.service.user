@@ -2,9 +2,9 @@ import "reflect-metadata"; // TypeError: Reflect.hasOwnMetadata is not a functio
 import * as express from 'express';
 import { interfaces } from 'inversify';
 
-import { iocContainer } from "@tm/lib.common";
-import * as common from "@tm/lib.service";
-import * as auth from "@tm/lib.service.auth";
+import { iocContainer } from "@gtm/lib.common";
+import * as common from "@gtm/lib.service";
+import * as auth from "@gtm/lib.service.auth";
 
 import * as controllers from "./controllers/index";
 import { default as config, IAppConfig } from './config/AppConfig';

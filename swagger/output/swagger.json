@@ -110,7 +110,7 @@
 		}
 	},
 	"info": {
-		"title": "@tm/service.user",
+		"title": "@gtm/service.user",
 		"version": "1.0.0",
 		"license": {
 			"name": "UNLICENSED"
