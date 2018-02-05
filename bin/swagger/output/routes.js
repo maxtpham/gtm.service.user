@@ -21,6 +21,21 @@ const models = {
             "expires": { "dataType": "double", "required": true },
         },
     },
+    "RoleDetailView": {
+        "properties": {
+            "code": { "dataType": "string", "required": true },
+            "scope": { "dataType": "string", "required": true },
+            "id": { "dataType": "string", "required": true },
+            "created": { "dataType": "double", "required": true },
+            "updated": { "dataType": "double", "required": true },
+        },
+    },
+    "RoleViewWithPagination": {
+        "properties": {
+            "roles": { "dataType": "array", "array": { "ref": "RoleDetailView" }, "required": true },
+            "totalItems": { "dataType": "double", "required": true },
+        },
+    },
     "RoleEntity": {
         "properties": {
             "name": { "dataType": "string", "required": true },
@@ -29,12 +44,6 @@ const models = {
             "created": { "dataType": "double" },
             "updated": { "dataType": "double" },
             "deleted": { "dataType": "double" },
-        },
-    },
-    "RoleViewWithPagination": {
-        "properties": {
-            "roles": { "dataType": "array", "array": { "ref": "RoleEntity" }, "required": true },
-            "totalItems": { "dataType": "double", "required": true },
         },
     },
     "RoleView": {

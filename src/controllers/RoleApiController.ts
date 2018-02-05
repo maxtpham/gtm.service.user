@@ -7,7 +7,7 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { RoleRepository, RoleRepositoryTYPE } from '../repositories/RoleRepository';
-import { RoleView, RoleViewWithPagination } from '../views/RoleView';
+import { RoleView, RoleViewWithPagination, RoleDetailView } from '../views/RoleView';
 import { RoleEntity } from '../entities/RoleEntity';
 
 @injectableSingleton(RoleApiController)
@@ -30,7 +30,17 @@ export class RoleApiController extends ApiController {
         let roles = await this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
         if (roles) {
             let roleTotalItems = await this.RoleRepository.count({ deleted: null });
-            let roleViews = <RoleViewWithPagination>{ roles, totalItems: roleTotalItems };
+            let roleDetailViews: RoleDetailView[] = [];
+            roles.map(role => {
+                roleDetailViews.push({
+                    id: role._id,
+                    code: role.name,
+                    scope: role.scope,
+                    created: role.created,
+                    updated: role.updated,
+                })
+            })
+            let roleViews = <RoleViewWithPagination>{ roles: roleDetailViews, totalItems: roleTotalItems };
             return Promise.resolve(roleViews);
         }
         return Promise.reject(`Not found.`);

@@ -41,7 +41,17 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
             let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
             if (roles) {
                 let roleTotalItems = yield this.RoleRepository.count({ deleted: null });
-                let roleViews = { roles, totalItems: roleTotalItems };
+                let roleDetailViews = [];
+                roles.map(role => {
+                    roleDetailViews.push({
+                        id: role._id,
+                        code: role.name,
+                        scope: role.scope,
+                        created: role.created,
+                        updated: role.updated,
+                    });
+                });
+                let roleViews = { roles: roleDetailViews, totalItems: roleTotalItems };
                 return Promise.resolve(roleViews);
             }
             return Promise.reject(`Not found.`);

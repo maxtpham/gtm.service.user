@@ -1,8 +1,16 @@
 import { RoleEntity } from "../entities/RoleEntity";
 
 export interface RoleViewWithPagination {
-    roles: RoleEntity[];
+    roles: RoleDetailView[];
     totalItems: number;
+}
+
+export interface RoleDetailView {
+    code: string;
+    scope: string;
+    id: string;
+    created: number;
+    updated: number;
 }
 
 export interface RoleView {
@@ -12,6 +20,8 @@ export interface RoleView {
     /** role scope */
     scope: string;
 }
+
+
 
 export enum RoleType {
     Admin = 1,

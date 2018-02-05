@@ -42,6 +42,54 @@
 			],
 			"type": "object"
 		},
+		"RoleDetailView": {
+			"properties": {
+				"code": {
+					"type": "string"
+				},
+				"scope": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string"
+				},
+				"created": {
+					"type": "number",
+					"format": "double"
+				},
+				"updated": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"code",
+				"scope",
+				"id",
+				"created",
+				"updated"
+			],
+			"type": "object"
+		},
+		"RoleViewWithPagination": {
+			"properties": {
+				"roles": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/RoleDetailView"
+					}
+				},
+				"totalItems": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"roles",
+				"totalItems"
+			],
+			"type": "object"
+		},
 		"RoleEntity": {
 			"properties": {
 				"name": {
@@ -69,25 +117,6 @@
 			"required": [
 				"name",
 				"_id"
-			],
-			"type": "object"
-		},
-		"RoleViewWithPagination": {
-			"properties": {
-				"roles": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/RoleEntity"
-					}
-				},
-				"totalItems": {
-					"type": "number",
-					"format": "double"
-				}
-			},
-			"required": [
-				"roles",
-				"totalItems"
 			],
 			"type": "object"
 		},
