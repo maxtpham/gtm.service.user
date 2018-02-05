@@ -40,8 +40,8 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
             } : { deleted: null };
             let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
             if (roles) {
-                let roleTotalItem = yield this.RoleRepository.count({ deleted: null });
-                let roleViews = { roles, totalItems: roleTotalItem };
+                let roleTotalItems = yield this.RoleRepository.count({ deleted: null });
+                let roleViews = { roles, totalItems: roleTotalItems };
                 return Promise.resolve(roleViews);
             }
             return Promise.reject(`Not found.`);
@@ -84,7 +84,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
     /** Delete Role */
     deleteEntity(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: new Date() });
+            let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
             if (role) {
                 return Promise.resolve();
             }

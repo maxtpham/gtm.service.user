@@ -29,8 +29,8 @@ export class RoleApiController extends ApiController {
         } : { deleted: null };
         let roles = await this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
         if (roles) {
-            let roleTotalItem = await this.RoleRepository.count({ deleted: null });
-            let roleViews = <RoleViewWithPagination>{ roles, totalItems: roleTotalItem };
+            let roleTotalItems = await this.RoleRepository.count({ deleted: null });
+            let roleViews = <RoleViewWithPagination>{ roles, totalItems: roleTotalItems };
             return Promise.resolve(roleViews);
         }
         return Promise.reject(`Not found.`);
@@ -73,7 +73,7 @@ export class RoleApiController extends ApiController {
     /** Delete Role */
     @Tags('Role') @Security('jwt') @Delete('{id}')
     public async deleteEntity(id: string): Promise<void> {
-        let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: new Date() });
+        let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
         if (role) {
             return Promise.resolve();
         }

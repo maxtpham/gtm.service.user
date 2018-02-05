@@ -5,6 +5,7 @@ import { IAppConfig } from './../config/AppConfig';
 import { SystemApiController } from "./SystemApiController";
 import { SessionApiController } from "./SessionApiController";
 import { RoleApiController } from "./RoleApiController";
+import { MessageApiController } from "./MessageApiController";
 
 import { AuthWebController } from "./AuthWebController";
 

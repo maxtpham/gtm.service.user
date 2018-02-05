@@ -6,6 +6,7 @@ const index_1 = require("./../index");
 const SystemApiController_1 = require("./../../src/controllers/SystemApiController");
 const SessionApiController_1 = require("./../../src/controllers/SessionApiController");
 const RoleApiController_1 = require("./../../src/controllers/RoleApiController");
+const MessageApiController_1 = require("./../../src/controllers/MessageApiController");
 const index_2 = require("./../index");
 const models = {
     "MapOfBoolean": {
@@ -40,6 +41,45 @@ const models = {
         "properties": {
             "code": { "dataType": "string", "required": true },
             "scope": { "dataType": "string", "required": true },
+        },
+    },
+    "MessageDetailView": {
+        "properties": {
+            "id": { "dataType": "string", "required": true },
+            "userId": { "dataType": "string", "required": true },
+            "userName": { "dataType": "string", "required": true },
+            "toUserId": { "dataType": "string", "required": true },
+            "toUserName": { "dataType": "string", "required": true },
+            "content": { "dataType": "string", "required": true },
+            "delivered": { "dataType": "double", "required": true },
+            "created": { "dataType": "double", "required": true },
+            "updated": { "dataType": "double", "required": true },
+        },
+    },
+    "MessageViewWithPagination": {
+        "properties": {
+            "messages": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
+            "totalItems": { "dataType": "double", "required": true },
+        },
+    },
+    "MessageEntity": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "toUserId": { "dataType": "string", "required": true },
+            "content": { "dataType": "string", "required": true },
+            "delivered": { "dataType": "double" },
+            "_id": { "dataType": "any", "required": true },
+            "created": { "dataType": "double" },
+            "updated": { "dataType": "double" },
+            "deleted": { "dataType": "double" },
+        },
+    },
+    "MessageView": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "toUserId": { "dataType": "string", "required": true },
+            "content": { "dataType": "string", "required": true },
+            "delivered": { "dataType": "double" },
         },
     },
 };
@@ -162,6 +202,84 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(RoleApiController_1.RoleApiController);
+        const promise = controller.deleteEntity.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/Message', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            query: { "in": "query", "name": "query", "dataType": "string" },
+            pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+            itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
+        const promise = controller.getEntities.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/Message/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
+        const promise = controller.getEntity.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.post('/api/user/v1/Message', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            messageView: { "in": "body", "name": "messageView", "required": true, "ref": "MessageView" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
+        const promise = controller.createEntity.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.put('/api/user/v1/Message/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+            messageView: { "in": "body", "name": "messageView", "required": true, "ref": "MessageView" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
+        const promise = controller.updateEntity.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.delete('/api/user/v1/Message/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
         const promise = controller.deleteEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });

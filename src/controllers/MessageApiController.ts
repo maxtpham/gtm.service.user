@@ -1,75 +1,95 @@
-// import { inject } from 'inversify';
-// import { injectableSingleton } from "@gtm/lib.common";
-// import { Get, Post, Route, Body, Query, Header, Path, SuccessResponse, Controller, Request, Response, Delete, Put } from 'tsoa';
-// import * as express from 'express';
-// import { ApiController } from "@gtm/lib.service";
-// import config from './../config/AppConfig';
-// import { Security, Tags } from "tsoa";
-// import { JwtToken } from '@gtm/lib.service.auth';
-// import { MessageRepository, MessageRepositoryTYPE } from '../repositories/MessageRepository';
-// import { MessageView, MessageViewWithPagination } from '../views/MessageView';
-// import { MessageEntity } from '../entities/MessageEntity';
+import { inject } from 'inversify';
+import { injectableSingleton } from "@gtm/lib.common";
+import { Get, Post, Route, Body, Query, Header, Path, SuccessResponse, Controller, Request, Response, Delete, Put } from 'tsoa';
+import * as express from 'express';
+import { ApiController } from "@gtm/lib.service";
+import config from './../config/AppConfig';
+import { Security, Tags } from "tsoa";
+import { JwtToken } from '@gtm/lib.service.auth';
+import { MessageRepository, MessageRepositoryTYPE } from '../repositories/MessageRepository';
+import { MessageView, MessageViewWithPagination, MessageDetailView } from '../views/MessageView';
+import { MessageEntity } from '../entities/MessageEntity';
+import { UserRepositoryTYPE, UserRepository } from '../repositories/UserRepository';
 
-// @injectableSingleton(MessageApiController)
-// @Route('api/user/v1/Message')
-// export class MessageApiController extends ApiController {
-//     @inject(MessageRepositoryTYPE) private MessageRepository: MessageRepository;
+@injectableSingleton(MessageApiController)
+@Route('api/user/v1/Message')
+export class MessageApiController extends ApiController {
+    @inject(MessageRepositoryTYPE) private MessageRepository: MessageRepository;
+    @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
 
-//     /** Get Messages */
-//     @Tags('Message') @Security('jwt') @Get()
-//     public async getEntities( @Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
-//         : Promise<MessageViewWithPagination> {
-//         let queryToEntities = !!query ? { code: query, scope: query, deleted: null } : { deleted: null };
-//         let Messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
-//         if (Messages) {
-//             let MessageTotalItem = await this.MessageRepository.find({});
-//             let MessageViews = <MessageViewWithPagination>{ Messages, totalItems: MessageTotalItem.length };
-//             return Promise.resolve(MessageViews);
-//         }
-//         return Promise.reject(`Not found.`);
-//     }
+    /** Get Messages */
+    @Tags('Message') @Security('jwt') @Get()
+    public async getEntities( @Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
+        : Promise<MessageViewWithPagination> {
+        let queryToEntities = !!query ? { code: query, scope: query, deleted: null } : { deleted: null };
+        let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+        if (messages) {
+            let messageTotalItems = await this.MessageRepository.count({});
+            let users = await this.UserRepository.find({deleted: null});
+            let messageDetailView: MessageDetailView[] = [];
+            messages.map(mes => {
+                let user = users.find(u => u._id == mes.userId);
+                let toUser = users.find(u => u._id == mes.toUserId);
 
-//     /** Get Message by Id */
-//     @Tags('Message') @Security('jwt') @Get('{id}')
-//     public async getEntity(id: string): Promise<MessageEntity> {
-//         let Message = await this.MessageRepository.findOneById(id);
-//         if (Message) {
-//             return Promise.resolve(Message);
-//         }
-//         return Promise.reject(`Not found.`);
-//     }
+                messageDetailView.push({
+                    id: mes._id,
+                    userId: mes.userId,
+                    userName: user ? user.name : '',
+                    toUserId: mes.toUserId,
+                    toUserName: toUser ? toUser.name : '',
+                    content: mes.content,
+                    delivered: mes.delivered,
+                    created: mes.created,
+                    updated: mes.updated
+                });
+            })
+            let messageDetailViews = <MessageViewWithPagination>{ messages: messageDetailView, totalItems: messageTotalItems };
+            return Promise.resolve(messageDetailViews);
+        }
+        return Promise.reject(`Not found.`);
+    }
 
-//     /** Create New Message */
-//     @Tags('Message') @Security('jwt') @Post()
-//     public async createEntity( @Body() MessageView: MessageView): Promise<MessageEntity> {
-//         let Message = await this.MessageRepository.save(<MessageEntity>{ name: MessageView.code, scope: MessageView.scope });
-//         if (Message) {
-//             return Promise.resolve(await this.MessageRepository.findOneById(Message._id));
-//         }
-//         if (Message instanceof Error) {
-//             return Promise.reject('Error');
-//         }
-//     }
+    /** Get Message by Id */
+    @Tags('Message') @Security('jwt') @Get('{id}')
+    public async getEntity(id: string): Promise<MessageEntity> {
+        let Message = await this.MessageRepository.findOneById(id);
+        if (Message) {
+            return Promise.resolve(Message);
+        }
+        return Promise.reject(`Not found.`);
+    }
 
-//     /** Update Message */
-//     @Tags('Message') @Security('jwt') @Put('{id}')
-//     public async updateEntity(id: string, @Body() MessageView: MessageView): Promise<MessageEntity> {
-//         let Message = await this.MessageRepository.findOneAndUpdate({ _id: id }, <MessageEntity>{ name: MessageView.code, scope: MessageView.scope });
-//         if (Message) {
-//             return Promise.resolve(await this.MessageRepository.findOneById(Message._id));
-//         }
-//         if (Message instanceof Error) {
-//             return Promise.reject('Error');
-//         }
-//     }
+    /** Create New Message */
+    @Tags('Message') @Security('jwt') @Post()
+    public async createEntity( @Body() messageView: MessageView): Promise<MessageEntity> {
+        let message = await this.MessageRepository.save(<MessageEntity>{ userId: messageView.userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
+        if (message) {
+            return Promise.resolve(await this.MessageRepository.findOneById(message._id));
+        }
+        if (message instanceof Error) {
+            return Promise.reject('Error');
+        }
+    }
 
-//     /** Delete Message */
-//     @Tags('Message') @Security('jwt') @Delete('{id}')
-//     public async deleteEntity(id: string): Promise<void> {
-//         let Message = await this.MessageRepository.findOneAndUpdate({ _id: id }, { deleted: new Date() });
-//         if (Message) {
-//             return Promise.resolve();
-//         }
-//         return Promise.reject(`Not found.`);
-//     }
-// }
+    /** Update Message */
+    @Tags('Message') @Security('jwt') @Put('{id}')
+    public async updateEntity(id: string, @Body() messageView: MessageView): Promise<MessageEntity> {
+        let message = await this.MessageRepository.findOneAndUpdate({ _id: id }, <MessageEntity>{ userId: messageView.userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
+        if (message) {
+            return Promise.resolve(await this.MessageRepository.findOneById(message._id));
+        }
+        if (message instanceof Error) {
+            return Promise.reject('Error');
+        }
+    }
+
+    /** Delete Message */
+    @Tags('Message') @Security('jwt') @Delete('{id}')
+    public async deleteEntity(id: string): Promise<void> {
+        let message = await this.MessageRepository.findOneAndUpdate({ _id: id }, { s: Date.now() });
+        if (message) {
+            return Promise.resolve();
+        }
+        return Promise.reject(`Not found.`);
+    }
+}
