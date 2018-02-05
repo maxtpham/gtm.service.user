@@ -19,7 +19,7 @@
     "test": "if-env NODE_ENV=production && yarn run test:prd || yarn run test:dev",
     "test:dev": "cross-env-shell NODE_ENV=development \"ts-node tests/index.ts\"",
     "test:prd": "cross-env-shell NODE_ENV=production \"node bin/tests/index.js\"",
-    "swaggen": "rimraf ../gtm.lib.client.user/src/swagger/* && call ./node_modules/@gtm/lib.service/tool/swagger-codegen ./node_modules/@gtm/lib.service/tool ./swagger/output/swagger.json ../tm.lib.client.user/src/swagger",
+    "swaggen": "rimraf ../gtm.lib.client.user/src/swagger/* && call ./node_modules/@gtm/lib.service/tool/swagger-codegen ./node_modules/@gtm/lib.service/tool ./swagger/output/swagger.json ../gtm.lib.client.user/src/swagger",
     "swagger": "tsoa swagger && tsoa routes && yarn run swaggen"
   },
   "keywords": [],
