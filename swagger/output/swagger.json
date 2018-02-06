@@ -44,13 +44,13 @@
 		},
 		"RoleDetailView": {
 			"properties": {
+				"id": {
+					"type": "string"
+				},
 				"code": {
 					"type": "string"
 				},
 				"scope": {
-					"type": "string"
-				},
-				"id": {
 					"type": "string"
 				},
 				"created": {
@@ -63,9 +63,9 @@
 				}
 			},
 			"required": [
+				"id",
 				"code",
 				"scope",
-				"id",
 				"created",
 				"updated"
 			],
@@ -87,36 +87,6 @@
 			"required": [
 				"roles",
 				"totalItems"
-			],
-			"type": "object"
-		},
-		"RoleEntity": {
-			"properties": {
-				"code": {
-					"type": "string"
-				},
-				"scope": {
-					"type": "string"
-				},
-				"_id": {
-					"type": "object"
-				},
-				"created": {
-					"type": "number",
-					"format": "double"
-				},
-				"updated": {
-					"type": "number",
-					"format": "double"
-				},
-				"deleted": {
-					"type": "number",
-					"format": "double"
-				}
-			},
-			"required": [
-				"code",
-				"_id"
 			],
 			"type": "object"
 		},
@@ -406,7 +376,7 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/RoleEntity"
+							"$ref": "#/definitions/RoleDetailView"
 						}
 					}
 				},
@@ -441,7 +411,7 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/RoleEntity"
+							"$ref": "#/definitions/RoleDetailView"
 						}
 					}
 				},
@@ -472,7 +442,7 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/RoleEntity"
+							"$ref": "#/definitions/RoleDetailView"
 						}
 					}
 				},

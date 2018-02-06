@@ -22,9 +22,9 @@ const models: TsoaRoute.Models = {
     },
     "RoleDetailView": {
         "properties": {
+            "id": { "dataType": "string", "required": true },
             "code": { "dataType": "string", "required": true },
             "scope": { "dataType": "string", "required": true },
-            "id": { "dataType": "string", "required": true },
             "created": { "dataType": "double", "required": true },
             "updated": { "dataType": "double", "required": true },
         },
@@ -33,16 +33,6 @@ const models: TsoaRoute.Models = {
         "properties": {
             "roles": { "dataType": "array", "array": { "ref": "RoleDetailView" }, "required": true },
             "totalItems": { "dataType": "double", "required": true },
-        },
-    },
-    "RoleEntity": {
-        "properties": {
-            "code": { "dataType": "string", "required": true },
-            "scope": { "dataType": "string" },
-            "_id": { "dataType": "any", "required": true },
-            "created": { "dataType": "double" },
-            "updated": { "dataType": "double" },
-            "deleted": { "dataType": "double" },
         },
     },
     "RoleView": {

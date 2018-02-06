@@ -42,20 +42,20 @@ export class RoleApiController extends ApiController {
 
     /** Get Role by Id */
     @Tags('Role') @Security('jwt') @Get('{id}')
-    public async getEntity(id: string): Promise<RoleEntity> {
+    public async getEntity(id: string): Promise<RoleDetailView> {
         let role = await this.RoleRepository.findOneById(id);
         if (role) {
-            return Promise.resolve(role);
+            return Promise.resolve(this.RoleRepository.buildClientRole(role));
         }
         return Promise.reject(`Not found.`);
     }
 
     /** Create New Role */
     @Tags('Role') @Security('jwt') @Post()
-    public async createEntity( @Body() roleView: RoleView): Promise<RoleEntity> {
+    public async createEntity( @Body() roleView: RoleView): Promise<RoleDetailView> {
         let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope });
         if (role) {
-            return Promise.resolve(await this.RoleRepository.findOneById(role._id));
+            return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
         }
         if (role instanceof Error) {
             return Promise.reject('Error');
@@ -64,10 +64,10 @@ export class RoleApiController extends ApiController {
 
     /** Update Role */
     @Tags('Role') @Security('jwt') @Put('{id}')
-    public async updateEntity(id: string, @Body() roleView: RoleView): Promise<RoleEntity> {
+    public async updateEntity(id: string, @Body() roleView: RoleView): Promise<RoleDetailView> {
         let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ code: roleView.code, scope: roleView.scope });
         if (role) {
-            return Promise.resolve(await this.RoleRepository.findOneById(role._id));
+            return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
         }
         if (role instanceof Error) {
             return Promise.reject('Error');
