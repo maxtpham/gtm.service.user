@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 import { DbEntity, DbSchema } from "@gtm/lib.service"
 
 export interface RoleEntity extends DbEntity {
-    name: string;
+    code: string;
 
     /* Example: `*` OR `user:*` OR `subscription:*`,..  */
     scope?: string;
@@ -10,6 +10,6 @@ export interface RoleEntity extends DbEntity {
 
 export const RoleSchema = {
     ...DbSchema,
-    name: { type: mongoose.Schema.Types.String, required: true },
+    code: { type: mongoose.Schema.Types.String, required: true },
     scope: { type: mongoose.Schema.Types.String, required: false },
 };

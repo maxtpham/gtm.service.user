@@ -92,7 +92,7 @@
 		},
 		"RoleEntity": {
 			"properties": {
-				"name": {
+				"code": {
 					"type": "string"
 				},
 				"scope": {
@@ -115,7 +115,7 @@
 				}
 			},
 			"required": [
-				"name",
+				"code",
 				"_id"
 			],
 			"type": "object"

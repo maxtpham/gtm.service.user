@@ -32,13 +32,7 @@ export class RoleApiController extends ApiController {
             let roleTotalItems = await this.RoleRepository.count({ deleted: null });
             let roleDetailViews: RoleDetailView[] = [];
             roles.map(role => {
-                roleDetailViews.push({
-                    id: role._id,
-                    code: role.name,
-                    scope: role.scope,
-                    created: role.created,
-                    updated: role.updated,
-                })
+                roleDetailViews.push(this.RoleRepository.buildClientRole(role));
             })
             let roleViews = <RoleViewWithPagination>{ roles: roleDetailViews, totalItems: roleTotalItems };
             return Promise.resolve(roleViews);
@@ -59,7 +53,7 @@ export class RoleApiController extends ApiController {
     /** Create New Role */
     @Tags('Role') @Security('jwt') @Post()
     public async createEntity( @Body() roleView: RoleView): Promise<RoleEntity> {
-        let role = await this.RoleRepository.save(<RoleEntity>{ name: roleView.code, scope: roleView.scope });
+        let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope });
         if (role) {
             return Promise.resolve(await this.RoleRepository.findOneById(role._id));
         }
@@ -71,7 +65,7 @@ export class RoleApiController extends ApiController {
     /** Update Role */
     @Tags('Role') @Security('jwt') @Put('{id}')
     public async updateEntity(id: string, @Body() roleView: RoleView): Promise<RoleEntity> {
-        let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ name: roleView.code, scope: roleView.scope });
+        let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ code: roleView.code, scope: roleView.scope });
         if (role) {
             return Promise.resolve(await this.RoleRepository.findOneById(role._id));
         }
@@ -89,4 +83,6 @@ export class RoleApiController extends ApiController {
         }
         return Promise.reject(`Not found.`);
     }
+
+
 }

@@ -20,7 +20,8 @@
     "test:dev": "cross-env-shell NODE_ENV=development \"ts-node tests/index.ts\"",
     "test:prd": "cross-env-shell NODE_ENV=production \"node bin/tests/index.js\"",
     "swaggen": "rimraf ../gtm.lib.client.user/src/swagger/* && call ./node_modules/@gtm/lib.service/tool/swagger-codegen ./node_modules/@gtm/lib.service/tool ./swagger/output/swagger.json ../gtm.lib.client.user/src/swagger",
-    "swagger": "tsoa swagger && tsoa routes && yarn run swaggen"
+    "swagger": "tsoa swagger && tsoa routes && yarn run swaggen",
+    "p": "npm publish --access public"
   },
   "keywords": [],
   "author": "MyBestBook.NET",
