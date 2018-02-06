@@ -43,13 +43,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
                 let roleTotalItems = yield this.RoleRepository.count({ deleted: null });
                 let roleDetailViews = [];
                 roles.map(role => {
-                    roleDetailViews.push({
-                        id: role._id,
-                        code: role.name,
-                        scope: role.scope,
-                        created: role.created,
-                        updated: role.updated,
-                    });
+                    roleDetailViews.push(this.RoleRepository.buildClientRole(role));
                 });
                 let roleViews = { roles: roleDetailViews, totalItems: roleTotalItems };
                 return Promise.resolve(roleViews);
@@ -70,7 +64,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
     /** Create New Role */
     createEntity(roleView) {
         return __awaiter(this, void 0, void 0, function* () {
-            let role = yield this.RoleRepository.save({ name: roleView.code, scope: roleView.scope });
+            let role = yield this.RoleRepository.save({ code: roleView.code, scope: roleView.scope });
             if (role) {
                 return Promise.resolve(yield this.RoleRepository.findOneById(role._id));
             }
@@ -82,7 +76,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
     /** Update Role */
     updateEntity(id, roleView) {
         return __awaiter(this, void 0, void 0, function* () {
-            let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { name: roleView.code, scope: roleView.scope });
+            let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { code: roleView.code, scope: roleView.scope });
             if (role) {
                 return Promise.resolve(yield this.RoleRepository.findOneById(role._id));
             }

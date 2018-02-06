@@ -22,6 +22,15 @@ let RoleRepositoryImpl = class RoleRepositoryImpl extends lib_service_1.Reposito
     constructor(mongoclient) {
         super(mongoclient, "Role", RoleEntity_1.RoleSchema);
     }
+    buildClientRole(role) {
+        return {
+            id: role._id,
+            code: role.code,
+            scope: role.scope,
+            created: role.created,
+            updated: role.updated,
+        };
+    }
 };
 RoleRepositoryImpl = __decorate([
     lib_common_1.injectableSingleton(exports.RoleRepositoryTYPE),

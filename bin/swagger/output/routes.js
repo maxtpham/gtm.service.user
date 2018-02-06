@@ -38,7 +38,7 @@ const models = {
     },
     "RoleEntity": {
         "properties": {
-            "name": { "dataType": "string", "required": true },
+            "code": { "dataType": "string", "required": true },
             "scope": { "dataType": "string" },
             "_id": { "dataType": "any", "required": true },
             "created": { "dataType": "double" },
