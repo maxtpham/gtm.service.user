@@ -23,9 +23,9 @@ const models = {
     },
     "RoleDetailView": {
         "properties": {
+            "id": { "dataType": "string", "required": true },
             "code": { "dataType": "string", "required": true },
             "scope": { "dataType": "string", "required": true },
-            "id": { "dataType": "string", "required": true },
             "created": { "dataType": "double", "required": true },
             "updated": { "dataType": "double", "required": true },
         },
@@ -36,22 +36,13 @@ const models = {
             "totalItems": { "dataType": "double", "required": true },
         },
     },
-    "RoleEntity": {
-        "properties": {
-            "code": { "dataType": "string", "required": true },
-            "scope": { "dataType": "string" },
-            "_id": { "dataType": "any", "required": true },
-            "created": { "dataType": "double" },
-            "updated": { "dataType": "double" },
-            "deleted": { "dataType": "double" },
-        },
-    },
     "RoleView": {
         "properties": {
             "code": { "dataType": "string", "required": true },
             "scope": { "dataType": "string", "required": true },
         },
     },
+    "String": {},
     "MessageDetailView": {
         "properties": {
             "id": { "dataType": "string", "required": true },
@@ -170,7 +161,7 @@ function RegisterRoutes(app) {
     });
     app.post('/api/user/v1/role', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            roleView: { "in": "body", "name": "roleView", "required": true, "ref": "RoleView" },
+            roleView: { "in": "body", "name": "roleView", "ref": "RoleView" },
         };
         let validatedArgs = [];
         try {
@@ -186,7 +177,7 @@ function RegisterRoutes(app) {
     app.put('/api/user/v1/role/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-            roleView: { "in": "body", "name": "roleView", "required": true, "ref": "RoleView" },
+            roleView: { "in": "body", "name": "roleView", "ref": "RoleView" },
         };
         let validatedArgs = [];
         try {

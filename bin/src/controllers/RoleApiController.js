@@ -56,7 +56,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
         return __awaiter(this, void 0, void 0, function* () {
             let role = yield this.RoleRepository.findOneById(id);
             if (role) {
-                return Promise.resolve(role);
+                return Promise.resolve(this.RoleRepository.buildClientRole(role));
             }
             return Promise.reject(`Not found.`);
         });
@@ -66,7 +66,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
         return __awaiter(this, void 0, void 0, function* () {
             let role = yield this.RoleRepository.save({ code: roleView.code, scope: roleView.scope });
             if (role) {
-                return Promise.resolve(yield this.RoleRepository.findOneById(role._id));
+                return Promise.resolve(this.RoleRepository.buildClientRole(yield this.RoleRepository.findOneById(role._id)));
             }
             if (role instanceof Error) {
                 return Promise.reject('Error');
@@ -78,7 +78,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
         return __awaiter(this, void 0, void 0, function* () {
             let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { code: roleView.code, scope: roleView.scope });
             if (role) {
-                return Promise.resolve(yield this.RoleRepository.findOneById(role._id));
+                return Promise.resolve(this.RoleRepository.buildClientRole(yield this.RoleRepository.findOneById(role._id)));
             }
             if (role instanceof Error) {
                 return Promise.reject('Error');
@@ -90,7 +90,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
         return __awaiter(this, void 0, void 0, function* () {
             let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
             if (role) {
-                return Promise.resolve();
+                return Promise.resolve('DELETE request to homepage');
             }
             return Promise.reject(`Not found.`);
         });
