@@ -41,6 +41,8 @@ const models: TsoaRoute.Models = {
             "scope": { "dataType": "string", "required": true },
         },
     },
+    "String": {
+    },
     "MessageDetailView": {
         "properties": {
             "id": { "dataType": "string", "required": true },
@@ -188,7 +190,7 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                roleView: { "in": "body", "name": "roleView", "required": true, "ref": "RoleView" },
+                roleView: { "in": "body", "name": "roleView", "ref": "RoleView" },
             };
 
             let validatedArgs: any[] = [];
@@ -209,7 +211,7 @@ export function RegisterRoutes(app: any) {
         function(request: any, response: any, next: any) {
             const args = {
                 id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-                roleView: { "in": "body", "name": "roleView", "required": true, "ref": "RoleView" },
+                roleView: { "in": "body", "name": "roleView", "ref": "RoleView" },
             };
 
             let validatedArgs: any[] = [];

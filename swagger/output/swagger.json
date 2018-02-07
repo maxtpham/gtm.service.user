@@ -107,6 +107,11 @@
 			],
 			"type": "object"
 		},
+		"String": {
+			"description": "Allows manipulation and formatting of text strings and determination and location of substrings within strings.",
+			"properties": {},
+			"type": "object"
+		},
 		"MessageDetailView": {
 			"properties": {
 				"id": {
@@ -393,7 +398,7 @@
 					{
 						"in": "body",
 						"name": "roleView",
-						"required": true,
+						"required": false,
 						"schema": {
 							"$ref": "#/definitions/RoleView"
 						}
@@ -465,7 +470,7 @@
 					{
 						"in": "body",
 						"name": "roleView",
-						"required": true,
+						"required": false,
 						"schema": {
 							"$ref": "#/definitions/RoleView"
 						}
@@ -478,8 +483,11 @@
 					"application/json"
 				],
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/String"
+						}
 					}
 				},
 				"description": "Delete Role ",
