@@ -13,11 +13,11 @@
     rimraf "^2.6.2"
 
 "@gtm/lib.service.auth@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.1.tgz#2f32273282b2f57c08233b91a6dc2a037ad0a92e"
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.6.tgz#d6bf98fd9d0fecb3f66dab7b008299bd0e02970f"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
-    "@gtm/lib.service" "^1.0.1"
+    "@gtm/lib.service" "^1.0.2"
     express "^4.16.2"
     jsonwebtoken "^8.1.1"
     passport "^0.4.0"
@@ -30,9 +30,9 @@
     rimraf "^2.6.2"
     swagger-ui-dist "^3.9.3"
 
-"@gtm/lib.service@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.1.tgz#32ac4b2e2c3d99a378615fc9a8c6dcf0b586de80"
+"@gtm/lib.service@^1.0.1", "@gtm/lib.service@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.2.tgz#83baf438586d2c28f46b5e647fd12d51000bb36b"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
     body-parser "^1.18.2"
@@ -123,8 +123,8 @@
     "@types/node" "*"
 
 "@types/node@*", "@types/node@^9.4.0":
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.0.tgz#b85a0bcf1e1cc84eb4901b7e96966aedc6f078d1"
+  version "9.4.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.2.tgz#b109a6c4f64147ccf9476d9e1a6fbf69a10faeb8"
 
 "@types/passport@^0.3.5":
   version "0.3.5"
@@ -801,8 +801,8 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
     delayed-stream "~1.0.0"
 
 commander@*, commander@^2.11.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
+  version "2.14.1"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.14.1.tgz#2235123e37af8ca3c65df45b026dbd357b01b9aa"
 
 commandpost@^1.0.0:
   version "1.3.0"
@@ -2118,8 +2118,8 @@ make-dir@^1.0.0:
     pify "^3.0.0"
 
 make-error@^1.1.1:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/make-error/-/make-error-1.3.2.tgz#8762ffad2444dd8ff1f7c819629fa28e24fea1c4"
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/make-error/-/make-error-1.3.3.tgz#a97ae14ffd98b05f543e83ddc395e1b2b6e4cc6a"
 
 map-cache@^0.2.2:
   version "0.2.2"
@@ -2212,8 +2212,8 @@ minimist@~0.0.1:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.10.tgz#de3f98543dbf96082be48ad1a0c7cda836301dcf"
 
 mixin-deep@^1.1.3, mixin-deep@^1.2.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.0.tgz#47a8732ba97799457c8c1eca28f95132d7e8150a"
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.1.tgz#a49e7268dce1a0d9698e45326c5626df3543d0fe"
   dependencies:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
