@@ -20,8 +20,7 @@
     "test:dev": "cross-env-shell NODE_ENV=development \"ts-node tests/index.ts\"",
     "test:prd": "cross-env-shell NODE_ENV=production \"node bin/tests/index.js\"",
     "swaggen": "rimraf ../gtm.lib.client.user/src/swagger/* && call ./node_modules/@gtm/lib.service/tool/swagger-codegen ./node_modules/@gtm/lib.service/tool ./swagger/output/swagger.json ../gtm.lib.client.user/src/swagger",
-    "swagger": "tsoa swagger && tsoa routes && yarn run swaggen",
-    "p": "npm publish --access public"
+    "swagger": "tsoa swagger && tsoa routes && yarn run swaggen"
   },
   "keywords": [],
   "author": "MyBestBook.NET",
@@ -59,7 +58,7 @@
     "passport": "^0.4.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
-    "tsoa": "thanhptr/tsoa",
-    "yarn": "^1.3.2"
+    "tsoa": "github:thanhptr/tsoa",
+    "yarn": "^1.4.0"
   }
 }
