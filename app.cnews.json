@@ -1,0 +1,13 @@
+{
+  "apps": [{
+    "name": "cnews.service.user",
+    "script": "./bin/src/index.js",
+    "cwd": "/opt/cnews/git/gtm.service.user",
+    "error_file": "/opt/cnews/log/cnews.service.user-err.log",
+    "out_file": "/opt/cnews/log/cnews.service.user-out.log",
+    "exec_mode": "fork_mode",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }]
+}
