@@ -12,12 +12,12 @@
     reflect-metadata "^0.1.12"
     rimraf "^2.6.2"
 
-"@gtm/lib.service.auth@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.8.tgz#6e498d1776647b7326b206e9087496c803f104a6"
+"@gtm/lib.service.auth@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.9.tgz#e5f3615bd7901fcb527b19c46d93d9048ffe70e8"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
-    "@gtm/lib.service" "^1.0.2"
+    "@gtm/lib.service" "^1.0.3"
     "@types/lodash" "^4.14.102"
     express "^4.16.2"
     jsonwebtoken "^8.1.1"
@@ -30,11 +30,11 @@
     request "^2.83.0"
     request-promise-native "^1.0.5"
     rimraf "^2.6.2"
-    swagger-ui-dist "^3.9.3"
+    swagger-ui-dist "^3.10.0"
 
-"@gtm/lib.service@^1.0.1", "@gtm/lib.service@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.2.tgz#83baf438586d2c28f46b5e647fd12d51000bb36b"
+"@gtm/lib.service@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.3.tgz#6c4be7c1fd70f4f4045ec35459a0e951d42adf90"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
     body-parser "^1.18.2"
@@ -44,7 +44,7 @@
     inversify "^4.10.0"
     inversify-binding-decorators "^3.2.0"
     inversify-express-utils "^5.2.1"
-    mongoose "^4.13.10"
+    mongoose "^4.13.11"
     reflect-metadata "^0.1.12"
     rimraf "^2.6.2"
 
@@ -642,8 +642,8 @@ boxen@^1.2.1:
     widest-line "^2.0.0"
 
 brace-expansion@^1.1.7:
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.10.tgz#5205cdf64c9798c180dc74b7bfc670c3974e6300"
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
   dependencies:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
@@ -2254,7 +2254,7 @@ mongodb@2.2.34:
     mongodb-core "2.1.18"
     readable-stream "2.2.7"
 
-mongoose@^4.13.10, mongoose@^4.13.9:
+mongoose@^4.13.11, mongoose@^4.13.9:
   version "4.13.11"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.13.11.tgz#da6edf8e399054e12836016316999519a358db43"
   dependencies:
@@ -3254,9 +3254,9 @@ supports-color@^4.0.0:
   dependencies:
     has-flag "^2.0.0"
 
-swagger-ui-dist@^3.9.3:
-  version "3.9.3"
-  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.9.3.tgz#caba91e8550d7d2464a08456bd936d7c430f0dd3"
+swagger-ui-dist@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.10.0.tgz#8a5af33ff2263c715a143f73f2a8d47d539943ef"
 
 tar-pack@^3.4.0:
   version "3.4.1"
