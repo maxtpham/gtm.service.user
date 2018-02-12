@@ -48,6 +48,22 @@
     reflect-metadata "^0.1.12"
     rimraf "^2.6.2"
 
+"@gtm/lib.service@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.4.tgz#3a2f9cdca7c2ad72aae3087cd0a4717b0e6ba578"
+  dependencies:
+    "@gtm/lib.common" "^1.0.9"
+    body-parser "^1.18.2"
+    config "^1.29.4"
+    cookie-parser "^1.4.3"
+    express "^4.16.2"
+    inversify "^4.10.0"
+    inversify-binding-decorators "^3.2.0"
+    inversify-express-utils "^5.2.1"
+    mongoose "^4.13.11"
+    reflect-metadata "^0.1.12"
+    rimraf "^2.6.2"
+
 "@types/body-parser@*":
   version "1.16.8"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.16.8.tgz#687ec34140624a3bec2b1a8ea9268478ae8f3be3"
@@ -128,9 +144,13 @@
     "@types/mongodb" "*"
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^9.4.4":
+"@types/node@*":
   version "9.4.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.4.tgz#4cad4305d1ec84eab2dc2bda97dfb6a5f652cccb"
+
+"@types/node@^9.4.5":
+  version "9.4.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.5.tgz#d2a90c634208173d1b1a0a6ba9f1df3de62edcf5"
 
 "@types/passport@^0.3.5":
   version "0.3.5"
