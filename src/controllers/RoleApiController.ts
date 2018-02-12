@@ -21,7 +21,7 @@ export class RoleApiController extends ApiController {
         : Promise<RoleViewWithPagination> {
         let queryToEntities = !!query ? {
             $and: [
-                { $or: [{ name: query }, { scope: query }] },
+                { $or: [{ code: { $regex: query, $options: 'i' } }, { scope: { $regex: query, $options: 'i' }}] },
                 {
                     deleted: null
                 }
@@ -29,12 +29,12 @@ export class RoleApiController extends ApiController {
         } : { deleted: null };
         let roles = await this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
         if (roles) {
-            let roleTotalItems = await this.RoleRepository.count({ deleted: null });
+            let roleTotalItems = await this.RoleRepository.find(queryToEntities);
             let roleDetailViews: RoleDetailView[] = [];
             roles.map(role => {
                 roleDetailViews.push(this.RoleRepository.buildClientRole(role));
             })
-            let roleViews = <RoleViewWithPagination>{ roles: roleDetailViews, totalItems: roleTotalItems };
+            let roleViews = <RoleViewWithPagination>{ roles: roleDetailViews, totalItems: roleTotalItems.length };
             return Promise.resolve(roleViews);
         }
         return Promise.reject(`Not found.`);
