@@ -8,6 +8,7 @@ import { MongoClient } from "@gtm/lib.service";
 import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
 import { UserEntity, UserSchema } from '../entities/UserEntity';
+import { MUserView } from "../views/MUserView";
 
 export interface UserDocument extends UserEntity, Document { }
 
@@ -16,6 +17,7 @@ export const UserRepositoryTYPE = Symbol("UserRepository");
 export interface UserRepository extends Repository<UserEntity> {
     /** Get or create User by passport Profile. If User exists, compare and update changes */
     getByProfile(profile: passport.Profile): Promise<UserEntity>;
+    buildClientRole: (user: UserEntity) => MUserView;
 }
 
 @injectableSingleton(UserRepositoryTYPE)
@@ -58,5 +60,12 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         }
 
         return Promise.resolve(user);
+    }
+
+    public buildClientRole(user: UserEntity): MUserView {
+        return <MUserView>{
+            id: user._id,
+            name: user.name,
+        }
     }
 }

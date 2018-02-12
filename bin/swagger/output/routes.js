@@ -7,6 +7,7 @@ const SystemApiController_1 = require("./../../src/controllers/SystemApiControll
 const SessionApiController_1 = require("./../../src/controllers/SessionApiController");
 const RoleApiController_1 = require("./../../src/controllers/RoleApiController");
 const MessageApiController_1 = require("./../../src/controllers/MessageApiController");
+const UserApiController_1 = require("./../../src/controllers/UserApiController");
 const index_2 = require("./../index");
 const models = {
     "MapOfBoolean": {
@@ -80,6 +81,12 @@ const models = {
             "toUserId": { "dataType": "string", "required": true },
             "content": { "dataType": "string", "required": true },
             "delivered": { "dataType": "double" },
+        },
+    },
+    "MUserView": {
+        "properties": {
+            "id": { "ref": "String", "required": true },
+            "name": { "ref": "String", "required": true },
         },
     },
 };
@@ -281,6 +288,21 @@ function RegisterRoutes(app) {
         }
         const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
         const promise = controller.deleteEntity.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/user/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.getEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     function authenticateMiddleware(security = []) {

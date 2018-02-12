@@ -10,6 +10,11 @@ export interface UserEntity extends DbEntity {
 
     /* Provider profile data */
     profiles?: any;
+
+    roleCode: String;
+
+    status: number;
+
 }
 
 export const UserSchema = {
@@ -17,4 +22,6 @@ export const UserSchema = {
     code: { type: mongoose.Schema.Types.String, required: true },
     name: { type: mongoose.Schema.Types.String, required: true },
     profiles: { type: mongoose.Schema.Types.Mixed, required: false },
+    roleCode: { type: mongoose.Schema.Types.String, required: true },
+    status: { type: mongoose.Schema.Types.Number, required: true },
 };

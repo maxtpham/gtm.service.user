@@ -8,6 +8,7 @@ import { RoleApiController } from "./RoleApiController";
 import { MessageApiController } from "./MessageApiController";
 
 import { AuthWebController } from "./AuthWebController";
+import { UserApiController } from "./UserApiController";
 
 export async function register(app: express.Application, config: IAppConfig, iocContainer: interfaces.Container) {
     // IOC initialize for all web controllers manually (as no reference to them)
