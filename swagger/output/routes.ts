@@ -5,6 +5,7 @@ import { SystemApiController } from './../../src/controllers/SystemApiController
 import { SessionApiController } from './../../src/controllers/SessionApiController';
 import { RoleApiController } from './../../src/controllers/RoleApiController';
 import { MessageApiController } from './../../src/controllers/MessageApiController';
+import { UserApiController } from './../../src/controllers/UserApiController';
 import { expressAuthentication } from './../index';
 
 const models: TsoaRoute.Models = {
@@ -80,6 +81,12 @@ const models: TsoaRoute.Models = {
             "toUserId": { "dataType": "string", "required": true },
             "content": { "dataType": "string", "required": true },
             "delivered": { "dataType": "double" },
+        },
+    },
+    "MUserView": {
+        "properties": {
+            "id": { "ref": "String", "required": true },
+            "name": { "ref": "String", "required": true },
         },
     },
 };
@@ -348,6 +355,26 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.deleteEntity.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/user/:id',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.getEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
 

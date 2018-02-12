@@ -67,6 +67,12 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             return Promise.resolve(user);
         });
     }
+    buildClientRole(user) {
+        return {
+            id: user._id,
+            name: user.name,
+        };
+    }
 };
 UserRepositoryImpl = __decorate([
     lib_common_1.injectableSingleton(exports.UserRepositoryTYPE),

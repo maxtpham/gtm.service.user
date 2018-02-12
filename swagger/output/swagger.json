@@ -238,6 +238,21 @@
 				"content"
 			],
 			"type": "object"
+		},
+		"MUserView": {
+			"properties": {
+				"id": {
+					"$ref": "#/definitions/String"
+				},
+				"name": {
+					"$ref": "#/definitions/String"
+				}
+			},
+			"required": [
+				"id",
+				"name"
+			],
+			"type": "object"
 		}
 	},
 	"info": {
@@ -673,6 +688,39 @@
 				"description": "Delete Message ",
 				"tags": [
 					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/{id}": {
+			"get": {
+				"operationId": "GetEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MUserView"
+						}
+					}
+				},
+				"description": "Get user by Id ",
+				"tags": [
+					"User"
 				],
 				"security": [
 					{
