@@ -32,7 +32,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
         return __awaiter(this, void 0, void 0, function* () {
             let queryToEntities = !!query ? {
                 $and: [
-                    { $or: [{ name: query }, { scope: query }] },
+                    { $or: [{ code: { $regex: query, $options: 'i' } }, { scope: { $regex: query, $options: 'i' } }] },
                     {
                         deleted: null
                     }
@@ -40,12 +40,12 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
             } : { deleted: null };
             let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
             if (roles) {
-                let roleTotalItems = yield this.RoleRepository.count({ deleted: null });
+                let roleTotalItems = yield this.RoleRepository.find(queryToEntities);
                 let roleDetailViews = [];
                 roles.map(role => {
                     roleDetailViews.push(this.RoleRepository.buildClientRole(role));
                 });
-                let roleViews = { roles: roleDetailViews, totalItems: roleTotalItems };
+                let roleViews = { roles: roleDetailViews, totalItems: roleTotalItems.length };
                 return Promise.resolve(roleViews);
             }
             return Promise.reject(`Not found.`);

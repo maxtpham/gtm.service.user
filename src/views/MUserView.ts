@@ -17,3 +17,10 @@ export interface UserViewLite {
   roleCode: String;
   status: number;
 }
+
+export interface ScProfileView {
+  balance: number;
+  bonus: number;
+  
+  laiXuatMacDinh?: number;
+}

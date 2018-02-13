@@ -148,10 +148,6 @@
   version "9.4.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.4.tgz#4cad4305d1ec84eab2dc2bda97dfb6a5f652cccb"
 
-"@types/node@^9.4.5":
-  version "9.4.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.5.tgz#d2a90c634208173d1b1a0a6ba9f1df3de62edcf5"
-
 "@types/passport@^0.3.5":
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/@types/passport/-/passport-0.3.5.tgz#2089c7046d120e8bb92aa4ed86338c9c62ef7853"
