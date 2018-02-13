@@ -27,15 +27,23 @@ export interface UserView {
     birthday?: number;
 
     address?: string;
+    location?: LocationView;
     phone?: string;
     email?: string;
 
     /** The OAuth2 authentication process should auto
      * load up the default user avatar at 1st user login  */
-    avatar?: UserAvatarView;
+    avatar?: AttachmentView;
 }
 
-export interface UserAvatarView {
+export interface LocationView {
+    /** longitude */
+    x: number;
+    /** latitude */
+    y: number;
+}
+
+export interface AttachmentView {
     /** HTML Content-Type: image/png, image/jpeg, image/gif,..
      * This will be return to browser client to correctly load & show the image  */
     type: string;
@@ -47,8 +55,12 @@ export interface UserAvatarView {
 export interface UserEntity extends DbEntity, UserView {
 }
 
-export const UserAvatarSchema = {
-    required: false,
+export const LocationSchema = {
+    x: { type: mongoose.Schema.Types.Number, required: true },
+    y: { type: mongoose.Schema.Types.Number, required: true },
+}
+
+export const AttachmentSchema = {
     type: { type: mongoose.Schema.Types.String, required: true },
     data: { type: mongoose.Schema.Types.Buffer, required: true },
 }
@@ -63,9 +75,10 @@ export const UserSchema = {
 
     birthday: { type: mongoose.Schema.Types.Number, required: false },
     address: { type: mongoose.Schema.Types.String, required: false },
+    location: { ...LocationSchema, required: false },
     phone: { type: mongoose.Schema.Types.String, required: false },
     email: { type: mongoose.Schema.Types.String, required: false },
-    avatar: UserAvatarSchema,
+    avatar: { ...AttachmentSchema, required: false },
 };
 
 export module User {
