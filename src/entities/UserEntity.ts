@@ -46,7 +46,7 @@ export interface LocationView {
 export interface AttachmentView {
     /** HTML Content-Type: image/png, image/jpeg, image/gif,..
      * This will be return to browser client to correctly load & show the image  */
-    type: string;
+    media: string;
 
     /** Image raw/binary Content-Data will be stramming to browser client */
     data: Buffer;
@@ -61,8 +61,8 @@ export const LocationSchema = {
 }
 
 export const AttachmentSchema = {
-    type: { type: mongoose.Schema.Types.String, required: true },
-    data: { type: mongoose.Schema.Types.Buffer, required: true },
+    media: { type: mongoose.Schema.Types.String, required: true },
+    data: { type: mongoose.Schema.Types.Buffer, required: true },   
 }
 
 export const UserSchema = {
@@ -75,15 +75,15 @@ export const UserSchema = {
 
     birthday: { type: mongoose.Schema.Types.Number, required: false },
     address: { type: mongoose.Schema.Types.String, required: false },
-    location: { ...LocationSchema, required: false },
+    location: { type: LocationSchema, required: false },
     phone: { type: mongoose.Schema.Types.String, required: false },
     email: { type: mongoose.Schema.Types.String, required: false },
-    avatar: { ...AttachmentSchema, required: false },
+    avatar: { type: AttachmentSchema, required: false },
 };
 
 export module User {
     export function toView(entity: UserEntity): UserView {
-        const { _id, __v, created, deleted, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
+        const { _id, __v, created, deleted, updated, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
         return view;
     }
 }

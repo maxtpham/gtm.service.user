@@ -16,14 +16,14 @@ exports.LocationSchema = {
     y: { type: mongoose.Schema.Types.Number, required: true },
 };
 exports.AttachmentSchema = {
-    type: { type: mongoose.Schema.Types.String, required: true },
+    media: { type: mongoose.Schema.Types.String, required: true },
     data: { type: mongoose.Schema.Types.Buffer, required: true },
 };
-exports.UserSchema = Object.assign({}, lib_service_1.DbSchema, { code: { type: mongoose.Schema.Types.String, required: true }, name: { type: mongoose.Schema.Types.String, required: true }, profiles: { type: mongoose.Schema.Types.Mixed, required: true }, roleId: { type: mongoose.Schema.Types.ObjectId, required: false }, active: { type: mongoose.Schema.Types.Boolean, required: false }, birthday: { type: mongoose.Schema.Types.Number, required: false }, address: { type: mongoose.Schema.Types.String, required: false }, location: Object.assign({}, exports.LocationSchema, { required: false }), phone: { type: mongoose.Schema.Types.String, required: false }, email: { type: mongoose.Schema.Types.String, required: false }, avatar: Object.assign({}, exports.AttachmentSchema, { required: false }) });
+exports.UserSchema = Object.assign({}, lib_service_1.DbSchema, { code: { type: mongoose.Schema.Types.String, required: true }, name: { type: mongoose.Schema.Types.String, required: true }, profiles: { type: mongoose.Schema.Types.Mixed, required: true }, roleId: { type: mongoose.Schema.Types.ObjectId, required: false }, active: { type: mongoose.Schema.Types.Boolean, required: false }, birthday: { type: mongoose.Schema.Types.Number, required: false }, address: { type: mongoose.Schema.Types.String, required: false }, location: { type: exports.LocationSchema, required: false }, phone: { type: mongoose.Schema.Types.String, required: false }, email: { type: mongoose.Schema.Types.String, required: false }, avatar: { type: exports.AttachmentSchema, required: false } });
 var User;
 (function (User) {
     function toView(entity) {
-        const _a = !!entity.toObject ? entity.toObject() : entity, { _id, __v, created, deleted } = _a, view = __rest(_a, ["_id", "__v", "created", "deleted"]);
+        const _a = !!entity.toObject ? entity.toObject() : entity, { _id, __v, created, deleted, updated } = _a, view = __rest(_a, ["_id", "__v", "created", "deleted", "updated"]);
         return view;
     }
     User.toView = toView;
