@@ -9,10 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const AuthWebController_1 = require("./AuthWebController");
+const UserWebController_1 = require("./UserWebController");
 function register(app, config, iocContainer) {
     return __awaiter(this, void 0, void 0, function* () {
         // IOC initialize for all web controllers manually (as no reference to them)
         AuthWebController_1.AuthWebController.name;
+        UserWebController_1.UserWebController.name;
     });
 }
 exports.register = register;

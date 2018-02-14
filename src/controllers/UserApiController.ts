@@ -15,7 +15,6 @@ import { UserEntity } from '../entities/UserEntity';
 export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
 
-
     /** Get user by Id */
     @Tags('User') @Security('jwt') @Get('{id}')
     public async getEntity(id: string): Promise<MUserView> {
