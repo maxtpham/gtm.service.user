@@ -28,11 +28,11 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
      * [OAuth2] Called by passport to give Provider tokens & profile after a successful authentication process
      * the system in turn will getOrCreate a UserProfile then return it to passport
      */
-    createJwtToken(accessToken, refreshToken, providerSession, profile, done) {
+    createJwtToken(accessToken, refreshToken, providerSession, profile, profileExt, done) {
         return __awaiter(this, void 0, void 0, function* () {
             let jwtToken;
             try {
-                jwtToken = this.toJwtToken(yield this.createSession(accessToken, refreshToken, providerSession, profile));
+                jwtToken = this.toJwtToken(yield this.createSession(accessToken, refreshToken, providerSession, profile, profileExt));
             }
             catch (ex) {
                 done(ex, null, `Error while creating & updating ${profile.provider} session for user '${profile.displayName}' with ${profile.provider} token: ${accessToken}`);
@@ -68,7 +68,7 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
         }
         return jwtScope;
     }
-    createSession(accessToken, refreshToken, providerSession, profile) {
+    createSession(accessToken, refreshToken, providerSession, profile, profileExt) {
         return __awaiter(this, void 0, void 0, function* () {
             // Find the session with provided accessToken then restore in case user lost the current working token,but Provider still detect then return old token
             let session = yield this.SessionRepository.findOneAndUpdate({ code: accessToken }, {
@@ -82,7 +82,7 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
                 console.log(`Reuse existing ${profile.provider} session ${session._id} for user '${profile.displayName}' [${session.userId}]`);
             }
             else {
-                const user = yield this.UserRepository.getByProfile(profile);
+                const user = yield this.UserRepository.getByProfile(profile, profileExt);
                 // Create new session for the user
                 session = yield this.SessionRepository.save({
                     userId: user._id,

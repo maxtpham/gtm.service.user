@@ -1,5 +1,5 @@
 import * as mongoose from "mongoose";
-import { DbEntity, DbSchema } from "@gtm/lib.service"
+import { DbEntity, DbSchema, LocationView, AttachmentView, LocationSchema, AttachmentSchema } from "@gtm/lib.service"
 
 export interface UserView {
     /** Google/FB profile id*/
@@ -30,39 +30,19 @@ export interface UserView {
     location?: LocationView;
     phone?: string;
     email?: string;
+    /** en, vn,.. */
+    language?: string;
+    /** male/female */
+    gender?: string;
+    /** +/- UTC time */
+    timezone?: number;
 
     /** The OAuth2 authentication process should auto
      * load up the default user avatar at 1st user login  */
     avatar?: AttachmentView;
 }
 
-export interface LocationView {
-    /** longitude */
-    x: number;
-    /** latitude */
-    y: number;
-}
-
-export interface AttachmentView {
-    /** HTML Content-Type: image/png, image/jpeg, image/gif,..
-     * This will be return to browser client to correctly load & show the image  */
-    media: string;
-
-    /** Image raw/binary Content-Data will be stramming to browser client */
-    data: Buffer;
-}
-
 export interface UserEntity extends DbEntity, UserView {
-}
-
-export const LocationSchema = {
-    x: { type: mongoose.Schema.Types.Number, required: true },
-    y: { type: mongoose.Schema.Types.Number, required: true },
-}
-
-export const AttachmentSchema = {
-    media: { type: mongoose.Schema.Types.String, required: true },
-    data: { type: mongoose.Schema.Types.Buffer, required: true },   
 }
 
 export const UserSchema = {
@@ -78,12 +58,8 @@ export const UserSchema = {
     location: { type: LocationSchema, required: false },
     phone: { type: mongoose.Schema.Types.String, required: false },
     email: { type: mongoose.Schema.Types.String, required: false },
+    language: { type: mongoose.Schema.Types.String, required: false },
+    gender: { type: mongoose.Schema.Types.String, required: false },
+    timezone: { type: mongoose.Schema.Types.Number, required: false },
     avatar: { type: AttachmentSchema, required: false },
 };
-
-export module User {
-    export function toView(entity: UserEntity): UserView {
-        const { _id, __v, created, deleted, updated, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
-        return view;
-    }
-}

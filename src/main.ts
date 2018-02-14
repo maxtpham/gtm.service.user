@@ -9,13 +9,14 @@ import * as auth from "@gtm/lib.service.auth";
 import * as controllers from "./controllers/index";
 import { default as config, IAppConfig } from './config/AppConfig';
 import { AuthService, AuthServiceTYPE } from "./services/AuthService";
+import { CreateJwtTokenFunction } from "@gtm/lib.service.auth";
 
 export function main(test?: common.InitAppFunction) {
     common.main(__dirname, config, config, iocContainer, test, async (app: express.Application, config: IAppConfig, iocContainer: interfaces.Container) => {
         // Register OAuth2/JWT & Swagger routes
         const authService = iocContainer.get<AuthService>(AuthServiceTYPE);
         await auth.registerOAuth2(app, config, {
-            createJwtToken: authService.createJwtToken.bind(authService),
+            createJwtToken: (<CreateJwtTokenFunction>authService.createJwtToken).bind(authService),
             swaggerBaseDir: __dirname,
             jwtIgnoreUrls: ['/api/v1/system/loggedin', '/web/auth/session', '/web/auth/jwt']
         });

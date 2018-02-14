@@ -9,6 +9,7 @@ import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
 import { UserEntity, UserSchema } from '../entities/UserEntity';
 import { MUserView } from "../views/MUserView";
+import { Utils, OAuth2ProfileExt } from "@gtm/lib.service.auth";
 
 export interface UserDocument extends UserEntity, Document { }
 
@@ -16,7 +17,7 @@ export const UserRepositoryTYPE = Symbol("UserRepository");
 
 export interface UserRepository extends Repository<UserEntity> {
     /** Get or create User by passport Profile. If User exists, compare and update changes */
-    getByProfile(profile: passport.Profile): Promise<UserEntity>;
+    getByProfile(profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<UserEntity>;
     buildClientRole: (user: UserEntity) => MUserView;
 }
 
@@ -27,24 +28,20 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         super(mongoclient, "user", UserSchema);
     }
 
-    public async getByProfile(profile: passport.Profile): Promise<UserEntity> {
+    public async getByProfile(profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<UserEntity> {
         // Find & update the user by code (profile.id)
-        const tempUser = <UserEntity>{ updated: Date.now(), profiles: { } };
-        tempUser.updated = Date.now();
-        tempUser.name = profile.displayName;
-        tempUser.profiles[profile.provider] = (<any>profile)._json;
         let user: UserEntity;
         let users = await (<UserRepository>this).find({ code: profile.id });
         if (users && users.length > 0 && users[0]._id) {
             // Check to update user (if name or profile is changed)
             let updatedUser: UserEntity = <UserEntity>{ };
-            if (users[0].name !== tempUser.name) {
-                updatedUser.name = tempUser.name;
+            if (users[0].name !== profileExt.name) {
+                updatedUser.name = profileExt.name;
                 updatedUser.updated = Date.now();
             }
-            if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], tempUser.profiles[profile.provider], { strict: true })) {
+            if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], (<any>profile)._json, { strict: true })) {
                 updatedUser.profiles = { };
-                updatedUser.profiles[profile.provider] = tempUser.profiles[profile.provider];
+                updatedUser.profiles[profile.provider] = (<any>profile)._json;
                 updatedUser.updated = Date.now();
             }
             user = !updatedUser.updated ? users[0] : await (<UserRepository>this).findOneAndUpdate({ _id: users[0]._id }, updatedUser);
@@ -53,9 +50,20 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             }
         } else {
             // Create new user
-            tempUser.code = profile.id;
-            tempUser.updated = undefined;
-            user = await (<UserRepository>this).save(tempUser);
+            const newUser = <UserEntity>{
+                code: profileExt.id,
+                name: profileExt.name,
+                profiles: {},
+                email: profileExt.email,
+                gender: profileExt.gender,
+                avatar: await Utils.fetchPhoto(profileExt.avatar),
+                address: profileExt.address,
+                timezone: profileExt.timezone,
+                language: profileExt.language,
+            };
+            newUser.profiles[profile.provider] = (<any>profile)._json;
+
+            user = await (<UserRepository>this).save(newUser);
             console.log(`Created new ${profile.provider} user profile`, user);
         }
 

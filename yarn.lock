@@ -12,13 +12,12 @@
     reflect-metadata "^0.1.12"
     rimraf "^2.6.2"
 
-"@gtm/lib.service.auth@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.9.tgz#e5f3615bd7901fcb527b19c46d93d9048ffe70e8"
+"@gtm/lib.service.auth@^1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.15.tgz#82ac0bd91d5507e89b128eba7e575a20746f74e1"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
-    "@gtm/lib.service" "^1.0.3"
-    "@types/lodash" "^4.14.102"
+    "@gtm/lib.service" "^1.0.5"
     express "^4.16.2"
     jsonwebtoken "^8.1.1"
     lodash "^4.17.5"
@@ -32,25 +31,9 @@
     rimraf "^2.6.2"
     swagger-ui-dist "^3.10.0"
 
-"@gtm/lib.service@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.3.tgz#6c4be7c1fd70f4f4045ec35459a0e951d42adf90"
-  dependencies:
-    "@gtm/lib.common" "^1.0.9"
-    body-parser "^1.18.2"
-    config "^1.29.4"
-    cookie-parser "^1.4.3"
-    express "^4.16.2"
-    inversify "^4.10.0"
-    inversify-binding-decorators "^3.2.0"
-    inversify-express-utils "^5.2.1"
-    mongoose "^4.13.11"
-    reflect-metadata "^0.1.12"
-    rimraf "^2.6.2"
-
-"@gtm/lib.service@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.4.tgz#3a2f9cdca7c2ad72aae3087cd0a4717b0e6ba578"
+"@gtm/lib.service@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.5.tgz#1830efd04e95ad64ba477e1519d0297e7848e47a"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
     body-parser "^1.18.2"
@@ -119,10 +102,6 @@
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-7.2.5.tgz#413159d570ec45fc3e7da7ea3f7bca6fb9300e72"
   dependencies:
     "@types/node" "*"
-
-"@types/lodash@^4.14.102":
-  version "4.14.102"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.102.tgz#586a3e22385fc79b07cef9c5a1c8a5387986fbc8"
 
 "@types/mime@*":
   version "2.0.0"
@@ -817,6 +796,12 @@ color-name@^1.1.1:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
 
+combined-stream@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.6.tgz#723e7df6e801ac5613113a7e445a9b69cb632818"
+  dependencies:
+    delayed-stream "~1.0.0"
+
 combined-stream@^1.0.5, combined-stream@~1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.5.tgz#938370a57b4a51dea2c77c15d5c5fdf895164009"
@@ -1277,11 +1262,11 @@ form-data@~2.1.1:
     mime-types "^2.1.12"
 
 form-data@~2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.3.1.tgz#6fb94fbd71885306d73d15cc497fe4cc4ecd44bf"
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.3.2.tgz#4970498be604c20c005d4f5c23aecd21d6b49099"
   dependencies:
     asynckit "^0.4.0"
-    combined-stream "^1.0.5"
+    combined-stream "1.0.6"
     mime-types "^2.1.12"
 
 forwarded@~0.1.2:

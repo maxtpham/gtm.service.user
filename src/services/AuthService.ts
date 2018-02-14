@@ -4,7 +4,7 @@ import * as mongoose from "mongoose";
 
 import { injectableSingleton } from "@gtm/lib.common";
 import { Service, ServiceImpl } from "@gtm/lib.service";
-import { ProviderSession, JwtToken } from "@gtm/lib.service.auth";
+import { ProviderSession, JwtToken, OAuth2ProfileExt } from "@gtm/lib.service.auth";
 import { SessionEntity, SessionSchema } from '../entities/SessionEntity';
 import { SessionRepository, SessionRepositoryTYPE } from '../repositories/SessionRepository';
 import { UserEntity } from "../entities/UserEntity";
@@ -13,9 +13,9 @@ import { UserRepository, UserRepositoryTYPE } from '../repositories/UserReposito
 export const AuthServiceTYPE = Symbol("AuthService");
 
 export interface AuthService extends Service {
-    createJwtToken(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile, done: (error: any, user?: any, info?: any) => void): Promise<void>;
+    createJwtToken(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile, profileExt: OAuth2ProfileExt, done: (error: any, user?: any, info?: any) => void): Promise<void>;
     toJwtToken(session: SessionEntity): JwtToken;
-    createSession(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile): Promise<SessionEntity>;
+    createSession(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<SessionEntity>;
 }
 
 @injectableSingleton(AuthServiceTYPE)
@@ -27,10 +27,10 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
      * [OAuth2] Called by passport to give Provider tokens & profile after a successful authentication process
      * the system in turn will getOrCreate a UserProfile then return it to passport
      */
-    public async createJwtToken(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile, done: (error: any, user?: any, info?: any) => void): Promise<void> {
+    public async createJwtToken(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile, profileExt: OAuth2ProfileExt, done: (error: any, user?: any, info?: any) => void): Promise<void> {
         let jwtToken: JwtToken;
         try {
-            jwtToken = this.toJwtToken(await this.createSession(accessToken, refreshToken, providerSession, profile));
+            jwtToken = this.toJwtToken(await this.createSession(accessToken, refreshToken, providerSession, profile, profileExt));
         }
         catch (ex) {
             done(ex, null, `Error while creating & updating ${profile.provider} session for user '${profile.displayName}' with ${profile.provider} token: ${accessToken}`);
@@ -67,7 +67,7 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
         return jwtScope;
     }
     
-    public async createSession(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile): Promise<SessionEntity> {
+    public async createSession(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<SessionEntity> {
         // Find the session with provided accessToken then restore in case user lost the current working token,but Provider still detect then return old token
         let session = await this.SessionRepository.findOneAndUpdate({ code: accessToken }, <SessionEntity>{
             updated: Date.now(),
@@ -79,7 +79,7 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
         if (session) {
             console.log(`Reuse existing ${profile.provider} session ${session._id} for user '${profile.displayName}' [${session.userId}]`);
         } else {
-            const user: UserEntity = await this.UserRepository.getByProfile(profile);
+            const user: UserEntity = await this.UserRepository.getByProfile(profile, profileExt);
             
             // Create new session for the user
             session = await this.SessionRepository.save(<SessionEntity>{

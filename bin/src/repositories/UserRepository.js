@@ -26,30 +26,27 @@ const lib_common_1 = require("@gtm/lib.common");
 const lib_service_1 = require("@gtm/lib.service");
 const lib_service_2 = require("@gtm/lib.service");
 const UserEntity_1 = require("../entities/UserEntity");
+const lib_service_auth_1 = require("@gtm/lib.service.auth");
 exports.UserRepositoryTYPE = Symbol("UserRepository");
 let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.RepositoryImpl {
     constructor(mongoclient) {
         super(mongoclient, "user", UserEntity_1.UserSchema);
     }
-    getByProfile(profile) {
+    getByProfile(profile, profileExt) {
         return __awaiter(this, void 0, void 0, function* () {
             // Find & update the user by code (profile.id)
-            const tempUser = { updated: Date.now(), profiles: {} };
-            tempUser.updated = Date.now();
-            tempUser.name = profile.displayName;
-            tempUser.profiles[profile.provider] = profile._json;
             let user;
             let users = yield this.find({ code: profile.id });
             if (users && users.length > 0 && users[0]._id) {
                 // Check to update user (if name or profile is changed)
                 let updatedUser = {};
-                if (users[0].name !== tempUser.name) {
-                    updatedUser.name = tempUser.name;
+                if (users[0].name !== profileExt.name) {
+                    updatedUser.name = profileExt.name;
                     updatedUser.updated = Date.now();
                 }
-                if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], tempUser.profiles[profile.provider], { strict: true })) {
+                if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], profile._json, { strict: true })) {
                     updatedUser.profiles = {};
-                    updatedUser.profiles[profile.provider] = tempUser.profiles[profile.provider];
+                    updatedUser.profiles[profile.provider] = profile._json;
                     updatedUser.updated = Date.now();
                 }
                 user = !updatedUser.updated ? users[0] : yield this.findOneAndUpdate({ _id: users[0]._id }, updatedUser);
@@ -59,9 +56,19 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             }
             else {
                 // Create new user
-                tempUser.code = profile.id;
-                tempUser.updated = undefined;
-                user = yield this.save(tempUser);
+                const newUser = {
+                    code: profileExt.id,
+                    name: profileExt.name,
+                    profiles: {},
+                    email: profileExt.email,
+                    gender: profileExt.gender,
+                    avatar: yield lib_service_auth_1.Utils.fetchPhoto(profileExt.avatar),
+                    address: profileExt.address,
+                    timezone: profileExt.timezone,
+                    language: profileExt.language,
+                };
+                newUser.profiles[profile.provider] = profile._json;
+                user = yield this.save(newUser);
                 console.log(`Created new ${profile.provider} user profile`, user);
             }
             return Promise.resolve(user);
