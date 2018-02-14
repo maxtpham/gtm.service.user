@@ -1,2 +1,2 @@
 export { iocContainer } from "@gtm/lib.common";
-export { expressAuthentication } from "@gtm/lib.service";
+export { expressAuthentication } from "@gtm/lib.service.auth";

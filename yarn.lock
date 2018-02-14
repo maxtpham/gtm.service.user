@@ -12,12 +12,12 @@
     reflect-metadata "^0.1.12"
     rimraf "^2.6.2"
 
-"@gtm/lib.service.auth@^1.0.15":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.15.tgz#82ac0bd91d5507e89b128eba7e575a20746f74e1"
+"@gtm/lib.service.auth@^1.0.17":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.17.tgz#7f8640042b03df0b83ffeaa431319f3bb0be8bc0"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
-    "@gtm/lib.service" "^1.0.5"
+    "@gtm/lib.service" "^1.0.6"
     express "^4.16.2"
     jsonwebtoken "^8.1.1"
     lodash "^4.17.5"
@@ -31,9 +31,9 @@
     rimraf "^2.6.2"
     swagger-ui-dist "^3.10.0"
 
-"@gtm/lib.service@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.5.tgz#1830efd04e95ad64ba477e1519d0297e7848e47a"
+"@gtm/lib.service@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.6.tgz#eb8d28e2f8e02a75003f5831b88531be75a36620"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
     body-parser "^1.18.2"

@@ -18,7 +18,7 @@ export function main(test?: common.InitAppFunction) {
         await auth.registerOAuth2(app, config, {
             createJwtToken: (<CreateJwtTokenFunction>authService.createJwtToken).bind(authService),
             swaggerBaseDir: __dirname,
-            jwtIgnoreUrls: ['/api/v1/system/loggedin', '/web/auth/session', '/web/auth/jwt']
+            jwtIgnoreUrls: ['/api/user/v1/system/loggedin', '/web/auth/session', '/web/auth/jwt']
         });
     
         // Register Web/Controllers
