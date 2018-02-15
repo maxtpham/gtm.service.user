@@ -17,6 +17,10 @@ export class UserWebController extends WebController {
      */
     @httpGet('/avatar')
     public getAvatar(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+        if (!(<JwtToken>req.user).user) {
+            res.sendStatus(401);
+            return Promise.resolve();
+        }
         return new Promise<void>((resolve, reject) => {
             this.UserRepository.findOneById((<JwtToken>req.user).user).then(userEntity => {
                 if (!userEntity.avatar) {
@@ -24,7 +28,7 @@ export class UserWebController extends WebController {
                     reject();
                 } else {
                     res.contentType(userEntity.avatar.media);
-                    res.end((<Binary><any>userEntity.avatar.data).buffer, 'binary', resolve);
+                    res.end(userEntity.avatar.data.buffer, 'binary', resolve);
                 }
             }).catch(e => reject(e));
         });

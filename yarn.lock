@@ -12,12 +12,13 @@
     reflect-metadata "^0.1.12"
     rimraf "^2.6.2"
 
-"@gtm/lib.service.auth@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.18.tgz#ab305d45fb2c094c8c633f513e7fff4be0afd23c"
+"@gtm/lib.service.auth@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.19.tgz#fe144d52e14ccf3164561ee7c5ae87d1866d9a92"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
-    "@gtm/lib.service" "^1.0.6"
+    "@gtm/lib.service" "^1.0.7"
+    bson "^1.0.4"
     express "^4.16.2"
     jsonwebtoken "^8.1.1"
     lodash "^4.17.5"
@@ -31,9 +32,9 @@
     rimraf "^2.6.2"
     swagger-ui-dist "^3.10.0"
 
-"@gtm/lib.service@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.6.tgz#eb8d28e2f8e02a75003f5831b88531be75a36620"
+"@gtm/lib.service@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service/-/lib.service-1.0.7.tgz#04bb2d83acb888f133b58aafe61dcd8ae7f02667"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
     body-parser "^1.18.2"
@@ -659,7 +660,7 @@ braces@^2.3.0:
     split-string "^3.0.2"
     to-regex "^3.0.1"
 
-bson@~1.0.4:
+bson@^1.0.4, bson@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/bson/-/bson-1.0.4.tgz#93c10d39eaa5b58415cbc4052f3e53e562b0b72c"
 
