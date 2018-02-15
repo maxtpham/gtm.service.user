@@ -29,8 +29,7 @@ let UserWebController = class UserWebController extends lib_service_1.WebControl
         return new Promise((resolve, reject) => {
             this.UserRepository.findOneById(req.user.user).then(userEntity => {
                 if (!userEntity.avatar) {
-                    res.sendStatus(404);
-                    reject();
+                    reject('Avatar is not available');
                 }
                 else {
                     res.contentType(userEntity.avatar.media);
@@ -48,14 +47,16 @@ let UserWebController = class UserWebController extends lib_service_1.WebControl
             return Promise.resolve();
         }
         if (!userId) {
-            res.sendStatus(404);
             return Promise.reject('Invalid user Id');
+        }
+        if (req.user.user === userId) {
+            res.sendStatus(401);
+            return Promise.resolve();
         }
         return new Promise((resolve, reject) => {
             this.UserRepository.findOneById(userId).then(userEntity => {
                 if (!userEntity.avatar) {
-                    res.sendStatus(404);
-                    reject();
+                    reject('Avatar is not available');
                 }
                 else {
                     res.contentType(userEntity.avatar.media);
@@ -77,7 +78,7 @@ __decorate([
 ], UserWebController.prototype, "getAvatar", null);
 __decorate([
     inversify_express_utils_1.httpGet('/avatar/:id'),
-    __param(0, inversify_express_utils_1.queryParam('id')),
+    __param(0, inversify_express_utils_1.requestParam('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object, Object, Function]),
     __metadata("design:returntype", Promise)
