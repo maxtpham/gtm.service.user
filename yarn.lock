@@ -12,9 +12,9 @@
     reflect-metadata "^0.1.12"
     rimraf "^2.6.2"
 
-"@gtm/lib.service.auth@^1.0.20":
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.20.tgz#6dfa4017cd27b7c48033fcd38c7ab8a67741947f"
+"@gtm/lib.service.auth@^1.0.21":
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/@gtm/lib.service.auth/-/lib.service.auth-1.0.21.tgz#81f8a315dd63aa3e9c00badaed042f4cfa4731c9"
   dependencies:
     "@gtm/lib.common" "^1.0.9"
     "@gtm/lib.service" "^1.0.7"

@@ -44,7 +44,7 @@
   "dependencies": {
     "@gtm/lib.common": "^1.0.9",
     "@gtm/lib.service": "^1.0.7",
-    "@gtm/lib.service.auth": "^1.0.20",
+    "@gtm/lib.service.auth": "^1.0.21",
     "config": "^1.29.2",
     "cross-env": "^5.1.3",
     "deep-equal": "^1.0.1",
