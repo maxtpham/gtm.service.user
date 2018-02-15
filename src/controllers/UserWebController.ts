@@ -24,8 +24,35 @@ export class UserWebController extends WebController {
         return new Promise<void>((resolve, reject) => {
             this.UserRepository.findOneById((<JwtToken>req.user).user).then(userEntity => {
                 if (!userEntity.avatar) {
-                    res.sendStatus(404);
-                    reject();
+                    reject('Avatar is not available');
+                } else {
+                    res.contentType(userEntity.avatar.media);
+                    res.end(userEntity.avatar.data.buffer, 'binary', resolve);
+                }
+            }).catch(e => reject(e));
+        });
+    }
+
+    /**
+     * Get Avatar for other user
+     */
+    @httpGet('/avatar/:id')
+    public getAvatarFor(@requestParam('id') userId: string, req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+        if (!(<JwtToken>req.user).user) {
+            res.sendStatus(401);
+            return Promise.resolve();
+        }
+        if (!userId) {
+            return Promise.reject('Invalid user Id');
+        }
+        if ((<JwtToken>req.user).user === userId) {
+            res.sendStatus(401);
+            return Promise.resolve();
+        }
+        return new Promise<void>((resolve, reject) => {
+            this.UserRepository.findOneById(userId).then(userEntity => {
+                if (!userEntity.avatar) {
+                    reject('Avatar is not available');
                 } else {
                     res.contentType(userEntity.avatar.media);
                     res.end(userEntity.avatar.data.buffer, 'binary', resolve);

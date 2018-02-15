@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const inversify_express_utils_1 = require("inversify-express-utils");
@@ -19,8 +22,37 @@ let UserWebController = class UserWebController extends lib_service_1.WebControl
      * Get current user Avatar
      */
     getAvatar(req, res, next) {
+        if (!req.user.user) {
+            res.sendStatus(401);
+            return Promise.resolve();
+        }
         return new Promise((resolve, reject) => {
             this.UserRepository.findOneById(req.user.user).then(userEntity => {
+                if (!userEntity.avatar) {
+                    res.sendStatus(404);
+                    reject();
+                }
+                else {
+                    res.contentType(userEntity.avatar.media);
+                    res.end(userEntity.avatar.data.buffer, 'binary', resolve);
+                }
+            }).catch(e => reject(e));
+        });
+    }
+    /**
+     * Get Avatar for other user
+     */
+    getAvatarFor(userId, req, res, next) {
+        if (!req.user.user) {
+            res.sendStatus(401);
+            return Promise.resolve();
+        }
+        if (!userId) {
+            res.sendStatus(404);
+            return Promise.reject('Invalid user Id');
+        }
+        return new Promise((resolve, reject) => {
+            this.UserRepository.findOneById(userId).then(userEntity => {
                 if (!userEntity.avatar) {
                     res.sendStatus(404);
                     reject();
@@ -43,6 +75,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
 ], UserWebController.prototype, "getAvatar", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/avatar/:id'),
+    __param(0, inversify_express_utils_1.queryParam('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserWebController.prototype, "getAvatarFor", null);
 UserWebController = __decorate([
     inversify_express_utils_1.controller('/web/user')
 ], UserWebController);
