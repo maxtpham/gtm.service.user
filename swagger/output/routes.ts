@@ -42,8 +42,6 @@ const models: TsoaRoute.Models = {
             "scope": { "dataType": "string", "required": true },
         },
     },
-    "String": {
-    },
     "MessageDetailView": {
         "properties": {
             "id": { "dataType": "string", "required": true },
@@ -85,8 +83,8 @@ const models: TsoaRoute.Models = {
     },
     "MUserView": {
         "properties": {
-            "id": { "ref": "String", "required": true },
-            "name": { "ref": "String", "required": true },
+            "id": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
         },
     },
 };

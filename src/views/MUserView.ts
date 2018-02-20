@@ -1,20 +1,20 @@
 export interface MUserView {
-  id: String;
-  name: String;
+  id: string;
+  name: string;
 }
 
 export interface UserViewFull {
   code: string;
   name: string;
   profiles?: any;
-  roleCode: String;
+  roleCode: string;
   status: number;
 }
 
 export interface UserViewLite {
   code: string;
   name: string;
-  roleCode: String;
+  roleCode: string;
   status: number;
 }
 

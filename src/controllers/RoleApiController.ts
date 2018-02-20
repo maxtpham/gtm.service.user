@@ -76,7 +76,7 @@ export class RoleApiController extends ApiController {
 
     /** Delete Role */
     @Tags('Role') @Security('jwt') @Delete('{id}')
-    public async deleteEntity(id: string): Promise<String> {
+    public async deleteEntity(id: string): Promise<string> {
         let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
         if (role) {
             return Promise.resolve('DELETE request to homepage');

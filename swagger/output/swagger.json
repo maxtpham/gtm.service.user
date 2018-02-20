@@ -107,11 +107,6 @@
 			],
 			"type": "object"
 		},
-		"String": {
-			"description": "Allows manipulation and formatting of text strings and determination and location of substrings within strings.",
-			"properties": {},
-			"type": "object"
-		},
 		"MessageDetailView": {
 			"properties": {
 				"id": {
@@ -242,10 +237,10 @@
 		"MUserView": {
 			"properties": {
 				"id": {
-					"$ref": "#/definitions/String"
+					"type": "string"
 				},
 				"name": {
-					"$ref": "#/definitions/String"
+					"type": "string"
 				}
 			},
 			"required": [
@@ -501,7 +496,7 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/String"
+							"type": "string"
 						}
 					}
 				},
