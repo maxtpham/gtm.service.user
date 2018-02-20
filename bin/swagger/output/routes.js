@@ -43,7 +43,6 @@ const models = {
             "scope": { "dataType": "string", "required": true },
         },
     },
-    "String": {},
     "MessageDetailView": {
         "properties": {
             "id": { "dataType": "string", "required": true },
@@ -85,8 +84,8 @@ const models = {
     },
     "MUserView": {
         "properties": {
-            "id": { "ref": "String", "required": true },
-            "name": { "ref": "String", "required": true },
+            "id": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
         },
     },
 };
