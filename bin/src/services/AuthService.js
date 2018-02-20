@@ -22,6 +22,7 @@ const lib_common_1 = require("@gtm/lib.common");
 const lib_service_1 = require("@gtm/lib.service");
 const SessionRepository_1 = require("../repositories/SessionRepository");
 const UserRepository_1 = require("../repositories/UserRepository");
+const AppConfig_1 = require("../config/AppConfig");
 exports.AuthServiceTYPE = Symbol("AuthService");
 let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
     /**
@@ -45,10 +46,11 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
     toJwtToken(session) {
         return {
             name: session.name,
+            roles: this.toJwtRoles(session.roles),
             scope: this.toJwtScope(session.scope),
             session: session._id.toHexString(),
             user: session.userId.toHexString(),
-            expires: (session.created + (session.expiresIn || 2592000) * 1000) // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
+            expires: (session.created + (session.expiresIn || AppConfig_1.default.sessionExpires || 2592000) * 1000) // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
         };
     }
     toJwtScope(sessionScope) {
@@ -67,6 +69,14 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
             }
         }
         return jwtScope;
+    }
+    toJwtRoles(sessionRoles) {
+        if (!sessionRoles || sessionRoles.length <= 0) {
+            return {};
+        }
+        const jwtRoles = {};
+        sessionRoles.forEach(sr => jwtRoles[sr] = true);
+        return jwtRoles;
     }
     createSession(accessToken, refreshToken, providerSession, profile, profileExt) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -88,8 +98,9 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
                     userId: user._id,
                     code: accessToken,
                     name: profile.displayName,
+                    roles: !user.roles || user.roles.length <= 0 ? undefined : user.roles.map(ur => ur.code),
                     scope: '*',
-                    expiresIn: null,
+                    expiresIn: AppConfig_1.default.sessionExpires || 2592000,
                     provider: {
                         name: profile.provider,
                         access_token: providerSession.access_token,

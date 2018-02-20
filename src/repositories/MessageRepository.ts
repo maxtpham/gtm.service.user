@@ -17,6 +17,6 @@ export interface MessageRepository extends Repository<MessageEntity> {
 @injectableSingleton(MessageRepositoryTYPE)
 export class MessageRepositoryImpl extends RepositoryImpl<MessageDocument> implements MessageRepository {
     constructor(@inject(DefaultMongoClientTYPE) mongoclient: MongoClient) {
-        super(mongoclient, "Message", MessageSchema);
+        super(mongoclient, "message", MessageSchema);
     }
 }

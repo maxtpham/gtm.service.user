@@ -9,6 +9,7 @@ import { SessionEntity, SessionSchema } from '../entities/SessionEntity';
 import { SessionRepository, SessionRepositoryTYPE } from '../repositories/SessionRepository';
 import { UserEntity } from "../entities/UserEntity";
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
+import config from "../config/AppConfig";
 
 export const AuthServiceTYPE = Symbol("AuthService");
 
@@ -43,14 +44,15 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
     public toJwtToken(session: SessionEntity): JwtToken {
         return <JwtToken>{
             name: session.name,
+            roles: this.toJwtRoles(session.roles),
             scope: this.toJwtScope(session.scope),
             session: (<mongoose.Types.ObjectId>session._id).toHexString(),
             user: session.userId.toHexString(),
-            expires: (session.created + (session.expiresIn || 2592000) * 1000) // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
+            expires: (session.created + (session.expiresIn || config.sessionExpires || 2592000) * 1000) // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
         };
     }
 
-    private toJwtScope(sessionScope: string): {[key: string]: boolean} {
+    private toJwtScope(sessionScope?: string): {[key: string]: boolean} {
         if (!sessionScope) {
             return {};
         }
@@ -65,6 +67,15 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
             }
         }
         return jwtScope;
+    }
+
+    private toJwtRoles(sessionRoles?: string[]): {[key: string]: boolean} {
+        if (!sessionRoles || sessionRoles.length <= 0) {
+            return {};
+        }
+        const jwtRoles = {};
+        sessionRoles.forEach(sr => jwtRoles[sr] = true);
+        return jwtRoles;
     }
     
     public async createSession(accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<SessionEntity> {
@@ -86,8 +97,9 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
                 userId: user._id,
                 code: accessToken,
                 name: profile.displayName,
+                roles: !user.roles || user.roles.length <= 0 ? undefined : user.roles.map(ur => ur.code),
                 scope: '*',
-                expiresIn: null,
+                expiresIn: config.sessionExpires || 2592000, // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)
                 provider: {
                     name: profile.provider,
                     access_token: providerSession.access_token,

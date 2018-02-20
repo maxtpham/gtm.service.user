@@ -23,6 +23,10 @@
 				"user": {
 					"type": "string"
 				},
+				"roles": {
+					"$ref": "#/definitions/MapOfBoolean",
+					"description": "List of roles for quicky checking "
+				},
 				"scope": {
 					"$ref": "#/definitions/MapOfBoolean",
 					"description": "List of scope or null is all scope (*) "
@@ -37,6 +41,7 @@
 				"name",
 				"session",
 				"user",
+				"roles",
 				"scope",
 				"expires"
 			],
@@ -65,7 +70,6 @@
 			"required": [
 				"id",
 				"code",
-				"scope",
 				"created",
 				"updated"
 			],
@@ -102,8 +106,7 @@
 				}
 			},
 			"required": [
-				"code",
-				"scope"
+				"code"
 			],
 			"type": "object"
 		},

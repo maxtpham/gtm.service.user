@@ -14,6 +14,9 @@ export interface SessionEntity extends DbEntity {
 
     /** User's display name */
     name: string;
+
+    /** List of Roles by code: user, manager, admin */
+    roles?: string[];
     
     /* Granted auth scope */
     scope?: string;
@@ -30,6 +33,7 @@ export const SessionSchema = {
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
     code: { type: mongoose.Schema.Types.String, required: true },
     name: { type: mongoose.Schema.Types.String, required: true },
+    roles: { type: [mongoose.Schema.Types.String], required: false },
     scope: { type: mongoose.Schema.Types.String, required: false },
     expiresIn: { type: mongoose.Schema.Types.Number, required: false },
     provider: {

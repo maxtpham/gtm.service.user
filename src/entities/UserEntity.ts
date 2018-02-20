@@ -16,7 +16,7 @@ export interface UserView {
     profiles: any;
 
     /** Link to [role] table */
-    roleId?: mongoose.Types.ObjectId;
+    roles?: UserRole[];
 
     /** [true] - active user
      * [false] - inactive user
@@ -42,7 +42,17 @@ export interface UserView {
     avatar?: AttachmentView;
 }
 
+export interface UserRole {
+    id: mongoose.Types.ObjectId;
+    code: string;
+}
+
 export interface UserEntity extends DbEntity, UserView {
+}
+
+export const UserRoleSchema =  {
+    id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    code: { type: mongoose.Schema.Types.String, required: true },
 }
 
 export const UserSchema = {
@@ -50,7 +60,7 @@ export const UserSchema = {
     code: { type: mongoose.Schema.Types.String, required: true },
     name: { type: mongoose.Schema.Types.String, required: true },
     profiles: { type: mongoose.Schema.Types.Mixed, required: true },
-    roleId: { type: mongoose.Schema.Types.ObjectId, required: false },
+    roles: { type: [UserRoleSchema], required: false },
     active: { type: mongoose.Schema.Types.Boolean, required: false },
 
     birthday: { type: mongoose.Schema.Types.Number, required: false },

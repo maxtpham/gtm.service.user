@@ -19,7 +19,7 @@ export interface RoleRepository extends Repository<RoleEntity> {
 @injectableSingleton(RoleRepositoryTYPE)
 export class RoleRepositoryImpl extends RepositoryImpl<RoleDocument> implements RoleRepository {
     constructor( @inject(DefaultMongoClientTYPE) mongoclient: MongoClient) {
-        super(mongoclient, "Role", RoleSchema);
+        super(mongoclient, "role", RoleSchema);
     }
 
     public buildClientRole(role: RoleEntity): RoleDetailView {

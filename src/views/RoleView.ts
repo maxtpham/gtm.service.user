@@ -8,7 +8,7 @@ export interface RoleViewWithPagination {
 export interface RoleDetailView {
     id: string;
     code: string;
-    scope: string;
+    scope?: string;
     created: number;
     updated: number;
 }
@@ -18,7 +18,7 @@ export interface RoleView {
     code: string;
 
     /** role scope */
-    scope: string;
+    scope?: string;
 }
 
 

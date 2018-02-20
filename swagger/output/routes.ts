@@ -17,6 +17,7 @@ const models: TsoaRoute.Models = {
             "name": { "dataType": "string", "required": true },
             "session": { "dataType": "string", "required": true },
             "user": { "dataType": "string", "required": true },
+            "roles": { "ref": "MapOfBoolean", "required": true },
             "scope": { "ref": "MapOfBoolean", "required": true },
             "expires": { "dataType": "double", "required": true },
         },
@@ -25,7 +26,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "id": { "dataType": "string", "required": true },
             "code": { "dataType": "string", "required": true },
-            "scope": { "dataType": "string", "required": true },
+            "scope": { "dataType": "string" },
             "created": { "dataType": "double", "required": true },
             "updated": { "dataType": "double", "required": true },
         },
@@ -39,7 +40,7 @@ const models: TsoaRoute.Models = {
     "RoleView": {
         "properties": {
             "code": { "dataType": "string", "required": true },
-            "scope": { "dataType": "string", "required": true },
+            "scope": { "dataType": "string" },
         },
     },
     "MessageDetailView": {

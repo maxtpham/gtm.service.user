@@ -20,7 +20,7 @@ const MessageEntity_1 = require("../entities/MessageEntity");
 exports.MessageRepositoryTYPE = Symbol("MessageRepository");
 let MessageRepositoryImpl = class MessageRepositoryImpl extends lib_service_1.RepositoryImpl {
     constructor(mongoclient) {
-        super(mongoclient, "Message", MessageEntity_1.MessageSchema);
+        super(mongoclient, "message", MessageEntity_1.MessageSchema);
     }
 };
 MessageRepositoryImpl = __decorate([

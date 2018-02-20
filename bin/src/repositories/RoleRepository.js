@@ -20,7 +20,7 @@ const RoleEntity_1 = require("../entities/RoleEntity");
 exports.RoleRepositoryTYPE = Symbol("RoleRepository");
 let RoleRepositoryImpl = class RoleRepositoryImpl extends lib_service_1.RepositoryImpl {
     constructor(mongoclient) {
-        super(mongoclient, "Role", RoleEntity_1.RoleSchema);
+        super(mongoclient, "role", RoleEntity_1.RoleSchema);
     }
     buildClientRole(role) {
         return {

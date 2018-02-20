@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const lib_service_1 = require("@gtm/lib.service");
-exports.SessionSchema = Object.assign({}, lib_service_1.DbSchema, { userId: { type: mongoose.Schema.Types.ObjectId, required: true }, code: { type: mongoose.Schema.Types.String, required: true }, name: { type: mongoose.Schema.Types.String, required: true }, scope: { type: mongoose.Schema.Types.String, required: false }, expiresIn: { type: mongoose.Schema.Types.Number, required: false }, provider: {
+exports.SessionSchema = Object.assign({}, lib_service_1.DbSchema, { userId: { type: mongoose.Schema.Types.ObjectId, required: true }, code: { type: mongoose.Schema.Types.String, required: true }, name: { type: mongoose.Schema.Types.String, required: true }, roles: { type: [mongoose.Schema.Types.String], required: false }, scope: { type: mongoose.Schema.Types.String, required: false }, expiresIn: { type: mongoose.Schema.Types.Number, required: false }, provider: {
         _id: false,
         required: false,
         name: { type: mongoose.Schema.Types.String, required: true },
