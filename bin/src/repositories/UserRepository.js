@@ -45,8 +45,7 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
                     updatedUser.updated = Date.now();
                 }
                 if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], profile._json, { strict: true })) {
-                    updatedUser.profiles = {};
-                    updatedUser.profiles[profile.provider] = profile._json;
+                    updatedUser.profiles = { [profile.provider]: profile._json };
                     updatedUser.updated = Date.now();
                 }
                 user = !updatedUser.updated ? users[0] : yield this.findOneAndUpdate({ _id: users[0]._id }, updatedUser);
@@ -56,19 +55,18 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             }
             else {
                 // Create new user
-                const newUser = {
+                user = yield this.save({
                     code: profileExt.id,
                     name: profileExt.name,
-                    profiles: {},
+                    provider: profile.provider,
+                    profiles: { [profile.provider]: profile._json },
                     email: profileExt.email,
                     gender: profileExt.gender,
                     avatar: yield lib_service_auth_1.Utils.fetchPhoto(profileExt.avatar),
                     address: profileExt.address,
                     timezone: profileExt.timezone,
                     language: profileExt.language,
-                };
-                newUser.profiles[profile.provider] = profile._json;
-                user = yield this.save(newUser);
+                });
                 console.log(`Created new ${profile.provider} user profile`, user);
             }
             return Promise.resolve(user);

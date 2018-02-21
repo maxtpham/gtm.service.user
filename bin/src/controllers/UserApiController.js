@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -20,18 +23,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
+const express = require("express");
 const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
+const UserEntity_1 = require("../entities/UserEntity");
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get user by Id */
     getEntity(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let user = yield this.UserRepository.findOneById(id);
-            if (user) {
-                return Promise.resolve(this.UserRepository.buildClientRole(user));
+            let userEntity = yield this.UserRepository.findOneById(id);
+            if (userEntity) {
+                return Promise.resolve(this.UserRepository.buildClientRole(userEntity));
             }
             return Promise.reject(`Not found.`);
+        });
+    }
+    getProfileCurrent(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userEntity = yield this.UserRepository.findOneById(req.user.user);
+            if (userEntity) {
+                return Promise.resolve(UserEntity_1.User.toProfileView(userEntity));
+            }
+            return Promise.reject(`Not found`);
+        });
+    }
+    updateProfileCurrent(profileView, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userEntity = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, profileView);
+            if (!userEntity) {
+                return Promise.reject('Not found');
+            }
+            if (userEntity instanceof Error) {
+                return Promise.reject(userEntity);
+            }
+            return Promise.resolve(UserEntity_1.User.toProfileView(userEntity));
         });
     }
 };
@@ -40,11 +66,25 @@ __decorate([
     __metadata("design:type", Object)
 ], UserApiController.prototype, "UserRepository", void 0);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('{id}'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/entity/{id}'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getEntity", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/profile'),
+    __param(0, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getProfileCurrent", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/profile'),
+    __param(0, tsoa_1.Body()), __param(1, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "updateProfileCurrent", null);
 UserApiController = UserApiController_1 = __decorate([
     lib_common_1.injectableSingleton(UserApiController_1),
     tsoa_1.Route('api/user/v1/user')

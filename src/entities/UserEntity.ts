@@ -1,19 +1,15 @@
 import * as mongoose from "mongoose";
 import { DbEntity, DbSchema, LocationView, AttachmentView, LocationSchema, AttachmentSchema } from "@gtm/lib.service"
 
-export interface UserView {
+export interface ProfileView {
     /** Google/FB profile id*/
     code: string;
 
     /** Google/FB display name, ex: Thanh Pham */
     name: string;
 
-    /** With 3 sub-dcouments:
-     * - user.profiles.google: Google profile (auto created by OAuth2 by Google)
-     * - user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)
-     * - user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }
-     **/
-    profiles: any;
+    /** OAuth2 provider: google/facebook/builtin/.. */
+    provider: string;
 
     /** Link to [role] table */
     roles?: UserRole[];
@@ -36,6 +32,15 @@ export interface UserView {
     gender?: string;
     /** +/- UTC time */
     timezone?: number;
+}
+
+export interface UserView extends ProfileView {
+    /** With 3 sub-dcouments:
+     * - user.profiles.google: Google profile (auto created by OAuth2 by Google)
+     * - user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)
+     * - user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }
+     **/
+    profiles: any;
 
     /** The OAuth2 authentication process should auto
      * load up the default user avatar at 1st user login  */
@@ -43,7 +48,7 @@ export interface UserView {
 }
 
 export interface UserRole {
-    id: mongoose.Types.ObjectId;
+    id: any;
     code: string;
 }
 
@@ -59,6 +64,7 @@ export const UserSchema = {
     ...DbSchema,
     code: { type: mongoose.Schema.Types.String, required: true },
     name: { type: mongoose.Schema.Types.String, required: true },
+    provider: { type: mongoose.Schema.Types.String, required: true },
     profiles: { type: mongoose.Schema.Types.Mixed, required: true },
     roles: { type: [UserRoleSchema], required: false },
     active: { type: mongoose.Schema.Types.Boolean, required: false },
@@ -73,3 +79,10 @@ export const UserSchema = {
     timezone: { type: mongoose.Schema.Types.Number, required: false },
     avatar: { type: AttachmentSchema, required: false },
 };
+
+export module User {
+    export function toProfileView(entity: UserEntity): ProfileView {
+        const { _id, __v, created, deleted, updated, profiles, avatar, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
+        return view;
+    }
+}

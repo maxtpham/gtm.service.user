@@ -251,6 +251,103 @@
 				"name"
 			],
 			"type": "object"
+		},
+		"UserRole": {
+			"properties": {
+				"id": {
+					"type": "object"
+				},
+				"code": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"id",
+				"code"
+			],
+			"type": "object"
+		},
+		"LocationView": {
+			"properties": {
+				"x": {
+					"type": "number",
+					"format": "double",
+					"description": "longitude "
+				},
+				"y": {
+					"type": "number",
+					"format": "double",
+					"description": "latitude "
+				}
+			},
+			"required": [
+				"x",
+				"y"
+			],
+			"type": "object"
+		},
+		"ProfileView": {
+			"properties": {
+				"code": {
+					"type": "string",
+					"description": "Google/FB profile id"
+				},
+				"name": {
+					"type": "string",
+					"description": "Google/FB display name, ex: Thanh Pham "
+				},
+				"provider": {
+					"type": "string",
+					"description": "OAuth2 provider: google/facebook/builtin/.. "
+				},
+				"roles": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/UserRole"
+					},
+					"description": "Link to [role] table "
+				},
+				"active": {
+					"type": "boolean",
+					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+				},
+				"birthday": {
+					"type": "number",
+					"format": "double",
+					"description": "UTC tick only date without time component "
+				},
+				"address": {
+					"type": "string"
+				},
+				"location": {
+					"$ref": "#/definitions/LocationView"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"language": {
+					"type": "string",
+					"description": "en, vn,.. "
+				},
+				"gender": {
+					"type": "string",
+					"description": "male/female "
+				},
+				"timezone": {
+					"type": "number",
+					"format": "double",
+					"description": "+/- UTC time "
+				}
+			},
+			"required": [
+				"code",
+				"name",
+				"provider"
+			],
+			"type": "object"
 		}
 	},
 	"info": {
@@ -702,7 +799,7 @@
 				]
 			}
 		},
-		"/api/user/v1/user/{id}": {
+		"/api/user/v1/user/entity/{id}": {
 			"get": {
 				"operationId": "GetEntity",
 				"produces": [
@@ -731,6 +828,63 @@
 						"name": "id",
 						"required": true,
 						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/profile": {
+			"get": {
+				"operationId": "GetProfileCurrent",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/ProfileView"
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "UpdateProfileCurrent",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/ProfileView"
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "profileView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/ProfileView"
+						}
 					}
 				]
 			}
