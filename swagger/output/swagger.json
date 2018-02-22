@@ -565,6 +565,18 @@
 						"required": false,
 						"format": "double",
 						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "from",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "to",
+						"required": false,
+						"type": "string"
 					}
 				]
 			},

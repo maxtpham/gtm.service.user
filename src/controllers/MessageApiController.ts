@@ -19,13 +19,13 @@ export class MessageApiController extends ApiController {
 
     /** Get Messages */
     @Tags('Message') @Security('jwt') @Get()
-    public async getEntities( @Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
+    public async getEntities(@Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number, @Query() from?: string, @Query() to?: string)
         : Promise<MessageViewWithPagination> {
-        let queryToEntities = !!query ? { code: query, scope: query, deleted: null } : { deleted: null };
+        let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
         let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
         if (messages) {
-            let messageTotalItems = await this.MessageRepository.count({});
-            let users = await this.UserRepository.find({deleted: null});
+            let messageTotalItems = await this.MessageRepository.find(queryToEntities);
+            let users = await this.UserRepository.find({ deleted: null });
             let messageDetailView: MessageDetailView[] = [];
             messages.map(mes => {
                 let user = users.find(u => u._id == mes.userId);
@@ -43,7 +43,7 @@ export class MessageApiController extends ApiController {
                     updated: mes.updated
                 });
             })
-            let messageDetailViews = <MessageViewWithPagination>{ messages: messageDetailView, totalItems: messageTotalItems };
+            let messageDetailViews = <MessageViewWithPagination>{ messages: messageDetailView, totalItems: messageTotalItems.length };
             return Promise.resolve(messageDetailViews);
         }
         return Promise.reject(`Not found.`);
@@ -61,7 +61,7 @@ export class MessageApiController extends ApiController {
 
     /** Create New Message */
     @Tags('Message') @Security('jwt') @Post()
-    public async createEntity( @Body() messageView: MessageView): Promise<MessageEntity> {
+    public async createEntity(@Body() messageView: MessageView): Promise<MessageEntity> {
         let message = await this.MessageRepository.save(<MessageEntity>{ userId: messageView.userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
         if (message) {
             return Promise.resolve(await this.MessageRepository.findOneById(message._id));
