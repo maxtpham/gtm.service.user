@@ -40,8 +40,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
                 updatedUser.updated = Date.now();
             }
             if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], (<any>profile)._json, { strict: true })) {
-                updatedUser.profiles = { };
-                updatedUser.profiles[profile.provider] = (<any>profile)._json;
+                updatedUser.profiles = { [profile.provider]: (<any>profile)._json };
                 updatedUser.updated = Date.now();
             }
             user = !updatedUser.updated ? users[0] : await (<UserRepository>this).findOneAndUpdate({ _id: users[0]._id }, updatedUser);
@@ -50,20 +49,18 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             }
         } else {
             // Create new user
-            const newUser = <UserEntity>{
+            user = await (<UserRepository>this).save(<UserEntity>{
                 code: profileExt.id,
                 name: profileExt.name,
-                profiles: {},
+                provider: profile.provider,
+                profiles: { [profile.provider]: (<any>profile)._json },
                 email: profileExt.email,
                 gender: profileExt.gender,
                 avatar: await Utils.fetchPhoto(profileExt.avatar),
                 address: profileExt.address,
                 timezone: profileExt.timezone,
                 language: profileExt.language,
-            };
-            newUser.profiles[profile.provider] = (<any>profile)._json;
-
-            user = await (<UserRepository>this).save(newUser);
+            });
             console.log(`Created new ${profile.provider} user profile`, user);
         }
 
