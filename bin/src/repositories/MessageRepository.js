@@ -22,6 +22,33 @@ let MessageRepositoryImpl = class MessageRepositoryImpl extends lib_service_1.Re
     constructor(mongoclient) {
         super(mongoclient, "message", MessageEntity_1.MessageSchema);
     }
+    buildQuery(query, from, to) {
+        let queryToEntities;
+        if (!!query || !!from || !!to) {
+            queryToEntities = {
+                $and: [
+                    {
+                        deleted: null
+                    }
+                ]
+            };
+            if (!!query) {
+                queryToEntities.$and.push({ content: { $regex: query, $options: 'i' } });
+            }
+            if (!!from) {
+                queryToEntities.$and.push({ userId: from });
+            }
+            if (!!to) {
+                queryToEntities.$and.push({ toUserId: to });
+            }
+        }
+        else {
+            queryToEntities = {
+                deleted: null
+            };
+        }
+        return queryToEntities;
+    }
 };
 MessageRepositoryImpl = __decorate([
     lib_common_1.injectableSingleton(exports.MessageRepositoryTYPE),
