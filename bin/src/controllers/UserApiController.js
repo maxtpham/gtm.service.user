@@ -29,12 +29,31 @@ const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
 const UserEntity_1 = require("../entities/UserEntity");
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
+    /** Get all user */
+    getAlls() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userEntity = yield this.UserRepository.find({});
+            if (userEntity) {
+                return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
     /** Get user by Id */
-    getEntity(id) {
+    getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = yield this.UserRepository.findOneById(id);
             if (userEntity) {
-                return Promise.resolve(this.UserRepository.buildClientRole(userEntity));
+                return Promise.resolve(this.UserRepository.buildClientUser(userEntity));
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
+    getUserByName(userName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userEntity = yield this.UserRepository.getByName(userName);
+            if (userEntity) {
+                return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
             }
             return Promise.reject(`Not found.`);
         });
@@ -66,11 +85,24 @@ __decorate([
     __metadata("design:type", Object)
 ], UserApiController.prototype, "UserRepository", void 0);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/entity/{id}'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/getAlls'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getAlls", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/getById/{id}'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], UserApiController.prototype, "getEntity", null);
+], UserApiController.prototype, "getById", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/getByUserName'),
+    __param(0, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getUserByName", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/profile'),
     __param(0, tsoa_1.Request()),

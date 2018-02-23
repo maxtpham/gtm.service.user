@@ -811,9 +811,38 @@
 				]
 			}
 		},
-		"/api/user/v1/user/entity/{id}": {
+		"/api/user/v1/user/getAlls": {
 			"get": {
-				"operationId": "GetEntity",
+				"operationId": "GetAlls",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MUserView"
+							}
+						}
+					}
+				},
+				"description": "Get all user ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/user/v1/user/getById/{id}": {
+			"get": {
+				"operationId": "GetById",
 				"produces": [
 					"application/json"
 				],
@@ -838,6 +867,41 @@
 					{
 						"in": "path",
 						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/getByUserName": {
+			"get": {
+				"operationId": "GetUserByName",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MUserView"
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userName",
 						"required": true,
 						"type": "string"
 					}
