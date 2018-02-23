@@ -1,5 +1,5 @@
 {
-	"basePath": "/",
+	"basePath": "",
 	"consumes": [
 		"application/json"
 	],
@@ -177,19 +177,6 @@
 		},
 		"MessageEntity": {
 			"properties": {
-				"userId": {
-					"type": "string"
-				},
-				"toUserId": {
-					"type": "string"
-				},
-				"content": {
-					"type": "string"
-				},
-				"delivered": {
-					"type": "number",
-					"format": "double"
-				},
 				"_id": {
 					"type": "object"
 				},
@@ -204,13 +191,26 @@
 				"deleted": {
 					"type": "number",
 					"format": "double"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"toUserId": {
+					"type": "string"
+				},
+				"content": {
+					"type": "string"
+				},
+				"delivered": {
+					"type": "number",
+					"format": "double"
 				}
 			},
 			"required": [
+				"_id",
 				"userId",
 				"toUserId",
-				"content",
-				"_id"
+				"content"
 			],
 			"type": "object"
 		},

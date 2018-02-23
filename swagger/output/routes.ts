@@ -64,14 +64,14 @@ const models: TsoaRoute.Models = {
     },
     "MessageEntity": {
         "properties": {
-            "userId": { "dataType": "string", "required": true },
-            "toUserId": { "dataType": "string", "required": true },
-            "content": { "dataType": "string", "required": true },
-            "delivered": { "dataType": "double" },
             "_id": { "dataType": "any", "required": true },
             "created": { "dataType": "double" },
             "updated": { "dataType": "double" },
             "deleted": { "dataType": "double" },
+            "userId": { "dataType": "string", "required": true },
+            "toUserId": { "dataType": "string", "required": true },
+            "content": { "dataType": "string", "required": true },
+            "delivered": { "dataType": "double" },
         },
     },
     "MessageView": {
