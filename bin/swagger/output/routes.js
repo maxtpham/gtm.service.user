@@ -246,6 +246,8 @@ function RegisterRoutes(app) {
             query: { "in": "query", "name": "query", "dataType": "string" },
             pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
             itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+            from: { "in": "query", "name": "from", "dataType": "string" },
+            to: { "in": "query", "name": "to", "dataType": "string" },
         };
         let validatedArgs = [];
         try {
@@ -319,7 +321,7 @@ function RegisterRoutes(app) {
         const promise = controller.deleteEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/user/v1/user/entity/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.get('/api/user/v1/user/getById/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
         };
@@ -331,7 +333,22 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.getEntity.apply(controller, validatedArgs);
+        const promise = controller.getById.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/user/getByUserName', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            userName: { "in": "query", "name": "userName", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.getUserByName.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.get('/api/user/v1/user/profile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {

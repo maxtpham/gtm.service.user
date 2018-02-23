@@ -72,11 +72,27 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             return Promise.resolve(user);
         });
     }
-    buildClientRole(user) {
+    getByName(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield this.find({ name: RegExp(name) });
+            return Promise.resolve(users);
+        });
+    }
+    buildClientUser(user) {
         return {
             id: user._id,
             name: user.name,
         };
+    }
+    buildClientUsers(users) {
+        let mUsers = [];
+        users.forEach((item) => {
+            mUsers.push({
+                id: item._id,
+                name: item.name
+            });
+        });
+        return mUsers;
     }
 };
 UserRepositoryImpl = __decorate([
