@@ -15,6 +15,16 @@ import { UserEntity, ProfileView, User } from '../entities/UserEntity';
 export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
 
+    /** Get all user */
+    @Tags('User') @Security('jwt') @Get('/getAlls')
+    public async getAlls(): Promise<MUserView[]> {
+        let userEntity = await this.UserRepository.find({});
+        if (userEntity) {
+            return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
+        }
+        return Promise.reject(`Not found.`);
+    }
+
     /** Get user by Id */
     @Tags('User') @Security('jwt') @Get('/getById/{id}')
     public async getById(id: string): Promise<MUserView> {

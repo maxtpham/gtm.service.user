@@ -811,6 +811,35 @@
 				]
 			}
 		},
+		"/api/user/v1/user/getAlls": {
+			"get": {
+				"operationId": "GetAlls",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MUserView"
+							}
+						}
+					}
+				},
+				"description": "Get all user ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/api/user/v1/user/getById/{id}": {
 			"get": {
 				"operationId": "GetById",
