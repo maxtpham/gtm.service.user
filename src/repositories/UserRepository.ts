@@ -18,7 +18,7 @@ export const UserRepositoryTYPE = Symbol("UserRepository");
 export interface UserRepository extends Repository<UserEntity> {
     /** Get or create User by passport Profile. If User exists, compare and update changes */
     getByProfile(profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<UserEntity>;
-    buildClientRole: (user: UserEntity) => MUserView;
+    buildUserView: (user: UserEntity) => MUserView;
 }
 
 @injectableSingleton(UserRepositoryTYPE)
@@ -67,7 +67,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         return Promise.resolve(user);
     }
 
-    public buildClientRole(user: UserEntity): MUserView {
+    public buildUserView(user: UserEntity): MUserView {
         return <MUserView>{
             id: user._id,
             name: user.name,

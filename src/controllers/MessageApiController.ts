@@ -34,9 +34,9 @@ export class MessageApiController extends ApiController {
                 messageDetailView.push({
                     id: mes._id,
                     userId: mes.userId,
-                    userName: user ? user.name : '',
+                    userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name)  : '',
                     toUserId: mes.toUserId,
-                    toUserName: toUser ? toUser.name : '',
+                    toUserName: toUser ? (toUser.phone ? toUser.name + ' - ' + toUser.phone : toUser.name) : '',
                     content: mes.content,
                     delivered: mes.delivered,
                     created: mes.created,

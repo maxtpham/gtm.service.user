@@ -83,6 +83,4 @@ export class RoleApiController extends ApiController {
         }
         return Promise.reject(`Not found.`);
     }
-
-
 }

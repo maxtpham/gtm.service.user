@@ -20,7 +20,7 @@ export class UserApiController extends ApiController {
     public async getEntity(id: string): Promise<MUserView> {
         let userEntity = await this.UserRepository.findOneById(id);
         if (userEntity) {
-            return Promise.resolve(this.UserRepository.buildClientRole(userEntity));
+            return Promise.resolve(this.UserRepository.buildUserView(userEntity));
         }
         return Promise.reject(`Not found.`);
     }
