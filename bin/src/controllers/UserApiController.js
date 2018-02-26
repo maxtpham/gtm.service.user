@@ -19,6 +19,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const lib_common_1 = require("@gtm/lib.common");
@@ -140,14 +149,15 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     }
     updateProfileCurrent(profileView, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            let oldUserEntity = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, profileView);
+            const { roles, code, provider, active } = profileView, updatingProfileView = __rest(profileView, ["roles", "code", "provider", "active"]);
+            let oldUserEntity = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, Object.assign({}, updatingProfileView, { updated: Date.now() }));
             if (!oldUserEntity) {
                 return Promise.reject('Not found');
             }
             if (oldUserEntity instanceof Error) {
                 return Promise.reject(oldUserEntity);
             }
-            return this.UserRepository.findOneById(req.user.user);
+            return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(req.user.user)));
         });
     }
 };
