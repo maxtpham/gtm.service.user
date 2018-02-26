@@ -237,21 +237,6 @@
 			],
 			"type": "object"
 		},
-		"MUserView": {
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"name": {
-					"type": "string"
-				}
-			},
-			"required": [
-				"id",
-				"name"
-			],
-			"type": "object"
-		},
 		"UserRole": {
 			"properties": {
 				"id": {
@@ -283,6 +268,77 @@
 			"required": [
 				"x",
 				"y"
+			],
+			"type": "object"
+		},
+		"MProfileView": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string",
+					"description": "Google/FB display name, ex: Thanh Pham "
+				},
+				"roles": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/UserRole"
+					},
+					"description": "Link to [role] table "
+				},
+				"active": {
+					"type": "boolean",
+					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+				},
+				"birthday": {
+					"type": "number",
+					"format": "double",
+					"description": "UTC tick only date without time component "
+				},
+				"address": {
+					"type": "string"
+				},
+				"location": {
+					"$ref": "#/definitions/LocationView"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"language": {
+					"type": "string",
+					"description": "en, vn,.. "
+				},
+				"gender": {
+					"type": "string",
+					"description": "male/female "
+				},
+				"timezone": {
+					"type": "number",
+					"format": "double",
+					"description": "+/- UTC time "
+				}
+			},
+			"required": [
+				"id"
+			],
+			"type": "object"
+		},
+		"MUserView": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"id",
+				"name"
 			],
 			"type": "object"
 		},
@@ -811,9 +867,141 @@
 				]
 			}
 		},
-		"/api/user/v1/user/getAlls": {
+		"/api/user/v1/user/get-user-profiles": {
 			"get": {
-				"operationId": "GetAlls",
+				"operationId": "GetUserProfiles",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MProfileView"
+							}
+						}
+					}
+				},
+				"description": "Get all user with profiles ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/user/v1/user/get-user-profile-by-id": {
+			"get": {
+				"operationId": "GetUserProfileById",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MProfileView"
+						}
+					}
+				},
+				"description": "Get all user with profiles ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/update-user-profiles": {
+			"post": {
+				"operationId": "UpdateUserProfiles",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MProfileView"
+						}
+					}
+				},
+				"description": "Update user with profiles ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "profile",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MProfileView"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/update-user-phone": {
+			"post": {
+				"operationId": "UpdateUserPhone",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MProfileView"
+						}
+					}
+				},
+				"description": "Update user with profiles ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "profile",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MProfileView"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/get-user-lite": {
+			"get": {
+				"operationId": "GetUserLite",
 				"produces": [
 					"application/json"
 				],
@@ -828,7 +1016,7 @@
 						}
 					}
 				},
-				"description": "Get all user ",
+				"description": "Get all user lite ",
 				"tags": [
 					"User"
 				],

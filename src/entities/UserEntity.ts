@@ -85,4 +85,26 @@ export module User {
         const { _id, __v, created, deleted, updated, profiles, avatar, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
         return view;
     }
+    export function toProfileViews(entity: UserEntity[]): ProfileView[] {
+        let profilesList: ProfileView[] = [];
+        entity.forEach((item) => {
+            let profiles: ProfileView = {
+                name: item.name,
+                code: item.code,
+                provider: item.profiles,
+                roles: item.roles,
+                active: item.active,
+                birthday: item.birthday,
+                address: item.address,
+                location: item.location,
+                phone: item.phone,
+                email: item.email,
+                language: item.email,
+                gender: item.gender,
+                timezone: item.timezone,
+            };
+            profilesList.push(profiles);
+        });
+        return profilesList;
+    }
 }
