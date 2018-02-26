@@ -23,4 +23,27 @@ var User;
         return view;
     }
     User.toProfileView = toProfileView;
+    function toProfileViews(entity) {
+        let profilesList = [];
+        entity.forEach((item) => {
+            let profiles = {
+                name: item.name,
+                code: item.code,
+                provider: item.profiles,
+                roles: item.roles,
+                active: item.active,
+                birthday: item.birthday,
+                address: item.address,
+                location: item.location,
+                phone: item.phone,
+                email: item.email,
+                language: item.email,
+                gender: item.gender,
+                timezone: item.timezone,
+            };
+            profilesList.push(profiles);
+        });
+        return profilesList;
+    }
+    User.toProfileViews = toProfileViews;
 })(User = exports.User || (exports.User = {}));
