@@ -31,7 +31,7 @@ const UserEntity_1 = require("../entities/UserEntity");
 const MProfileView_1 = require("../views/MProfileView");
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get all user with profiles */
-    getUserProfiles() {
+    getAllProfiles() {
         return __awaiter(this, void 0, void 0, function* () {
             let users = yield this.UserRepository.find({});
             if (users) {
@@ -41,7 +41,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Get all user with profiles */
-    getUserProfileById(id) {
+    getProfileById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let user = yield this.UserRepository.findOne({ _id: id });
             if (user) {
@@ -156,18 +156,18 @@ __decorate([
     __metadata("design:type", Object)
 ], UserApiController.prototype, "UserRepository", void 0);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-profiles'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-all-profiles'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], UserApiController.prototype, "getUserProfiles", null);
+], UserApiController.prototype, "getAllProfiles", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-profile-by-id'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-profile-by-id'),
     __param(0, tsoa_1.Query()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], UserApiController.prototype, "getUserProfileById", null);
+], UserApiController.prototype, "getProfileById", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-profiles'),
     __param(0, tsoa_1.Body()),

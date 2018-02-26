@@ -17,8 +17,8 @@ export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
 
     /** Get all user with profiles */
-    @Tags('User') @Security('jwt') @Get('/get-user-profiles')
-    public async getUserProfiles(): Promise<MProfileView[]> {
+    @Tags('User') @Security('jwt') @Get('/get-all-profiles')
+    public async getAllProfiles(): Promise<MProfileView[]> {
         let users = await this.UserRepository.find({});
         if (users) {
             return Promise.resolve(UserProfile.toProfileViews(users));
@@ -27,8 +27,8 @@ export class UserApiController extends ApiController {
     }
 
     /** Get all user with profiles */
-    @Tags('User') @Security('jwt') @Get('/get-user-profile-by-id')
-    public async getUserProfileById(
+    @Tags('User') @Security('jwt') @Get('/get-profile-by-id')
+    public async getProfileById(
         @Query() id: string
     ): Promise<MProfileView> {
         let user = await this.UserRepository.findOne({ _id: id });

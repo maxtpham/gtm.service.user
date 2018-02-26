@@ -867,9 +867,9 @@
 				]
 			}
 		},
-		"/api/user/v1/user/get-user-profiles": {
+		"/api/user/v1/user/get-all-profiles": {
 			"get": {
-				"operationId": "GetUserProfiles",
+				"operationId": "GetAllProfiles",
 				"produces": [
 					"application/json"
 				],
@@ -896,9 +896,9 @@
 				"parameters": []
 			}
 		},
-		"/api/user/v1/user/get-user-profile-by-id": {
+		"/api/user/v1/user/get-profile-by-id": {
 			"get": {
-				"operationId": "GetUserProfileById",
+				"operationId": "GetProfileById",
 				"produces": [
 					"application/json"
 				],

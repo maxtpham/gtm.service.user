@@ -403,7 +403,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.deleteEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/user/v1/user/get-user-profiles',
+    app.get('/api/user/v1/user/get-all-profiles',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -419,10 +419,10 @@ export function RegisterRoutes(app: any) {
             const controller = iocContainer.get<UserApiController>(UserApiController);
 
 
-            const promise = controller.getUserProfiles.apply(controller, validatedArgs);
+            const promise = controller.getAllProfiles.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/user/v1/user/get-user-profile-by-id',
+    app.get('/api/user/v1/user/get-profile-by-id',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -439,7 +439,7 @@ export function RegisterRoutes(app: any) {
             const controller = iocContainer.get<UserApiController>(UserApiController);
 
 
-            const promise = controller.getUserProfileById.apply(controller, validatedArgs);
+            const promise = controller.getProfileById.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-user-profiles',
