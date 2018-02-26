@@ -896,6 +896,39 @@
 				"parameters": []
 			}
 		},
+		"/api/user/v1/user/get-user-profile-by-id": {
+			"get": {
+				"operationId": "GetUserProfileById",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MProfileView"
+						}
+					}
+				},
+				"description": "Get all user with profiles ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/api/user/v1/user/update-user-profiles": {
 			"post": {
 				"operationId": "UpdateUserProfiles",

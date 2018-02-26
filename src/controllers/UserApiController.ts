@@ -26,6 +26,18 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Not found.`);
     }
 
+    /** Get all user with profiles */
+    @Tags('User') @Security('jwt') @Get('/get-user-profile-by-id')
+    public async getUserProfileById(
+        @Query() id: string
+    ): Promise<MProfileView> {
+        let user = await this.UserRepository.findOne({ _id: id });
+        if (user) {
+            return Promise.resolve(UserProfile.toProfileView(user));
+        }
+        return Promise.reject(`Not found.`);
+    }
+
     /** Update user with profiles */
     @Tags('User') @Security('jwt') @Post('/update-user-profiles')
     public async updateUserProfiles(

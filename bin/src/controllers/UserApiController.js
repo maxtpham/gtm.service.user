@@ -40,6 +40,16 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
+    /** Get all user with profiles */
+    getUserProfileById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let user = yield this.UserRepository.findOne({ _id: id });
+            if (user) {
+                return Promise.resolve(MProfileView_1.UserProfile.toProfileView(user));
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
     /** Update user with profiles */
     updateUserProfiles(profile) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -151,6 +161,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getUserProfiles", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-profile-by-id'),
+    __param(0, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getUserProfileById", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-profiles'),
     __param(0, tsoa_1.Body()),

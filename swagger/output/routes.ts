@@ -422,6 +422,26 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getUserProfiles.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.get('/api/user/v1/user/get-user-profile-by-id',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.getUserProfileById.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
     app.post('/api/user/v1/user/update-user-profiles',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
