@@ -140,14 +140,14 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     }
     updateProfileCurrent(profileView, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            let userEntity = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, profileView);
-            if (!userEntity) {
+            let oldUserEntity = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, profileView);
+            if (!oldUserEntity) {
                 return Promise.reject('Not found');
             }
-            if (userEntity instanceof Error) {
-                return Promise.reject(userEntity);
+            if (oldUserEntity instanceof Error) {
+                return Promise.reject(oldUserEntity);
             }
-            return Promise.resolve(UserEntity_1.User.toProfileView(userEntity));
+            return this.UserRepository.findOneById(req.user.user);
         });
     }
 };
