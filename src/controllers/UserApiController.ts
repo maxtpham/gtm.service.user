@@ -57,13 +57,13 @@ export class UserApiController extends ApiController {
 
     @Tags('User') @Security('jwt') @Post('/profile')
     public async updateProfileCurrent(@Body() profileView: ProfileView, @Request() req?: express.Request): Promise<ProfileView> {
-        let userEntity = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, profileView);
-        if (!userEntity) {
+        let oldUserEntity = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, profileView);
+        if (!oldUserEntity) {
             return Promise.reject('Not found');
         }
-        if (userEntity instanceof Error) {
-            return Promise.reject(<Error>userEntity);
+        if (oldUserEntity instanceof Error) {
+            return Promise.reject(<Error>oldUserEntity);
         }
-        return Promise.resolve(User.toProfileView(userEntity));
+        return this.UserRepository.findOneById((<JwtToken>req.user).user);
     }
 }
