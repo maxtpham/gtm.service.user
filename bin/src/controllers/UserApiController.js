@@ -39,6 +39,16 @@ const UserRepository_1 = require("../repositories/UserRepository");
 const UserEntity_1 = require("../entities/UserEntity");
 const MProfileView_1 = require("../views/MProfileView");
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
+    /** Get all userviews */
+    getUserViews() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield this.UserRepository.find({});
+            if (users) {
+                return Promise.resolve(this.UserRepository.buildClientUsers(users));
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
     /** Get all user with profiles */
     getAllProfiles() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -165,6 +175,12 @@ __decorate([
     inversify_1.inject(UserRepository_1.UserRepositoryTYPE),
     __metadata("design:type", Object)
 ], UserApiController.prototype, "UserRepository", void 0);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/userviews'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getUserViews", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-all-profiles'),
     __metadata("design:type", Function),

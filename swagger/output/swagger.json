@@ -237,6 +237,25 @@
 			],
 			"type": "object"
 		},
+		"MUserView": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"id",
+				"name",
+				"phone"
+			],
+			"type": "object"
+		},
 		"UserRole": {
 			"properties": {
 				"id": {
@@ -324,21 +343,6 @@
 			},
 			"required": [
 				"id"
-			],
-			"type": "object"
-		},
-		"MUserView": {
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"name": {
-					"type": "string"
-				}
-			},
-			"required": [
-				"id",
-				"name"
 			],
 			"type": "object"
 		},
@@ -865,6 +869,35 @@
 						"type": "string"
 					}
 				]
+			}
+		},
+		"/api/user/v1/user/userviews": {
+			"get": {
+				"operationId": "GetUserViews",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MUserView"
+							}
+						}
+					}
+				},
+				"description": "Get all userviews ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
 			}
 		},
 		"/api/user/v1/user/get-all-profiles": {

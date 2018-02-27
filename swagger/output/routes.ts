@@ -82,6 +82,13 @@ const models: TsoaRoute.Models = {
             "delivered": { "dataType": "double" },
         },
     },
+    "MUserView": {
+        "properties": {
+            "id": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string", "required": true },
+        },
+    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -108,12 +115,6 @@ const models: TsoaRoute.Models = {
             "language": { "dataType": "string" },
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
-        },
-    },
-    "MUserView": {
-        "properties": {
-            "id": { "dataType": "string", "required": true },
-            "name": { "dataType": "string", "required": true },
         },
     },
     "ProfileView": {
@@ -401,6 +402,25 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.deleteEntity.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/user/userviews',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.getUserViews.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-all-profiles',

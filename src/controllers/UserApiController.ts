@@ -16,6 +16,16 @@ import { MProfileView, UserProfile } from '../views/MProfileView';
 export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
 
+    /** Get all userviews */
+    @Tags('User') @Security('jwt') @Get('/userviews')
+    public async getUserViews(): Promise<MUserView[]> {
+        let users = await this.UserRepository.find({});
+        if (users) {
+            return Promise.resolve(this.UserRepository.buildClientUsers(users));
+        }
+        return Promise.reject(`Not found.`);
+    }
+
     /** Get all user with profiles */
     @Tags('User') @Security('jwt') @Get('/get-all-profiles')
     public async getAllProfiles(): Promise<MProfileView[]> {

@@ -83,6 +83,13 @@ const models = {
             "delivered": { "dataType": "double" },
         },
     },
+    "MUserView": {
+        "properties": {
+            "id": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string", "required": true },
+        },
+    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -109,12 +116,6 @@ const models = {
             "language": { "dataType": "string" },
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
-        },
-    },
-    "MUserView": {
-        "properties": {
-            "id": { "dataType": "string", "required": true },
-            "name": { "dataType": "string", "required": true },
         },
     },
     "ProfileView": {
@@ -335,6 +336,19 @@ function RegisterRoutes(app) {
         }
         const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
         const promise = controller.deleteEntity.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/user/userviews', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {};
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.getUserViews.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.get('/api/user/v1/user/get-all-profiles', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {

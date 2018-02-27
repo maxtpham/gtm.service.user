@@ -78,6 +78,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         return <MUserView>{
             id: user._id,
             name: user.name,
+            phone: user.phone
         }
     }
 
@@ -86,7 +87,8 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         users.forEach((item) => {
             mUsers.push({
                 id: item._id,
-                name: item.name
+                name: item.name,
+                phone: item.phone
             });
         });
         return mUsers;

@@ -82,6 +82,7 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
         return {
             id: user._id,
             name: user.name,
+            phone: user.phone
         };
     }
     buildClientUsers(users) {
@@ -89,7 +90,8 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
         users.forEach((item) => {
             mUsers.push({
                 id: item._id,
-                name: item.name
+                name: item.name,
+                phone: item.phone
             });
         });
         return mUsers;

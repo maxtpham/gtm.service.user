@@ -1,6 +1,7 @@
 export interface MUserView {
   id: string;
   name: string;
+  phone: string;
 }
 
 export interface UserViewFull {
