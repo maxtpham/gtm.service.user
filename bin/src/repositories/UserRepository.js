@@ -40,16 +40,33 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             if (users && users.length > 0 && users[0]._id) {
                 // Check to update user (if name or profile is changed)
                 let updatedUser = {};
-                if (users[0].name !== profileExt.name) {
-                    updatedUser.name = profileExt.name;
-                    updatedUser.updated = Date.now();
+                const currentUser = users[0];
+                const currentProfile = currentUser.profiles[profile.provider];
+                if (currentProfile && deepEqual(currentProfile, profile._json, { strict: true })) {
+                    user = currentUser;
                 }
-                if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], profile._json, { strict: true })) {
+                else {
+                    if (currentUser.code !== profileExt.id)
+                        updatedUser.code = profileExt.id;
+                    if (currentUser.name !== profileExt.name && currentUser.name === currentProfile.name)
+                        updatedUser.name = profileExt.name;
+                    if (currentUser.provider !== profile.provider)
+                        updatedUser.provider = profile.provider;
+                    if (currentUser.email !== profileExt.email && currentUser.email === currentProfile.email)
+                        updatedUser.email = profileExt.email;
+                    if (currentUser.gender !== profileExt.gender && currentUser.gender === currentProfile.gender)
+                        updatedUser.gender = profileExt.gender;
+                    if (!currentUser.avatar && profileExt.avatar)
+                        updatedUser.avatar = yield lib_service_auth_1.Utils.fetchPhoto(profileExt.avatar);
+                    if (currentUser.address !== profileExt.address && currentUser.address === currentProfile.address)
+                        updatedUser.address = profileExt.address;
+                    if (currentUser.timezone !== profileExt.timezone && currentUser.timezone === currentProfile.timezone)
+                        updatedUser.timezone = profileExt.timezone;
+                    if (currentUser.language !== profileExt.language && currentUser.language === currentProfile.language)
+                        updatedUser.language = profileExt.language;
                     updatedUser.profiles = { [profile.provider]: profile._json };
                     updatedUser.updated = Date.now();
-                }
-                user = !updatedUser.updated ? users[0] : yield this.findOneAndUpdate({ _id: users[0]._id }, updatedUser);
-                if (updatedUser.updated) {
+                    user = yield this.findOneAndUpdate({ _id: currentUser._id }, updatedUser);
                     console.log(`Updated ${profile.provider} user profile`, user);
                 }
             }

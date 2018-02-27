@@ -97,7 +97,7 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
                 session = yield this.SessionRepository.save({
                     userId: user._id,
                     code: accessToken,
-                    name: profile.displayName,
+                    name: user.name,
                     roles: !user.roles || user.roles.length <= 0 ? undefined : user.roles.map(ur => ur.code),
                     scope: '*',
                     expiresIn: AppConfig_1.default.sessionExpires || 2592000,
