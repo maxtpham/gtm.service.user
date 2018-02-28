@@ -96,7 +96,7 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
             session = await this.SessionRepository.save(<SessionEntity>{
                 userId: user._id,
                 code: accessToken,
-                name: profile.displayName,
+                name: user.name,
                 roles: !user.roles || user.roles.length <= 0 ? undefined : user.roles.map(ur => ur.code),
                 scope: '*',
                 expiresIn: config.sessionExpires || 2592000, // default to 15 minutes (900s), 30d (30d x 24h x 3600s = 2592000s)

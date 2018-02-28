@@ -37,16 +37,24 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         if (users && users.length > 0 && users[0]._id) {
             // Check to update user (if name or profile is changed)
             let updatedUser: UserEntity = <UserEntity>{ };
-            if (users[0].name !== profileExt.name) {
-                updatedUser.name = profileExt.name;
-                updatedUser.updated = Date.now();
-            }
-            if (!users[0].profiles[profile.provider] || !deepEqual(users[0].profiles[profile.provider], (<any>profile)._json, { strict: true })) {
+            const currentUser = users[0];
+            const currentProfile = currentUser.profiles[profile.provider];
+            if (currentProfile && deepEqual(currentProfile, (<any>profile)._json, { strict: true })) {
+                user = currentUser;
+            } else {
+                if (currentUser.code !== profileExt.id) updatedUser.code = profileExt.id;
+                if (currentUser.name !== profileExt.name && currentUser.name === currentProfile.name) updatedUser.name = profileExt.name;
+                if (currentUser.provider !== profile.provider) updatedUser.provider = profile.provider;
+                if (currentUser.email !== profileExt.email && currentUser.email === currentProfile.email) updatedUser.email = profileExt.email;
+                if (currentUser.gender !== profileExt.gender && currentUser.gender === currentProfile.gender) updatedUser.gender = profileExt.gender;
+                if (!currentUser.avatar && profileExt.avatar) updatedUser.avatar = await Utils.fetchPhoto(profileExt.avatar);
+                if (currentUser.address !== profileExt.address && currentUser.address === currentProfile.address) updatedUser.address = profileExt.address;
+                if (currentUser.timezone !== profileExt.timezone && currentUser.timezone === currentProfile.timezone) updatedUser.timezone = profileExt.timezone;
+                if (currentUser.language !== profileExt.language && currentUser.language === currentProfile.language) updatedUser.language = profileExt.language;
+
                 updatedUser.profiles = { [profile.provider]: (<any>profile)._json };
                 updatedUser.updated = Date.now();
-            }
-            user = !updatedUser.updated ? users[0] : await (<UserRepository>this).findOneAndUpdate({ _id: users[0]._id }, updatedUser);
-            if (updatedUser.updated) {
+                user = await (<UserRepository>this).findOneAndUpdate({ _id: currentUser._id }, updatedUser);
                 console.log(`Updated ${profile.provider} user profile`, user);
             }
         } else {
