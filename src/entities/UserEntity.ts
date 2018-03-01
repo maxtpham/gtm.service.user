@@ -45,6 +45,7 @@ export interface UserView extends ProfileView {
     /** The OAuth2 authentication process should auto
      * load up the default user avatar at 1st user login  */
     avatar?: AttachmentView;
+
 }
 
 export interface UserRole {

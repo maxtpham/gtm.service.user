@@ -237,6 +237,21 @@
 			],
 			"type": "object"
 		},
+		"MUserView": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"id",
+				"name"
+			],
+			"type": "object"
+		},
 		"UserRole": {
 			"properties": {
 				"id": {
@@ -268,77 +283,6 @@
 			"required": [
 				"x",
 				"y"
-			],
-			"type": "object"
-		},
-		"MProfileView": {
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"name": {
-					"type": "string",
-					"description": "Google/FB display name, ex: Thanh Pham "
-				},
-				"roles": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/UserRole"
-					},
-					"description": "Link to [role] table "
-				},
-				"active": {
-					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
-				},
-				"birthday": {
-					"type": "number",
-					"format": "double",
-					"description": "UTC tick only date without time component "
-				},
-				"address": {
-					"type": "string"
-				},
-				"location": {
-					"$ref": "#/definitions/LocationView"
-				},
-				"phone": {
-					"type": "string"
-				},
-				"email": {
-					"type": "string"
-				},
-				"language": {
-					"type": "string",
-					"description": "en, vn,.. "
-				},
-				"gender": {
-					"type": "string",
-					"description": "male/female "
-				},
-				"timezone": {
-					"type": "number",
-					"format": "double",
-					"description": "+/- UTC time "
-				}
-			},
-			"required": [
-				"id"
-			],
-			"type": "object"
-		},
-		"MUserView": {
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"name": {
-					"type": "string"
-				}
-			},
-			"required": [
-				"id",
-				"name"
 			],
 			"type": "object"
 		},
@@ -402,6 +346,211 @@
 				"code",
 				"name",
 				"provider"
+			],
+			"type": "object"
+		},
+		"Binary": {
+			"properties": {
+				"SUBTYPE_DEFAULT": {
+					"type": "number",
+					"format": "double"
+				},
+				"SUBTYPE_FUNCTION": {
+					"type": "number",
+					"format": "double"
+				},
+				"SUBTYPE_BYTE_ARRAY": {
+					"type": "number",
+					"format": "double"
+				},
+				"SUBTYPE_UUID_OLD": {
+					"type": "number",
+					"format": "double"
+				},
+				"SUBTYPE_UUID": {
+					"type": "number",
+					"format": "double"
+				},
+				"SUBTYPE_MD5": {
+					"type": "number",
+					"format": "double"
+				},
+				"SUBTYPE_USER_DEFINED": {
+					"type": "number",
+					"format": "double"
+				},
+				"buffer": {
+					"type": "string",
+					"format": "byte"
+				},
+				"subType": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"SUBTYPE_DEFAULT",
+				"SUBTYPE_FUNCTION",
+				"SUBTYPE_BYTE_ARRAY",
+				"SUBTYPE_UUID_OLD",
+				"SUBTYPE_UUID",
+				"SUBTYPE_MD5",
+				"SUBTYPE_USER_DEFINED",
+				"buffer"
+			],
+			"type": "object"
+		},
+		"AttachmentView": {
+			"properties": {
+				"media": {
+					"type": "string",
+					"description": "HTML Content-Type: image/png, image/jpeg, image/gif,..\r\nThis will be return to browser client to correctly load & show the image  "
+				},
+				"data": {
+					"$ref": "#/definitions/Binary",
+					"description": "Image raw/binary Content-Data will be stramming to browser client "
+				}
+			},
+			"required": [
+				"media",
+				"data"
+			],
+			"type": "object"
+		},
+		"UserEntity": {
+			"properties": {
+				"_id": {
+					"type": "object"
+				},
+				"created": {
+					"type": "number",
+					"format": "double"
+				},
+				"updated": {
+					"type": "number",
+					"format": "double"
+				},
+				"deleted": {
+					"type": "number",
+					"format": "double"
+				},
+				"code": {
+					"type": "string",
+					"description": "Google/FB profile id"
+				},
+				"name": {
+					"type": "string",
+					"description": "Google/FB display name, ex: Thanh Pham "
+				},
+				"provider": {
+					"type": "string",
+					"description": "OAuth2 provider: google/facebook/builtin/.. "
+				},
+				"roles": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/UserRole"
+					},
+					"description": "Link to [role] table "
+				},
+				"active": {
+					"type": "boolean",
+					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+				},
+				"birthday": {
+					"type": "number",
+					"format": "double",
+					"description": "UTC tick only date without time component "
+				},
+				"address": {
+					"type": "string"
+				},
+				"location": {
+					"$ref": "#/definitions/LocationView"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"language": {
+					"type": "string",
+					"description": "en, vn,.. "
+				},
+				"gender": {
+					"type": "string",
+					"description": "male/female "
+				},
+				"timezone": {
+					"type": "number",
+					"format": "double",
+					"description": "+/- UTC time "
+				},
+				"profiles": {
+					"type": "object",
+					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
+				},
+				"avatar": {
+					"$ref": "#/definitions/AttachmentView",
+					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login  "
+				}
+			},
+			"required": [
+				"_id",
+				"code",
+				"name",
+				"provider",
+				"profiles"
+			],
+			"type": "object"
+		},
+		"MProfileView": {
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"gender": {
+					"type": "string"
+				},
+				"birthday": {
+					"type": "number",
+					"format": "double"
+				},
+				"address": {
+					"type": "string"
+				},
+				"localtion": {
+					"$ref": "#/definitions/LocationView"
+				},
+				"identityCard": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"job": {
+					"type": "string"
+				},
+				"bankRate": {
+					"type": "number",
+					"format": "double"
+				},
+				"note": {
+					"type": "string"
+				},
+				"infos": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"name",
+				"gender",
+				"birthday",
+				"address",
+				"identityCard",
+				"phone",
+				"infos"
 			],
 			"type": "object"
 		}
@@ -867,138 +1016,6 @@
 				]
 			}
 		},
-		"/api/user/v1/user/get-all-profiles": {
-			"get": {
-				"operationId": "GetAllProfiles",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/MProfileView"
-							}
-						}
-					}
-				},
-				"description": "Get all user with profiles ",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": []
-			}
-		},
-		"/api/user/v1/user/get-profile-by-id": {
-			"get": {
-				"operationId": "GetProfileById",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MProfileView"
-						}
-					}
-				},
-				"description": "Get all user with profiles ",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "id",
-						"required": true,
-						"type": "string"
-					}
-				]
-			}
-		},
-		"/api/user/v1/user/update-user-profiles": {
-			"post": {
-				"operationId": "UpdateUserProfiles",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MProfileView"
-						}
-					}
-				},
-				"description": "Update user with profiles ",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "profile",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/MProfileView"
-						}
-					}
-				]
-			}
-		},
-		"/api/user/v1/user/update-user-phone": {
-			"post": {
-				"operationId": "UpdateUserPhone",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MProfileView"
-						}
-					}
-				},
-				"description": "Update user with profiles ",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "profile",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/MProfileView"
-						}
-					}
-				]
-			}
-		},
 		"/api/user/v1/user/get-user-lite": {
 			"get": {
 				"operationId": "GetUserLite",
@@ -1016,7 +1033,7 @@
 						}
 					}
 				},
-				"description": "Get all user lite ",
+				"description": "Get all user with profiles ",
 				"tags": [
 					"User"
 				],
@@ -1061,7 +1078,7 @@
 				]
 			}
 		},
-		"/api/user/v1/user/getByUserName": {
+		"/api/user/v1/user/get-by-user-name": {
 			"get": {
 				"operationId": "GetUserByName",
 				"produces": [
@@ -1148,6 +1165,41 @@
 						"required": true,
 						"schema": {
 							"$ref": "#/definitions/ProfileView"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/update-user-profiles": {
+			"post": {
+				"operationId": "UpdateUserProfiles",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/UserEntity"
+						}
+					}
+				},
+				"description": "Update user with profiles ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "profile",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MProfileView"
 						}
 					}
 				]

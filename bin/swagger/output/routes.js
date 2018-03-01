@@ -83,6 +83,12 @@ const models = {
             "delivered": { "dataType": "double" },
         },
     },
+    "MUserView": {
+        "properties": {
+            "id": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
+        },
+    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -93,28 +99,6 @@ const models = {
         "properties": {
             "x": { "dataType": "double", "required": true },
             "y": { "dataType": "double", "required": true },
-        },
-    },
-    "MProfileView": {
-        "properties": {
-            "id": { "dataType": "string", "required": true },
-            "name": { "dataType": "string" },
-            "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
-            "active": { "dataType": "boolean" },
-            "birthday": { "dataType": "double" },
-            "address": { "dataType": "string" },
-            "location": { "ref": "LocationView" },
-            "phone": { "dataType": "string" },
-            "email": { "dataType": "string" },
-            "language": { "dataType": "string" },
-            "gender": { "dataType": "string" },
-            "timezone": { "dataType": "double" },
-        },
-    },
-    "MUserView": {
-        "properties": {
-            "id": { "dataType": "string", "required": true },
-            "name": { "dataType": "string", "required": true },
         },
     },
     "ProfileView": {
@@ -132,6 +116,63 @@ const models = {
             "language": { "dataType": "string" },
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
+        },
+    },
+    "Binary": {
+        "properties": {
+            "SUBTYPE_DEFAULT": { "dataType": "double", "required": true },
+            "SUBTYPE_FUNCTION": { "dataType": "double", "required": true },
+            "SUBTYPE_BYTE_ARRAY": { "dataType": "double", "required": true },
+            "SUBTYPE_UUID_OLD": { "dataType": "double", "required": true },
+            "SUBTYPE_UUID": { "dataType": "double", "required": true },
+            "SUBTYPE_MD5": { "dataType": "double", "required": true },
+            "SUBTYPE_USER_DEFINED": { "dataType": "double", "required": true },
+            "buffer": { "dataType": "buffer", "required": true },
+            "subType": { "dataType": "double" },
+        },
+    },
+    "AttachmentView": {
+        "properties": {
+            "media": { "dataType": "string", "required": true },
+            "data": { "ref": "Binary", "required": true },
+        },
+    },
+    "UserEntity": {
+        "properties": {
+            "_id": { "dataType": "any", "required": true },
+            "created": { "dataType": "double" },
+            "updated": { "dataType": "double" },
+            "deleted": { "dataType": "double" },
+            "code": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "provider": { "dataType": "string", "required": true },
+            "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
+            "active": { "dataType": "boolean" },
+            "birthday": { "dataType": "double" },
+            "address": { "dataType": "string" },
+            "location": { "ref": "LocationView" },
+            "phone": { "dataType": "string" },
+            "email": { "dataType": "string" },
+            "language": { "dataType": "string" },
+            "gender": { "dataType": "string" },
+            "timezone": { "dataType": "double" },
+            "profiles": { "dataType": "any", "required": true },
+            "avatar": { "ref": "AttachmentView" },
+        },
+    },
+    "MProfileView": {
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "gender": { "dataType": "string", "required": true },
+            "birthday": { "dataType": "double", "required": true },
+            "address": { "dataType": "string", "required": true },
+            "localtion": { "ref": "LocationView" },
+            "identityCard": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string", "required": true },
+            "job": { "dataType": "string" },
+            "bankRate": { "dataType": "double" },
+            "note": { "dataType": "string" },
+            "infos": { "dataType": "string", "required": true },
         },
     },
 };
@@ -337,64 +378,6 @@ function RegisterRoutes(app) {
         const promise = controller.deleteEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/user/v1/user/get-all-profiles', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {};
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.getAllProfiles.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.get('/api/user/v1/user/get-profile-by-id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.getProfileById.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.post('/api/user/v1/user/update-user-profiles', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            profile: { "in": "body", "name": "profile", "required": true, "ref": "MProfileView" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.updateUserProfiles.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.post('/api/user/v1/user/update-user-phone', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            profile: { "in": "body", "name": "profile", "required": true, "ref": "MProfileView" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.updateUserPhone.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
     app.get('/api/user/v1/user/get-user-lite', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {};
         let validatedArgs = [];
@@ -423,7 +406,7 @@ function RegisterRoutes(app) {
         const promise = controller.getById.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/user/v1/user/getByUserName', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.get('/api/user/v1/user/get-by-user-name', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             userName: { "in": "query", "name": "userName", "required": true, "dataType": "string" },
         };
@@ -467,6 +450,22 @@ function RegisterRoutes(app) {
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
         const promise = controller.updateProfileCurrent.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.post('/api/user/v1/user/update-user-profiles', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            profile: { "in": "body", "name": "profile", "required": true, "ref": "MProfileView" },
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.updateUserProfiles.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     function authenticateMiddleware(security = []) {

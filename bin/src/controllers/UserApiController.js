@@ -37,78 +37,44 @@ const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
 const UserEntity_1 = require("../entities/UserEntity");
-const MProfileView_1 = require("../views/MProfileView");
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get all user with profiles */
-    getAllProfiles() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let users = yield this.UserRepository.find({});
-            if (users) {
-                return Promise.resolve(MProfileView_1.UserProfile.toProfileViews(users));
-            }
-            return Promise.reject(`Not found.`);
-        });
-    }
+    // @Tags('User') @Security('jwt') @Get('/get-all-profiles')
+    // public async getAllProfiles(): Promise<MProfileView[]> {
+    //     let users = await this.UserRepository.find({});
+    //     if (users) {
+    //         return Promise.resolve(UserProfile.toProfileViews(users));
+    //     }
+    //     return Promise.reject(`Not found.`);
+    // }
     /** Get all user with profiles */
-    getProfileById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let user = yield this.UserRepository.findOne({ _id: id });
-            if (user) {
-                return Promise.resolve(MProfileView_1.UserProfile.toProfileView(user));
-            }
-            return Promise.reject(`Not found.`);
-        });
-    }
+    // @Tags('User') @Security('jwt') @Get('/get-profile-by-id')
+    // public async getProfileById(
+    //     @Query() id: string
+    // ): Promise<MProfileView> {
+    //     let user = await this.UserRepository.findOne({ _id: id });
+    //     if (user) {
+    //         return Promise.resolve(UserProfile.toProfileView(user));
+    //     }
+    //     return Promise.reject(`Not found.`);
+    // }
     /** Update user with profiles */
-    updateUserProfiles(profile) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let users = yield this.UserRepository.findOne({ _id: profile.id });
-            if (!users) {
-                return Promise.reject("User not exist");
-            }
-            let userToSave = users;
-            if (profile.name)
-                userToSave.name = profile.name;
-            if (profile.birthday)
-                userToSave.birthday = profile.birthday;
-            if (profile.address)
-                userToSave.address = profile.address;
-            if (profile.location)
-                userToSave.location = profile.location;
-            if (profile.phone)
-                userToSave.phone = profile.phone;
-            if (profile.email)
-                userToSave.email = profile.email;
-            if (profile.language)
-                userToSave.language = profile.language;
-            if (profile.gender)
-                userToSave.gender = profile.gender;
-            if (profile.timezone)
-                userToSave.timezone = profile.timezone;
-            let userSave = yield this.UserRepository.findOneAndUpdate({ _id: profile.id }, userToSave);
-            if (userSave) {
-                return Promise.resolve(MProfileView_1.UserProfile.toProfileView(userSave));
-            }
-            return Promise.reject(`Not found.`);
-        });
-    }
-    /** Update user with profiles */
-    updateUserPhone(profile) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let users = yield this.UserRepository.findOne({ _id: profile.id });
-            if (!users) {
-                return Promise.reject("User not exist");
-            }
-            let userToSave = users;
-            if (profile.phone)
-                userToSave.phone = profile.phone;
-            let userSave = yield this.UserRepository.findOneAndUpdate({ _id: profile.id }, userToSave);
-            if (userSave) {
-                return Promise.resolve(MProfileView_1.UserProfile.toProfileView(userSave));
-            }
-            return Promise.reject(`Not found.`);
-        });
-    }
+    //  @Tags('User') @Security('jwt') @Post('/update-user-phone')
+    //  public async updateUserPhone(
+    //      @Body() profile: MProfileView,
+    //  ): Promise<MProfileView> {
+    //      let users = await this.UserRepository.findOne({ _id: profile.id });
+    //      if(!users) {
+    //          return Promise.reject("User not exist");
+    //      }
+    //      let userToSave: UserEntity = users;
+    //      if(profile.phone) userToSave.phone = profile.phone;
+    //      let userSave = await this.UserRepository.findOneAndUpdate({ _id: profile.id },userToSave);
+    //      if (userSave) {
+    //          return Promise.resolve(UserProfile.toProfileView(userSave));
+    //      }
+    //      return Promise.reject(`Not found.`);
+    //  }
     /** Get all user lite */
     getUserLite() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -160,38 +126,33 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(req.user.user)));
         });
     }
+    /** Update user with profiles */
+    updateUserProfiles(profile, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield this.UserRepository.findOne({ _id: req.user.user });
+            if (!users) {
+                return Promise.reject("User not exist");
+            }
+            let { profiles } = users;
+            let userToSave = Object.assign({}, users, { profile: Object.assign({}, profiles, { default: {
+                        job: profile.job,
+                        identityCard: profile.identityCard,
+                        bankRate: profile.bankRate,
+                        note: profile.note,
+                        infos: profile.infos
+                    } }), name: profile.name, address: profile.address, birthday: profile.birthday, location: profile.localtion, phone: profile.phone, gender: profile.gender, update: new Date().getTime });
+            let userSave = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, userToSave);
+            if (userSave) {
+                return Promise.resolve(userSave);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
 };
 __decorate([
     inversify_1.inject(UserRepository_1.UserRepositoryTYPE),
     __metadata("design:type", Object)
 ], UserApiController.prototype, "UserRepository", void 0);
-__decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-all-profiles'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UserApiController.prototype, "getAllProfiles", null);
-__decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-profile-by-id'),
-    __param(0, tsoa_1.Query()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], UserApiController.prototype, "getProfileById", null);
-__decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-profiles'),
-    __param(0, tsoa_1.Body()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UserApiController.prototype, "updateUserProfiles", null);
-__decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-phone'),
-    __param(0, tsoa_1.Body()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UserApiController.prototype, "updateUserPhone", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-lite'),
     __metadata("design:type", Function),
@@ -205,7 +166,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getById", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/getByUserName'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-by-user-name'),
     __param(0, tsoa_1.Query()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -225,6 +186,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "updateProfileCurrent", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-profiles'),
+    __param(0, tsoa_1.Body()),
+    __param(1, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "updateUserProfiles", null);
 UserApiController = UserApiController_1 = __decorate([
     lib_common_1.injectableSingleton(UserApiController_1),
     tsoa_1.Route('api/user/v1/user')
