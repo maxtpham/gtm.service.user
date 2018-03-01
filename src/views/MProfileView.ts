@@ -19,38 +19,3 @@ export interface MProfileView {
 
 }
 
-export module UserProfile {
-//   export function toProfileViews(entity: UserEntity[]): MProfileView[] {
-//       let profilesList: MProfileView[] = [];
-//       entity.forEach((item) => {
-//           let profiles: MProfileView = {
-//               id: item._id,
-//               name: item.name,
-//               birthday: item.birthday,
-//               address: item.address,
-//               phone: item.phone,
-//               gender: item.gender,
-//               identityCard: item.default
-//           };
-//           profilesList.push(profiles);
-//       });
-//       return profilesList;
-//   }
-//   export function toProfileView(item: UserEntity): MProfileView {
-//     let profiles: MProfileView = {
-//         id: item._id,
-//         name: item.name,
-//         roles: item.roles,
-//         active: item.active,
-//         birthday: item.birthday,
-//         address: item.address,
-//         location: item.location,
-//         phone: item.phone,
-//         email: item.email,
-//         language: item.email,
-//         gender: item.gender,
-//         timezone: item.timezone,
-//     };
-//     return profiles;
-// }
-}

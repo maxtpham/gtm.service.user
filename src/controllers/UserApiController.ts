@@ -9,57 +9,14 @@ import { JwtToken } from '@gtm/lib.service.auth';
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
 import { MUserView, UserViewLite, UserViewFull } from '../views/MUserView';
 import { UserEntity, User, ProfileView } from '../entities/UserEntity';
-import { MProfileView, UserProfile } from '../views/MProfileView';
+import { MProfileView } from '../views/MProfileView';
 var Mongoose = require('mongoose'),
- Schema = Mongoose.Schema;
+    Schema = Mongoose.Schema;
 
 @injectableSingleton(UserApiController)
 @Route('api/user/v1/user')
 export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
-
-    /** Get all user with profiles */
-    // @Tags('User') @Security('jwt') @Get('/get-all-profiles')
-    // public async getAllProfiles(): Promise<MProfileView[]> {
-    //     let users = await this.UserRepository.find({});
-    //     if (users) {
-    //         return Promise.resolve(UserProfile.toProfileViews(users));
-    //     }
-    //     return Promise.reject(`Not found.`);
-    // }
-
-    /** Get all user with profiles */
-    // @Tags('User') @Security('jwt') @Get('/get-profile-by-id')
-    // public async getProfileById(
-    //     @Query() id: string
-    // ): Promise<MProfileView> {
-    //     let user = await this.UserRepository.findOne({ _id: id });
-    //     if (user) {
-    //         return Promise.resolve(UserProfile.toProfileView(user));
-    //     }
-    //     return Promise.reject(`Not found.`);
-    // }
-
-    /** Update user with profiles */
-    //  @Tags('User') @Security('jwt') @Post('/update-user-phone')
-    //  public async updateUserPhone(
-    //      @Body() profile: MProfileView,
-    //  ): Promise<MProfileView> {
-
-    //      let users = await this.UserRepository.findOne({ _id: profile.id });
-    //      if(!users) {
-    //          return Promise.reject("User not exist");
-    //      }
-
-    //      let userToSave: UserEntity = users;
-    //      if(profile.phone) userToSave.phone = profile.phone;
-    //      let userSave = await this.UserRepository.findOneAndUpdate({ _id: profile.id },userToSave);
-
-    //      if (userSave) {
-    //          return Promise.resolve(UserProfile.toProfileView(userSave));
-    //      }
-    //      return Promise.reject(`Not found.`);
-    //  }
 
     /** Get all user lite */
     @Tags('User') @Security('jwt') @Get('/get-user-lite')
@@ -104,6 +61,7 @@ export class UserApiController extends ApiController {
     @Tags('User') @Security('jwt') @Post('/profile')
     public async updateProfileCurrent(@Body() profileView: ProfileView, @Request() req?: express.Request): Promise<ProfileView> {
         const { roles, code, provider, active, ...updatingProfileView } = profileView;
+        console.log(updatingProfileView);
         let oldUserEntity = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, { ...updatingProfileView, updated: Date.now() });
         if (!oldUserEntity) {
             return Promise.reject('Not found');
@@ -117,26 +75,42 @@ export class UserApiController extends ApiController {
     /** Update user with profiles */
     @Tags('User') @Security('jwt') @Post('/update-user-profiles')
     public async updateUserProfiles(
-        @Body() { profileView: ProfileView, profile: MProfileView },
+        @Body() profile: MProfileView,
         @Request() req: express.Request
     ): Promise<UserEntity> {
-        //const { roles, code, provider, active, ...updatingProfileView } = ProfileView;
 
         let users = await this.UserRepository.findOne({ _id: (<JwtToken>req.user).user });
         if (!users) {
             return Promise.reject("User not exist");
         }
 
-        const { roles, code, provider, active, ...updatingProfileView } = users;
+        const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone } = profile;
+        const { roles, code, provider, active, profiles } = users;
+        const { google, facebook } = profiles;
 
-        const object2 = Object.freeze(updatingProfileView);
+        users.profiles = {
+            google: google ? google : "",
+            facebook: facebook ? facebook : "",
+            default: {
+                bankRate: bankRate ? bankRate : "",
+                job: job ? job : "",
+                infos: infos ? infos : "",
+                note: note ? note : "",
+                identityCard: identityCard ? identityCard : ""
+            }
+        };
 
-        console.log(users);
-        console.log(updatingProfileView);
+        name ?  (users.name = name) : "";
+        birthday ? (users.birthday =  birthday) : 0;
+        address ? (users.address = address) : "";
+        gender ? (users.gender = gender) : "";
+        localtion ? (users.location = localtion) : { x: 0, y: 0};
+        phone ? (users.phone = phone) : "";
+        users.updated = new Date().getTime();
 
-        let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
+        let userSave = await this.UserRepository.update({ _id: (<JwtToken>req.user).user }, users);
         if (userSave) {
-            return Promise.resolve(userSave);
+            return Promise.resolve(users);
         }
 
         return Promise.reject(`Not found.`);

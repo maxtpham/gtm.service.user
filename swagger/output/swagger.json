@@ -1033,7 +1033,7 @@
 						}
 					}
 				},
-				"description": "Get all user with profiles ",
+				"description": "Get all user lite ",
 				"tags": [
 					"User"
 				],

@@ -37,44 +37,8 @@ const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
 const UserEntity_1 = require("../entities/UserEntity");
+var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
-    /** Get all user with profiles */
-    // @Tags('User') @Security('jwt') @Get('/get-all-profiles')
-    // public async getAllProfiles(): Promise<MProfileView[]> {
-    //     let users = await this.UserRepository.find({});
-    //     if (users) {
-    //         return Promise.resolve(UserProfile.toProfileViews(users));
-    //     }
-    //     return Promise.reject(`Not found.`);
-    // }
-    /** Get all user with profiles */
-    // @Tags('User') @Security('jwt') @Get('/get-profile-by-id')
-    // public async getProfileById(
-    //     @Query() id: string
-    // ): Promise<MProfileView> {
-    //     let user = await this.UserRepository.findOne({ _id: id });
-    //     if (user) {
-    //         return Promise.resolve(UserProfile.toProfileView(user));
-    //     }
-    //     return Promise.reject(`Not found.`);
-    // }
-    /** Update user with profiles */
-    //  @Tags('User') @Security('jwt') @Post('/update-user-phone')
-    //  public async updateUserPhone(
-    //      @Body() profile: MProfileView,
-    //  ): Promise<MProfileView> {
-    //      let users = await this.UserRepository.findOne({ _id: profile.id });
-    //      if(!users) {
-    //          return Promise.reject("User not exist");
-    //      }
-    //      let userToSave: UserEntity = users;
-    //      if(profile.phone) userToSave.phone = profile.phone;
-    //      let userSave = await this.UserRepository.findOneAndUpdate({ _id: profile.id },userToSave);
-    //      if (userSave) {
-    //          return Promise.resolve(UserProfile.toProfileView(userSave));
-    //      }
-    //      return Promise.reject(`Not found.`);
-    //  }
     /** Get all user lite */
     getUserLite() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -116,6 +80,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     updateProfileCurrent(profileView, req) {
         return __awaiter(this, void 0, void 0, function* () {
             const { roles, code, provider, active } = profileView, updatingProfileView = __rest(profileView, ["roles", "code", "provider", "active"]);
+            console.log(updatingProfileView);
             let oldUserEntity = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, Object.assign({}, updatingProfileView, { updated: Date.now() }));
             if (!oldUserEntity) {
                 return Promise.reject('Not found');
@@ -133,17 +98,30 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             if (!users) {
                 return Promise.reject("User not exist");
             }
-            let { profiles } = users;
-            let userToSave = Object.assign({}, users, { profile: Object.assign({}, profiles, { default: {
-                        job: profile.job,
-                        identityCard: profile.identityCard,
-                        bankRate: profile.bankRate,
-                        note: profile.note,
-                        infos: profile.infos
-                    } }), name: profile.name, address: profile.address, birthday: profile.birthday, location: profile.localtion, phone: profile.phone, gender: profile.gender, update: new Date().getTime });
-            let userSave = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, userToSave);
+            const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone } = profile;
+            const { roles, code, provider, active, profiles } = users;
+            const { google, facebook } = profiles;
+            users.profiles = {
+                google: google ? google : "",
+                facebook: facebook ? facebook : "",
+                default: {
+                    bankRate: bankRate ? bankRate : "",
+                    job: job ? job : "",
+                    infos: infos ? infos : "",
+                    note: note ? note : "",
+                    identityCard: identityCard ? identityCard : ""
+                }
+            };
+            name ? (users.name = name) : "";
+            birthday ? (users.birthday = birthday) : 0;
+            address ? (users.address = address) : "";
+            gender ? (users.gender = gender) : "";
+            localtion ? (users.location = localtion) : { x: 0, y: 0 };
+            phone ? (users.phone = phone) : "";
+            users.updated = new Date().getTime();
+            let userSave = yield this.UserRepository.update({ _id: req.user.user }, users);
             if (userSave) {
-                return Promise.resolve(userSave);
+                return Promise.resolve(users);
             }
             return Promise.reject(`Not found.`);
         });
