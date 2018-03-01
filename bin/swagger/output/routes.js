@@ -87,6 +87,7 @@ const models = {
         "properties": {
             "id": { "dataType": "string", "required": true },
             "name": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string", "required": true },
         },
     },
     "UserRole": {

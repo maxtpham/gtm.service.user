@@ -244,11 +244,15 @@
 				},
 				"name": {
 					"type": "string"
+				},
+				"phone": {
+					"type": "string"
 				}
 			},
 			"required": [
 				"id",
-				"name"
+				"name",
+				"phone"
 			],
 			"type": "object"
 		},
