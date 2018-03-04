@@ -545,6 +545,9 @@
 				},
 				"infos": {
 					"type": "string"
+				},
+				"houseHolder": {
+					"type": "string"
 				}
 			},
 			"required": [
@@ -553,8 +556,7 @@
 				"birthday",
 				"address",
 				"identityCard",
-				"phone",
-				"infos"
+				"phone"
 			],
 			"type": "object"
 		}
