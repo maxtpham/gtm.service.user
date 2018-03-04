@@ -49,6 +49,25 @@ export class AccountApiController extends ApiController {
     }
   }
 
+  /** get account by id */
+  @Tags('Account') @Security('jwt') @Get('get-by-user-id')
+  public async getByUserId(
+    @Query() userId: string
+  ): Promise<AccountEntity> {
+    try {
+
+      let account = await this.AccountRepository.findOne({ userId: userId });
+      if (account) {
+        return Promise.resolve(account);
+      }
+      return Promise.reject("Account not exist");
+
+    } catch (e) {
+      console.log(e);
+      return Promise.reject("Account not exist");
+    }
+  }
+
   /** get my-account */
   @Tags('Account') @Security('jwt') @Get('my-account')
   public async getMyAccount(

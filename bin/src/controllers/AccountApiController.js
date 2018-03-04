@@ -60,6 +60,22 @@ let AccountApiController = AccountApiController_1 = class AccountApiController e
             }
         });
     }
+    /** get account by id */
+    getByUserId(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let account = yield this.AccountRepository.findOne({ userId: userId });
+                if (account) {
+                    return Promise.resolve(account);
+                }
+                return Promise.reject("Account not exist");
+            }
+            catch (e) {
+                console.log(e);
+                return Promise.reject("Account not exist");
+            }
+        });
+    }
     /** get my-account */
     getMyAccount(req) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -168,6 +184,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AccountApiController.prototype, "getById", null);
+__decorate([
+    tsoa_2.Tags('Account'), tsoa_2.Security('jwt'), tsoa_1.Get('get-by-user-id'),
+    __param(0, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AccountApiController.prototype, "getByUserId", null);
 __decorate([
     tsoa_2.Tags('Account'), tsoa_2.Security('jwt'), tsoa_1.Get('my-account'),
     __param(0, tsoa_1.Request()),

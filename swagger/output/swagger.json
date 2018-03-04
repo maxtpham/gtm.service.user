@@ -1345,6 +1345,39 @@
 				]
 			}
 		},
+		"/api/user/v1/account/get-by-user-id": {
+			"get": {
+				"operationId": "GetByUserId",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "get account by id ",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/api/user/v1/account/my-account": {
 			"get": {
 				"operationId": "GetMyAccount",
