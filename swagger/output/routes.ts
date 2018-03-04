@@ -172,7 +172,8 @@ const models: TsoaRoute.Models = {
             "job": { "dataType": "string" },
             "bankRate": { "dataType": "double" },
             "note": { "dataType": "string" },
-            "infos": { "dataType": "string", "required": true },
+            "infos": { "dataType": "string" },
+            "houseHolder": { "dataType": "string" },
         },
     },
 };

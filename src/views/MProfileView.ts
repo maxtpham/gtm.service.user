@@ -15,7 +15,8 @@ export interface MProfileView {
   job?: string;
   bankRate?: number;
   note?: string;
-  infos: string;
-
+  infos?: string;
+  houseHolder?: string;
+  
 }
 
