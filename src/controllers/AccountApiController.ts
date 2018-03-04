@@ -8,7 +8,7 @@ import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { AccountRepositoryTYPE, AccountRepository } from '../repositories/AccountRepository';
 import { AccountEntity } from '../entities/AccountEnity';
-import { AccountView } from '../views/AccountView';
+import { AccountView, MAccountView } from '../views/AccountView';
 
 @injectableSingleton(AccountApiController)
 @Route('api/user/v1/account')
@@ -63,6 +63,74 @@ export class AccountApiController extends ApiController {
       return Promise.resolve(account);
     }
     return Promise.reject("Account not exist");
+
+   } catch (e) {
+     console.log(e);
+     return Promise.reject("User have not account");
+   }
+
+  }
+
+  /** add balance of account */
+  @Tags('Account') @Security('jwt') @Post('add-balance')
+  public async addBalance(
+    @Request() req: express.Request,
+    @Body() accountView: MAccountView
+  ): Promise<AccountEntity> {
+
+   try {
+
+    let account = await this.AccountRepository.findOne({ userId: accountView.userId });
+    if (!account) {
+      return Promise.reject("Account not exist");
+    }
+
+    let accountToSave = <AccountEntity> accountView;
+    accountToSave.updated = new Date().getTime();
+    accountToSave.balance = account.balance + accountView.balance;
+    let accountSave = await this.AccountRepository.findOneAndUpdate({ _id: account._id}, accountToSave);
+
+    if (accountSave) {
+      return Promise.resolve(accountSave);
+    }
+    return Promise.reject("Add balance fail");
+
+   } catch (e) {
+     console.log(e);
+     return Promise.reject("User have not account");
+   }
+
+  }
+
+  /** remove balance of account */
+  @Tags('Account') @Security('jwt') @Post('remove-balance')
+  public async updateMyAccount(
+    @Request() req: express.Request,
+    @Body() accountView: MAccountView
+  ): Promise<AccountEntity> {
+
+   try {
+
+    let account = await this.AccountRepository.findOne({ userId: accountView.userId });
+    if (!account) {
+      return Promise.reject("Account not exist");
+    }
+
+    let accountToSave = <AccountEntity> accountView;
+    if(account.balance <= 0) {
+      return Promise.reject("Account empty balance");
+    }
+    if (account.balance < accountView.balance) {
+      return Promise.reject("please check balance again");
+    }
+    accountToSave.balance = account.balance - accountView.balance;
+    accountToSave.updated = new Date().getTime();
+    let accountSave = await this.AccountRepository.findOneAndUpdate({ _id: account._id}, accountToSave);
+
+    if (accountSave) {
+      return Promise.resolve(accountSave);
+    }
+    return Promise.reject("Add balance fail");
 
    } catch (e) {
      console.log(e);

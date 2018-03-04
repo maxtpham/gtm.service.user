@@ -77,6 +77,58 @@ let AccountApiController = AccountApiController_1 = class AccountApiController e
             }
         });
     }
+    /** add balance of account */
+    addBalance(req, accountView) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let account = yield this.AccountRepository.findOne({ userId: accountView.userId });
+                if (!account) {
+                    return Promise.reject("Account not exist");
+                }
+                let accountToSave = accountView;
+                accountToSave.updated = new Date().getTime();
+                accountToSave.balance = account.balance + accountView.balance;
+                let accountSave = yield this.AccountRepository.findOneAndUpdate({ _id: account._id }, accountToSave);
+                if (accountSave) {
+                    return Promise.resolve(accountSave);
+                }
+                return Promise.reject("Add balance fail");
+            }
+            catch (e) {
+                console.log(e);
+                return Promise.reject("User have not account");
+            }
+        });
+    }
+    /** remove balance of account */
+    updateMyAccount(req, accountView) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let account = yield this.AccountRepository.findOne({ userId: accountView.userId });
+                if (!account) {
+                    return Promise.reject("Account not exist");
+                }
+                let accountToSave = accountView;
+                if (account.balance <= 0) {
+                    return Promise.reject("Account empty balance");
+                }
+                if (account.balance < accountView.balance) {
+                    return Promise.reject("please check balance again");
+                }
+                accountToSave.balance = account.balance - accountView.balance;
+                accountToSave.updated = new Date().getTime();
+                let accountSave = yield this.AccountRepository.findOneAndUpdate({ _id: account._id }, accountToSave);
+                if (accountSave) {
+                    return Promise.resolve(accountSave);
+                }
+                return Promise.reject("Add balance fail");
+            }
+            catch (e) {
+                console.log(e);
+                return Promise.reject("User have not account");
+            }
+        });
+    }
     /** add account */
     addAccount(account) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -123,6 +175,22 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AccountApiController.prototype, "getMyAccount", null);
+__decorate([
+    tsoa_2.Tags('Account'), tsoa_2.Security('jwt'), tsoa_1.Post('add-balance'),
+    __param(0, tsoa_1.Request()),
+    __param(1, tsoa_1.Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AccountApiController.prototype, "addBalance", null);
+__decorate([
+    tsoa_2.Tags('Account'), tsoa_2.Security('jwt'), tsoa_1.Post('remove-balance'),
+    __param(0, tsoa_1.Request()),
+    __param(1, tsoa_1.Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AccountApiController.prototype, "updateMyAccount", null);
 __decorate([
     tsoa_2.Tags('Account'), tsoa_2.Security('jwt'), tsoa_1.Post('create'),
     __param(0, tsoa_1.Body()),

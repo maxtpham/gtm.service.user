@@ -188,6 +188,12 @@ const models: TsoaRoute.Models = {
             "bonus": { "dataType": "double" },
         },
     },
+    "MAccountView": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "balance": { "dataType": "double", "required": true },
+        },
+    },
     "AccountView": {
         "properties": {
             "userId": { "dataType": "string", "required": true },
@@ -644,6 +650,48 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.getMyAccount.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/account/add-balance',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+                accountView: { "in": "body", "name": "accountView", "required": true, "ref": "MAccountView" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+
+
+            const promise = controller.addBalance.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/account/remove-balance',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+                accountView: { "in": "body", "name": "accountView", "required": true, "ref": "MAccountView" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+
+
+            const promise = controller.updateMyAccount.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/account/create',

@@ -596,6 +596,22 @@
 			],
 			"type": "object"
 		},
+		"MAccountView": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"balance": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"userId",
+				"balance"
+			],
+			"type": "object"
+		},
 		"AccountView": {
 			"properties": {
 				"userId": {
@@ -1353,6 +1369,76 @@
 					}
 				],
 				"parameters": []
+			}
+		},
+		"/api/user/v1/account/add-balance": {
+			"post": {
+				"operationId": "AddBalance",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "add balance of account ",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "accountView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MAccountView"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/account/remove-balance": {
+			"post": {
+				"operationId": "UpdateMyAccount",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "remove balance of account ",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "accountView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MAccountView"
+						}
+					}
+				]
 			}
 		},
 		"/api/user/v1/account/create": {
