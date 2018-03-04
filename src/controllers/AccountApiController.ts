@@ -104,7 +104,7 @@ export class AccountApiController extends ApiController {
 
   /** remove balance of account */
   @Tags('Account') @Security('jwt') @Post('remove-balance')
-  public async updateMyAccount(
+  public async removeBalance(
     @Request() req: express.Request,
     @Body() accountView: MAccountView
   ): Promise<AccountEntity> {
