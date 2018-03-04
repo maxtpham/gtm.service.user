@@ -356,6 +356,7 @@ function RegisterRoutes(app) {
     app.post('/api/user/v1/Message', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             messageView: { "in": "body", "name": "messageView", "required": true, "ref": "MessageView" },
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
         let validatedArgs = [];
         try {

@@ -61,8 +61,12 @@ export class MessageApiController extends ApiController {
 
     /** Create New Message */
     @Tags('Message') @Security('jwt') @Post()
-    public async createEntity(@Body() messageView: MessageView): Promise<MessageEntity> {
-        let message = await this.MessageRepository.save(<MessageEntity>{ userId: messageView.userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
+    public async createEntity(
+        @Body() messageView: MessageView,
+        @Request() req: express.Request,
+    ): Promise<MessageEntity> {
+        let userId = (<JwtToken>req.user).user;
+        let message = await this.MessageRepository.save(<MessageEntity>{ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
         if (message) {
             return Promise.resolve(await this.MessageRepository.findOneById(message._id));
         }

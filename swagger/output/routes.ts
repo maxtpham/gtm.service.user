@@ -409,6 +409,7 @@ export function RegisterRoutes(app: any) {
         function(request: any, response: any, next: any) {
             const args = {
                 messageView: { "in": "body", "name": "messageView", "required": true, "ref": "MessageView" },
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             };
 
             let validatedArgs: any[] = [];

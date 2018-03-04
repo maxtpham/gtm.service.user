@@ -23,6 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
+const express = require("express");
 const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const MessageRepository_1 = require("../repositories/MessageRepository");
@@ -69,9 +70,10 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         });
     }
     /** Create New Message */
-    createEntity(messageView) {
+    createEntity(messageView, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            let message = yield this.MessageRepository.save({ userId: messageView.userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
+            let userId = req.user.user;
+            let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
             if (message) {
                 return Promise.resolve(yield this.MessageRepository.findOneById(message._id));
             }
@@ -127,8 +129,9 @@ __decorate([
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Post(),
     __param(0, tsoa_1.Body()),
+    __param(1, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "createEntity", null);
 __decorate([
