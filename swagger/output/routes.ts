@@ -691,7 +691,7 @@ export function RegisterRoutes(app: any) {
             const controller = iocContainer.get<AccountApiController>(AccountApiController);
 
 
-            const promise = controller.updateMyAccount.apply(controller, validatedArgs);
+            const promise = controller.removeBalance.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/account/create',

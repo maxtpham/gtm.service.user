@@ -101,7 +101,7 @@ let AccountApiController = AccountApiController_1 = class AccountApiController e
         });
     }
     /** remove balance of account */
-    updateMyAccount(req, accountView) {
+    removeBalance(req, accountView) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let account = yield this.AccountRepository.findOne({ userId: accountView.userId });
@@ -190,7 +190,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], AccountApiController.prototype, "updateMyAccount", null);
+], AccountApiController.prototype, "removeBalance", null);
 __decorate([
     tsoa_2.Tags('Account'), tsoa_2.Security('jwt'), tsoa_1.Post('create'),
     __param(0, tsoa_1.Body()),

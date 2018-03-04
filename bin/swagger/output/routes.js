@@ -568,7 +568,7 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
-        const promise = controller.updateMyAccount.apply(controller, validatedArgs);
+        const promise = controller.removeBalance.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.post('/api/user/v1/account/create', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
