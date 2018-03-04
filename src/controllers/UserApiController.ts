@@ -84,7 +84,7 @@ export class UserApiController extends ApiController {
             return Promise.reject("User not exist");
         }
 
-        const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone } = profile;
+        const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone, houseHolder } = profile;
         const { roles, code, provider, active, profiles } = users;
         const { google, facebook } = profiles;
 
@@ -96,7 +96,8 @@ export class UserApiController extends ApiController {
                 job: job ? job : "",
                 infos: infos ? infos : "",
                 note: note ? note : "",
-                identityCard: identityCard ? identityCard : ""
+                identityCard: identityCard ? identityCard : "",
+                houseHolder: houseHolder
             }
         };
 

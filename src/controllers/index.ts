@@ -10,6 +10,7 @@ import { UserApiController } from "./UserApiController";
 
 import { AuthWebController } from "./AuthWebController";
 import { UserWebController } from "./UserWebController";
+import { AccountApiController } from "./AccountApiController";
 
 export async function register(app: express.Application, config: IAppConfig, iocContainer: interfaces.Container) {
     // IOC initialize for all web controllers manually (as no reference to them)

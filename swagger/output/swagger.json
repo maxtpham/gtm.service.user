@@ -559,6 +559,62 @@
 				"phone"
 			],
 			"type": "object"
+		},
+		"AccountEntity": {
+			"properties": {
+				"_id": {
+					"type": "object"
+				},
+				"created": {
+					"type": "number",
+					"format": "double"
+				},
+				"updated": {
+					"type": "number",
+					"format": "double"
+				},
+				"deleted": {
+					"type": "number",
+					"format": "double"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"balance": {
+					"type": "number",
+					"format": "double"
+				},
+				"bonus": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"_id",
+				"userId",
+				"balance"
+			],
+			"type": "object"
+		},
+		"AccountView": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"balance": {
+					"type": "number",
+					"format": "double"
+				},
+				"bonus": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"userId",
+				"balance"
+			],
+			"type": "object"
 		}
 	},
 	"info": {
@@ -1206,6 +1262,129 @@
 						"required": true,
 						"schema": {
 							"$ref": "#/definitions/MProfileView"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/account/get-all": {
+			"get": {
+				"operationId": "GetAccounts",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/AccountEntity"
+							}
+						}
+					}
+				},
+				"description": "get all account ",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/user/v1/account/get-by-id": {
+			"get": {
+				"operationId": "GetById",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "get account by id ",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/account/my-account": {
+			"get": {
+				"operationId": "GetMyAccount",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "get my-account ",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/user/v1/account/create": {
+			"post": {
+				"operationId": "AddAccount",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "add account ",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "account",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/AccountView"
 						}
 					}
 				]
