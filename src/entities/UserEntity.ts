@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import { DbEntity, DbSchema, LocationView, AttachmentView, LocationSchema, AttachmentSchema } from "@gtm/lib.service"
+import { UserViewDetails } from "../views/MUserView";
 
 export interface ProfileView {
     /** Google/FB profile id*/
@@ -56,7 +57,7 @@ export interface UserRole {
 export interface UserEntity extends DbEntity, UserView {
 }
 
-export const UserRoleSchema =  {
+export const UserRoleSchema = {
     id: { type: mongoose.Schema.Types.ObjectId, required: true },
     code: { type: mongoose.Schema.Types.String, required: true },
 }
@@ -107,5 +108,26 @@ export module User {
             profilesList.push(profiles);
         });
         return profilesList;
+    }
+
+    export function toDetailViews(item: UserEntity): UserViewDetails {
+        let userDetails: UserViewDetails = {
+            id: item._id,
+            name: item.name,
+            code: item.code,
+            phone: item.phone,
+            email: item.email,
+            active: item.active,
+            provider: item.provider,
+            profiles: item.profiles,
+            address: item.address,
+            location: item.location,
+            language: item.language,
+            gender: item.gender,
+            avatar: item.avatar,
+            created: item.created,
+            updated: item.updated,
+        };
+        return userDetails;
     }
 }

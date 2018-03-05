@@ -148,6 +148,46 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
         });
     }
+    /** Get users with pagination */
+    getEntities(query, pageNumber, itemCount) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let queryToEntities = !!query ? {
+                $and: [
+                    {
+                        $or: [{
+                                name: { $regex: query, $options: 'i' }
+                            },
+                            { email: { $regex: query, $options: 'i' } },
+                            { phone: { $regex: query, $options: 'i' } }]
+                    },
+                    {
+                        deleted: null
+                    }
+                ]
+            } : { deleted: null };
+            let users = yield this.UserRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            if (users) {
+                let userTotalItems = yield this.UserRepository.find(queryToEntities);
+                let userDetailViews = [];
+                users.map(user => {
+                    userDetailViews.push(UserEntity_1.User.toDetailViews(user));
+                });
+                let userViews = { users: userDetailViews, totalItems: userTotalItems.length };
+                return Promise.resolve(userViews);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
+    /** Get user details by Id */
+    getDetailViewById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userEntity = yield this.UserRepository.findOneById(id);
+            if (userEntity) {
+                return Promise.resolve(UserEntity_1.User.toDetailViews(userEntity));
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
 };
 __decorate([
     inversify_1.inject(UserRepository_1.UserRepositoryTYPE),
@@ -202,6 +242,19 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "updateAvatar", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/entities'),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getEntities", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/details/{id}'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getDetailViewById", null);
 UserApiController = UserApiController_1 = __decorate([
     lib_common_1.injectableSingleton(UserApiController_1),
     tsoa_1.Route('api/user/v1/user')

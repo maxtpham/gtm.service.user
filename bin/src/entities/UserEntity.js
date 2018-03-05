@@ -46,4 +46,25 @@ var User;
         return profilesList;
     }
     User.toProfileViews = toProfileViews;
+    function toDetailViews(item) {
+        let userDetails = {
+            id: item._id,
+            name: item.name,
+            code: item.code,
+            phone: item.phone,
+            email: item.email,
+            active: item.active,
+            provider: item.provider,
+            profiles: item.profiles,
+            address: item.address,
+            location: item.location,
+            language: item.language,
+            gender: item.gender,
+            avatar: item.avatar,
+            created: item.created,
+            updated: item.updated,
+        };
+        return userDetails;
+    }
+    User.toDetailViews = toDetailViews;
 })(User = exports.User || (exports.User = {}));

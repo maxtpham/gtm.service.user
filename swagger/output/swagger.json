@@ -110,71 +110,6 @@
 			],
 			"type": "object"
 		},
-		"MessageDetailView": {
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"userId": {
-					"type": "string"
-				},
-				"userName": {
-					"type": "string"
-				},
-				"toUserId": {
-					"type": "string"
-				},
-				"toUserName": {
-					"type": "string"
-				},
-				"content": {
-					"type": "string"
-				},
-				"delivered": {
-					"type": "number",
-					"format": "double"
-				},
-				"created": {
-					"type": "number",
-					"format": "double"
-				},
-				"updated": {
-					"type": "number",
-					"format": "double"
-				}
-			},
-			"required": [
-				"id",
-				"userId",
-				"userName",
-				"toUserId",
-				"toUserName",
-				"content",
-				"delivered",
-				"created",
-				"updated"
-			],
-			"type": "object"
-		},
-		"MessageViewWithPagination": {
-			"properties": {
-				"messages": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/MessageDetailView"
-					}
-				},
-				"totalItems": {
-					"type": "number",
-					"format": "double"
-				}
-			},
-			"required": [
-				"messages",
-				"totalItems"
-			],
-			"type": "object"
-		},
 		"MessageEntity": {
 			"properties": {
 				"_id": {
@@ -211,6 +146,25 @@
 				"userId",
 				"toUserId",
 				"content"
+			],
+			"type": "object"
+		},
+		"MessageViewWithPaginationApp": {
+			"properties": {
+				"messages": {
+					"type": "array",
+					"items": {
+						"type": "object"
+					}
+				},
+				"totalItems": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"messages",
+				"totalItems"
 			],
 			"type": "object"
 		},
@@ -560,6 +514,111 @@
 			],
 			"type": "object"
 		},
+		"UserViewDetails": {
+			"properties": {
+				"code": {
+					"type": "string",
+					"description": "Google/FB profile id"
+				},
+				"name": {
+					"type": "string",
+					"description": "Google/FB display name, ex: Thanh Pham "
+				},
+				"provider": {
+					"type": "string",
+					"description": "OAuth2 provider: google/facebook/builtin/.. "
+				},
+				"roles": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/UserRole"
+					},
+					"description": "Link to [role] table "
+				},
+				"active": {
+					"type": "boolean",
+					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+				},
+				"birthday": {
+					"type": "number",
+					"format": "double",
+					"description": "UTC tick only date without time component "
+				},
+				"address": {
+					"type": "string"
+				},
+				"location": {
+					"$ref": "#/definitions/LocationView"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"language": {
+					"type": "string",
+					"description": "en, vn,.. "
+				},
+				"gender": {
+					"type": "string",
+					"description": "male/female "
+				},
+				"timezone": {
+					"type": "number",
+					"format": "double",
+					"description": "+/- UTC time "
+				},
+				"profiles": {
+					"type": "object",
+					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
+				},
+				"avatar": {
+					"$ref": "#/definitions/AttachmentView",
+					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login  "
+				},
+				"id": {
+					"type": "string"
+				},
+				"created": {
+					"type": "number",
+					"format": "double"
+				},
+				"updated": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"code",
+				"name",
+				"provider",
+				"profiles",
+				"id",
+				"created",
+				"updated"
+			],
+			"type": "object"
+		},
+		"UserViewWithPagination": {
+			"properties": {
+				"users": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/UserViewDetails"
+					}
+				},
+				"totalItems": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"users",
+				"totalItems"
+			],
+			"type": "object"
+		},
 		"AccountEntity": {
 			"properties": {
 				"_id": {
@@ -902,98 +961,6 @@
 				]
 			}
 		},
-		"/api/user/v1/Message": {
-			"get": {
-				"operationId": "GetEntities",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageViewWithPagination"
-						}
-					}
-				},
-				"description": "Get Messages ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "query",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "pageNumber",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "itemCount",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "from",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "to",
-						"required": false,
-						"type": "string"
-					}
-				]
-			},
-			"post": {
-				"operationId": "CreateEntity",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageEntity"
-						}
-					}
-				},
-				"description": "Create New Message ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "messageView",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/MessageView"
-						}
-					}
-				]
-			}
-		},
 		"/api/user/v1/Message/{id}": {
 			"get": {
 				"operationId": "GetEntity",
@@ -1008,7 +975,7 @@
 						}
 					}
 				},
-				"description": "Get Message by Id ",
+				"description": "Get Messages ",
 				"tags": [
 					"Message"
 				],
@@ -1090,6 +1057,98 @@
 						"name": "id",
 						"required": true,
 						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/Message": {
+			"get": {
+				"operationId": "GetListMessageForApp",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MessageViewWithPaginationApp"
+						}
+					}
+				},
+				"description": "Get List Messages For App",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "pageNumber",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "from",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "to",
+						"required": false,
+						"type": "string"
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MessageEntity"
+						}
+					}
+				},
+				"description": "Create New Message ",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "messageView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MessageView"
+						}
 					}
 				]
 			}
@@ -1314,6 +1373,86 @@
 						"schema": {
 							"$ref": "#/definitions/AttachmentView"
 						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/entities": {
+			"get": {
+				"operationId": "GetEntities",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/UserViewWithPagination"
+						}
+					}
+				},
+				"description": "Get users with pagination ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "pageNumber",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/details/{id}": {
+			"get": {
+				"operationId": "GetDetailViewById",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/UserViewDetails"
+						}
+					}
+				},
+				"description": "Get user details by Id ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
 					}
 				]
 			}
