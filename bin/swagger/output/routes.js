@@ -496,6 +496,22 @@ function RegisterRoutes(app) {
         const promise = controller.updateUserProfiles.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
+    app.post('/api/user/v1/user/update-avatar', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            avatar: { "in": "body", "name": "avatar", "required": true, "ref": "AttachmentView" },
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.updateAvatar.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
     app.get('/api/user/v1/account/get-all', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {};
         let validatedArgs = [];

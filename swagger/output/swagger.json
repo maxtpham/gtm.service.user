@@ -1283,6 +1283,41 @@
 				]
 			}
 		},
+		"/api/user/v1/user/update-avatar": {
+			"post": {
+				"operationId": "UpdateAvatar",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/UserEntity"
+						}
+					}
+				},
+				"description": "Update user with profiles ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "avatar",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/AttachmentView"
+						}
+					}
+				]
+			}
+		},
 		"/api/user/v1/account/get-all": {
 			"get": {
 				"operationId": "GetAccounts",
