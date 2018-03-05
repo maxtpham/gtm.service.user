@@ -177,6 +177,34 @@ const models: TsoaRoute.Models = {
             "houseHolder": { "dataType": "string" },
         },
     },
+    "UserViewDetails": {
+        "properties": {
+            "code": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "provider": { "dataType": "string", "required": true },
+            "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
+            "active": { "dataType": "boolean" },
+            "birthday": { "dataType": "double" },
+            "address": { "dataType": "string" },
+            "location": { "ref": "LocationView" },
+            "phone": { "dataType": "string" },
+            "email": { "dataType": "string" },
+            "language": { "dataType": "string" },
+            "gender": { "dataType": "string" },
+            "timezone": { "dataType": "double" },
+            "profiles": { "dataType": "any", "required": true },
+            "avatar": { "ref": "AttachmentView" },
+            "id": { "dataType": "string", "required": true },
+            "created": { "dataType": "double", "required": true },
+            "updated": { "dataType": "double", "required": true },
+        },
+    },
+    "UserViewWithPagination": {
+        "properties": {
+            "users": { "dataType": "array", "array": { "ref": "UserViewDetails" }, "required": true },
+            "totalItems": { "dataType": "double", "required": true },
+        },
+    },
     "AccountEntity": {
         "properties": {
             "_id": { "dataType": "any", "required": true },
@@ -591,6 +619,48 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.updateUserProfiles.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/user/entities',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                query: { "in": "query", "name": "query", "dataType": "string" },
+                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.getEntities.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/user/details/:id',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.getDetailViewById.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/account/get-all',
