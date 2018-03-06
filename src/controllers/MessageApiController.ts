@@ -7,7 +7,7 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { MessageRepository, MessageRepositoryTYPE } from '../repositories/MessageRepository';
-import { MessageView, MessageViewWithPagination, MessageDetailView, MessageViewWithPaginationApp } from '../views/MessageView';
+import { MessageView, MessageViewWithPagination, MessageDetailView, MessageViewWithPaginationApp, MessageDetailViewApp } from '../views/MessageView';
 import { MessageEntity } from '../entities/MessageEntity';
 import { UserRepositoryTYPE, UserRepository } from '../repositories/UserRepository';
 
@@ -79,7 +79,7 @@ export class MessageApiController extends ApiController {
             let messageTotalItems = await this.MessageRepository.find(queryToEntities);
             let users = await this.UserRepository.find({ deleted: null });
 
-            let messageWithUser : {userId: string, userName: string , messageDetailView: MessageDetailView[]}[] = [];
+            let messageWithUser : MessageDetailViewApp[] = [];
             messages.map(mes => {
                 let user = users.find(u => u._id == mes.userId);
                 let toUser = users.find(u => u._id == mes.toUserId);

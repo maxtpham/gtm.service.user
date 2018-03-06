@@ -75,9 +75,16 @@ const models: TsoaRoute.Models = {
             "delivered": { "dataType": "double" },
         },
     },
+    "MessageDetailViewApp": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "userName": { "dataType": "string", "required": true },
+            "messageDetailView": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
+        },
+    },
     "MessageViewWithPaginationApp": {
         "properties": {
-            "messages": { "dataType": "array", "array": { "dataType": "any" }, "required": true },
+            "messages": { "dataType": "array", "array": { "ref": "MessageDetailViewApp" }, "required": true },
             "totalItems": { "dataType": "double", "required": true },
         },
     },

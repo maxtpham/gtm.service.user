@@ -214,12 +214,34 @@
 			],
 			"type": "object"
 		},
+		"MessageDetailViewApp": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"userName": {
+					"type": "string"
+				},
+				"messageDetailView": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/MessageDetailView"
+					}
+				}
+			},
+			"required": [
+				"userId",
+				"userName",
+				"messageDetailView"
+			],
+			"type": "object"
+		},
 		"MessageViewWithPaginationApp": {
 			"properties": {
 				"messages": {
 					"type": "array",
 					"items": {
-						"type": "object"
+						"$ref": "#/definitions/MessageDetailViewApp"
 					}
 				},
 				"totalItems": {
