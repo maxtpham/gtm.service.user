@@ -191,6 +191,12 @@ const models = {
             "houseHolder": { "dataType": "string" },
         },
     },
+    "MAttachmentView": {
+        "properties": {
+            "media": { "dataType": "string", "required": true },
+            "data": { "dataType": "string", "required": true },
+        },
+    },
     "UserViewDetails": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -568,7 +574,7 @@ function RegisterRoutes(app) {
     });
     app.post('/api/user/v1/user/update-avatar', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            avatar: { "in": "body", "name": "avatar", "required": true, "ref": "AttachmentView" },
+            avatar: { "in": "body", "name": "avatar", "required": true, "ref": "MAttachmentView" },
             req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
         let validatedArgs = [];

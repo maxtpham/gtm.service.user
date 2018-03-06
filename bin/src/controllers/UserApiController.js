@@ -137,12 +137,13 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!users) {
                     return Promise.reject("User not exist");
                 }
-                users.avatar = avatar;
-                users.updated = new Date().getTime();
-                let userSave = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, users);
-                if (userSave) {
-                    return Promise.resolve(userSave);
-                }
+                console.log(avatar);
+                // users.avatar = avatar;
+                // users.updated = new Date().getTime();
+                // let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
+                // if (userSave) {
+                //     return Promise.resolve(userSave);
+                // }
             }
             catch (e) {
                 console.log(e);
