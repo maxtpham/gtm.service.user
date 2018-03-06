@@ -1468,6 +1468,50 @@
 				]
 			}
 		},
+		"/api/user/v1/user/create-or-update-role/{userId}/{roleType}": {
+			"post": {
+				"operationId": "CreateOrUpdateUserRole",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/ProfileView"
+						}
+					}
+				},
+				"description": "Create or update User Role ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "path",
+						"name": "roleType",
+						"required": true,
+						"type": "string",
+						"enum": [
+							"1",
+							"2",
+							"3"
+						]
+					}
+				]
+			}
+		},
 		"/api/user/v1/account/get-all": {
 			"get": {
 				"operationId": "GetAccounts",

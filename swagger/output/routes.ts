@@ -663,6 +663,27 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getDetailViewById.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.post('/api/user/v1/user/create-or-update-role/:userId/:roleType',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+                roleType: { "in": "path", "name": "roleType", "required": true, "dataType": "enum", "enums": ["1", "2", "3"] },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.createOrUpdateUserRole.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
     app.get('/api/user/v1/account/get-all',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {

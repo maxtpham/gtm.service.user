@@ -37,6 +37,8 @@ const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
 const UserEntity_1 = require("../entities/UserEntity");
+const RoleView_1 = require("../views/RoleView");
+const RoleRepository_1 = require("../repositories/RoleRepository");
 var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get all user lite */
@@ -167,11 +169,36 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
+    /** Create or update User Role */
+    createOrUpdateUserRole(userId, roleType) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let user = yield this.UserRepository.findOneById(userId);
+            if (!user) {
+                return Promise.reject("User does not exist");
+            }
+            if (!(roleType in RoleView_1.RoleType)) {
+                return Promise.reject(`Role type ${roleType} does not exist`);
+            }
+            if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
+                // Update
+            }
+            else {
+                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
+                if (roleLookup) {
+                    let newUserRoles = user.roles.push(roleLookup);
+                }
+            }
+        });
+    }
 };
 __decorate([
     inversify_1.inject(UserRepository_1.UserRepositoryTYPE),
     __metadata("design:type", Object)
 ], UserApiController.prototype, "UserRepository", void 0);
+__decorate([
+    inversify_1.inject(RoleRepository_1.RoleRepositoryTYPE),
+    __metadata("design:type", Object)
+], UserApiController.prototype, "RoleRepository", void 0);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-lite'),
     __metadata("design:type", Function),
@@ -226,6 +253,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getDetailViewById", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('create-or-update-role'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "createOrUpdateUserRole", null);
 UserApiController = UserApiController_1 = __decorate([
     lib_common_1.injectableSingleton(UserApiController_1),
     tsoa_1.Route('api/user/v1/user')
