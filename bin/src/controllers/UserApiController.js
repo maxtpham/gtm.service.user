@@ -34,11 +34,13 @@ const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
 const express = require("express");
 const lib_service_1 = require("@gtm/lib.service");
+const AppConfig_1 = require("./../config/AppConfig");
 const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
 const UserEntity_1 = require("../entities/UserEntity");
 const RoleView_1 = require("../views/RoleView");
 const RoleRepository_1 = require("../repositories/RoleRepository");
+const coreClient = require("@scg/lib.client.core");
 var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get all user lite */
@@ -192,8 +194,9 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Create or update User Role */
-    createOrUpdateUserRole(userRoleView) {
+    createOrUpdateUserRole(userRoleView, req) {
         return __awaiter(this, void 0, void 0, function* () {
+            const coreApi = new coreClient.LendApi(AppConfig_1.default.services.core, req.cookies.jwt);
             try {
                 let user = yield this.UserRepository.findOneById(userRoleView.userId);
                 if (!user) {
@@ -216,7 +219,8 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 else {
                     user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                     if (userRoleView.roleType == RoleView_1.RoleType.Lender) {
-                        // TODO: create lender object
+                        // Create lender object with status is New = 2
+                        let lendObjectForUser = yield coreApi.addLendForUser({ userId: userRoleView.userId, status: 2 });
                     }
                 }
                 userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
@@ -302,9 +306,9 @@ __decorate([
 ], UserApiController.prototype, "getDetailViewById", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role'),
-    __param(0, tsoa_1.Body()),
+    __param(0, tsoa_1.Body()), __param(1, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "createOrUpdateUserRole", null);
 UserApiController = UserApiController_1 = __decorate([

@@ -623,6 +623,7 @@ function RegisterRoutes(app) {
     app.post('/api/user/v1/user/create-or-update-role', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             userRoleView: { "in": "body", "name": "userRoleView", "required": true, "ref": "UserRoleView" },
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
         let validatedArgs = [];
         try {

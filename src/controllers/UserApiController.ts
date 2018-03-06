@@ -13,6 +13,8 @@ import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
 import { MAttachmentView } from '../views/MAttachmentView';
+import * as coreClient from '@scg/lib.client.core';
+
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
 
@@ -152,7 +154,6 @@ export class UserApiController extends ApiController {
 
     }
 
-
     /** Get users with pagination */
     @Tags('User') @Security('jwt') @Get('/entities')
     public async getEntities(@Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
@@ -196,7 +197,9 @@ export class UserApiController extends ApiController {
 
     /** Create or update User Role */
     @Tags('User') @Security('jwt') @Post('/create-or-update-role')
-    public async createOrUpdateUserRole(@Body() userRoleView: UserRoleView): Promise<ProfileView> {
+    public async createOrUpdateUserRole(@Body() userRoleView: UserRoleView, @Request() req: express.Request): Promise<ProfileView> {
+        const coreApi = new coreClient.LendApi(config.services.core, req.cookies.jwt);
+
         try {
             let user = await this.UserRepository.findOneById(userRoleView.userId);
             if (!user) {
@@ -221,7 +224,8 @@ export class UserApiController extends ApiController {
             else { // Create new role
                 user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                 if (userRoleView.roleType == RoleType.Lender) {
-                    // TODO: create lender object
+                    // Create lender object with status is New = 2
+                    let lendObjectForUser = await coreApi.addLendForUser({ userId: userRoleView.userId, status: 2 });
                 }
             }
             userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);

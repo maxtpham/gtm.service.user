@@ -742,6 +742,7 @@ export function RegisterRoutes(app: any) {
         function(request: any, response: any, next: any) {
             const args = {
                 userRoleView: { "in": "body", "name": "userRoleView", "required": true, "ref": "UserRoleView" },
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             };
 
             let validatedArgs: any[] = [];
