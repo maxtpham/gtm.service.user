@@ -36,12 +36,12 @@ export class RoleRepositoryImpl extends RepositoryImpl<RoleDocument> implements 
 
     public async getRoleByType(roleCode: string): Promise<MRoleView> {
         let role = await this.findOne({ code: roleCode });
-        if (!role) {
-            throw new Error('Role code does not exist');
+        if (role) {
+            return <MRoleView>{
+                id: role.id,
+                code: role.code
+            };
         }
-        return <MRoleView>{
-            id: role.id,
-            code: role.code
-        };
+        throw new Error('Role code does not exist');
     }
 }

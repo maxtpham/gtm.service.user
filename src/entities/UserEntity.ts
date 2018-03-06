@@ -58,8 +58,9 @@ export interface UserEntity extends DbEntity, UserView {
 }
 
 export const UserRoleSchema = {
-    id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    id: { type: mongoose.Schema.Types.String, required: true },
     code: { type: mongoose.Schema.Types.String, required: true },
+    _id: false
 }
 
 export const UserSchema = {

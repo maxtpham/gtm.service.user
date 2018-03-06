@@ -7,8 +7,8 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
-import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails } from '../views/MUserView';
-import { UserEntity, User, ProfileView } from '../entities/UserEntity';
+import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView } from '../views/MUserView';
+import { UserEntity, User, ProfileView, UserRole } from '../entities/UserEntity';
 import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
@@ -140,12 +140,12 @@ export class UserApiController extends ApiController {
             if (userSave) {
                 return Promise.resolve(userSave);
             }
-           
+
         } catch (e) {
             console.log(e);
             Promise.reject(`User not exist`);
         }
-       
+
     }
 
 
@@ -191,25 +191,41 @@ export class UserApiController extends ApiController {
     }
 
     /** Create or update User Role */
-    @Tags('User') @Security('jwt') @Post('/create-or-update-role/{userId}/{roleType}')
-    public async createOrUpdateUserRole(userId: string, roleType: RoleType): Promise<ProfileView> {
-        let user = await this.UserRepository.findOneById(userId);
-        if (!user) {
-            return Promise.reject("User does not exist");
-        }
-
-        if (!(roleType in RoleType)) {
-            return Promise.reject(`Role type ${roleType} does not exist`);
-        }
-
-        if (user.roles && user.roles.some(us => us.code == RoleType[roleType])) {
-            // Update
-        }
-        else {
-            let roleLookup = await this.RoleRepository.getRoleByType(RoleType[roleType]);
-            if (roleLookup) {
-                let newUserRoles = user.roles.push(roleLookup);
+    @Tags('User') @Security('jwt') @Post('/create-or-update-role')
+    public async createOrUpdateUserRole(@Body() userRoleView: UserRoleView): Promise<ProfileView> {
+        try {
+            let user = await this.UserRepository.findOneById(userRoleView.userId);
+            if (!user) {
+                return Promise.reject("User does not exist");
             }
+
+            if (!(userRoleView.roleType in RoleType)) {
+                return Promise.reject(`Role type ${userRoleView.roleType} does not exist`);
+            }
+
+            let roleLookup = await this.RoleRepository.getRoleByType(RoleType[userRoleView.roleType]);
+            let userUpdated;
+            if (user.roles && user.roles.some(us => us.code == RoleType[userRoleView.roleType])) {
+                // Update if this role is existed and updated in role entity
+                user.roles.map(ur => {
+                    if (ur.id == roleLookup.id) {
+                        ur.id = roleLookup.id,
+                            ur.code = roleLookup.code
+                    }
+                });
+            }
+            else { // Create new role
+                user.roles.push({ id: roleLookup.id, code: roleLookup.code });
+                if (userRoleView.roleType == RoleType.Lender) {
+                    // TODO: create lender object
+                }
+            }
+            userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
+            if (userUpdated) {
+                return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userRoleView.userId)));
+            }
+        } catch (error) {
+            return Promise.reject(error);
         }
     }
 }

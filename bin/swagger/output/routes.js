@@ -78,7 +78,7 @@ const models = {
     },
     "MessageDetailViewApp": {
         "properties": {
-            "userid": { "dataType": "string", "required": true },
+            "userId": { "dataType": "string", "required": true },
             "userName": { "dataType": "string", "required": true },
             "messageDetailView": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
         },
@@ -217,6 +217,15 @@ const models = {
         "properties": {
             "users": { "dataType": "array", "array": { "ref": "UserViewDetails" }, "required": true },
             "totalItems": { "dataType": "double", "required": true },
+        },
+    },
+    "RoleType": {
+        "enums": ["1", "2", "3"],
+    },
+    "UserRoleView": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "roleType": { "ref": "RoleType", "required": true },
         },
     },
     "AccountEntity": {
@@ -605,10 +614,9 @@ function RegisterRoutes(app) {
         const promise = controller.getDetailViewById.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.post('/api/user/v1/user/create-or-update-role/:userId/:roleType', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.post('/api/user/v1/user/create-or-update-role', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
-            roleType: { "in": "path", "name": "roleType", "required": true, "dataType": "enum", "enums": ["1", "2", "3"] },
+            userRoleView: { "in": "body", "name": "userRoleView", "required": true, "ref": "UserRoleView" },
         };
         let validatedArgs = [];
         try {

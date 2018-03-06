@@ -218,6 +218,15 @@ const models: TsoaRoute.Models = {
             "totalItems": { "dataType": "double", "required": true },
         },
     },
+    "RoleType": {
+        "enums": ["1", "2", "3"],
+    },
+    "UserRoleView": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "roleType": { "ref": "RoleType", "required": true },
+        },
+    },
     "AccountEntity": {
         "properties": {
             "_id": { "dataType": "any", "required": true },
@@ -722,12 +731,11 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getDetailViewById.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.post('/api/user/v1/user/create-or-update-role/:userId/:roleType',
+    app.post('/api/user/v1/user/create-or-update-role',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
-                roleType: { "in": "path", "name": "roleType", "required": true, "dataType": "enum", "enums": ["1", "2", "3"] },
+                userRoleView: { "in": "body", "name": "userRoleView", "required": true, "ref": "UserRoleView" },
             };
 
             let validatedArgs: any[] = [];

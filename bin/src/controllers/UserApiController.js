@@ -191,23 +191,40 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Create or update User Role */
-    createOrUpdateUserRole(userId, roleType) {
+    createOrUpdateUserRole(userRoleView) {
         return __awaiter(this, void 0, void 0, function* () {
-            let user = yield this.UserRepository.findOneById(userId);
-            if (!user) {
-                return Promise.reject("User does not exist");
-            }
-            if (!(roleType in RoleView_1.RoleType)) {
-                return Promise.reject(`Role type ${roleType} does not exist`);
-            }
-            if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
-                // Update
-            }
-            else {
-                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
-                if (roleLookup) {
-                    let newUserRoles = user.roles.push(roleLookup);
+            try {
+                let user = yield this.UserRepository.findOneById(userRoleView.userId);
+                if (!user) {
+                    return Promise.reject("User does not exist");
                 }
+                if (!(userRoleView.roleType in RoleView_1.RoleType)) {
+                    return Promise.reject(`Role type ${userRoleView.roleType} does not exist`);
+                }
+                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[userRoleView.roleType]);
+                let userUpdated;
+                if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[userRoleView.roleType])) {
+                    // Update if this role is existed and updated in role entity
+                    user.roles.map(ur => {
+                        if (ur.id == roleLookup.id) {
+                            ur.id = roleLookup.id,
+                                ur.code = roleLookup.code;
+                        }
+                    });
+                }
+                else {
+                    user.roles.push({ id: roleLookup.id, code: roleLookup.code });
+                    if (userRoleView.roleType == RoleView_1.RoleType.Lender) {
+                        // TODO: create lender object
+                    }
+                }
+                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
+                if (userUpdated) {
+                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userRoleView.userId)));
+                }
+            }
+            catch (error) {
+                return Promise.reject(error);
             }
         });
     }
@@ -283,9 +300,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getDetailViewById", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role/{userId}/{roleType}'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role'),
+    __param(0, tsoa_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "createOrUpdateUserRole", null);
 UserApiController = UserApiController_1 = __decorate([

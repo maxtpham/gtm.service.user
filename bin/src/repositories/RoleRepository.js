@@ -42,13 +42,13 @@ let RoleRepositoryImpl = class RoleRepositoryImpl extends lib_service_1.Reposito
     getRoleByType(roleCode) {
         return __awaiter(this, void 0, void 0, function* () {
             let role = yield this.findOne({ code: roleCode });
-            if (!role) {
-                throw new Error('Role code does not exist');
+            if (role) {
+                return {
+                    id: role.id,
+                    code: role.code
+                };
             }
-            return {
-                id: role.id,
-                code: role.code
-            };
+            throw new Error('Role code does not exist');
         });
     }
 };
