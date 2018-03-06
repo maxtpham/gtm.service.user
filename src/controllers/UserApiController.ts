@@ -10,6 +10,7 @@ import { UserRepository, UserRepositoryTYPE } from '../repositories/UserReposito
 import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails } from '../views/MUserView';
 import { UserEntity, User, ProfileView } from '../entities/UserEntity';
 import { MProfileView } from '../views/MProfileView';
+import { MAttachmentView } from '../views/MAttachmentView';
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
 
@@ -120,7 +121,7 @@ export class UserApiController extends ApiController {
     /** Update user with profiles */
     @Tags('User') @Security('jwt') @Post('/update-avatar')
     public async updateAvatar(
-        @Body() avatar: AttachmentView,
+        @Body() avatar: MAttachmentView,
         @Request() req: express.Request
     ): Promise<UserEntity> {
 
@@ -130,13 +131,15 @@ export class UserApiController extends ApiController {
                 return Promise.reject("User not exist");
             }
 
-            users.avatar = avatar;
-            users.updated = new Date().getTime();
+            console.log(avatar);
 
-            let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
-            if (userSave) {
-                return Promise.resolve(userSave);
-            }
+            // users.avatar = avatar;
+            // users.updated = new Date().getTime();
+
+            // let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
+            // if (userSave) {
+            //     return Promise.resolve(userSave);
+            // }
            
         } catch (e) {
             console.log(e);

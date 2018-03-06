@@ -514,6 +514,21 @@
 			],
 			"type": "object"
 		},
+		"MAttachmentView": {
+			"properties": {
+				"media": {
+					"type": "string"
+				},
+				"data": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"media",
+				"data"
+			],
+			"type": "object"
+		},
 		"UserViewDetails": {
 			"properties": {
 				"code": {
@@ -1371,7 +1386,7 @@
 						"name": "avatar",
 						"required": true,
 						"schema": {
-							"$ref": "#/definitions/AttachmentView"
+							"$ref": "#/definitions/MAttachmentView"
 						}
 					}
 				]
