@@ -30,35 +30,35 @@ const MessageRepository_1 = require("../repositories/MessageRepository");
 const UserRepository_1 = require("../repositories/UserRepository");
 let MessageApiController = MessageApiController_1 = class MessageApiController extends lib_service_1.ApiController {
     /** Get Messages */
-    // @Tags('Message') @Security('jwt') @Get()
-    // public async getEntities( @Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number, @Query() from?: string, @Query() to?: string)
-    //     : Promise<MessageViewWithPagination> {
-    //     let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
-    //     let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
-    //     if (messages) {
-    //         let messageTotalItems = await this.MessageRepository.find(queryToEntities);
-    //         let users = await this.UserRepository.find({ deleted: null });
-    //         let messageDetailView: MessageDetailView[] = [];
-    //         messages.map(mes => {
-    //             let user = users.find(u => u._id == mes.userId);
-    //             let toUser = users.find(u => u._id == mes.toUserId);
-    //             messageDetailView.push({
-    //                 id: mes._id,
-    //                 userId: mes.userId,
-    //                 userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
-    //                 toUserId: mes.toUserId,
-    //                 toUserName: toUser ? (toUser.phone ? toUser.name + ' - ' + toUser.phone : toUser.name) : '',
-    //                 content: mes.content,
-    //                 delivered: mes.delivered,
-    //                 created: mes.created,
-    //                 updated: mes.updated
-    //             });
-    //         })
-    //         let messageDetailViews = <MessageViewWithPagination>{ messages: messageDetailView, totalItems: messageTotalItems.length };
-    //         return Promise.resolve(messageDetailViews);
-    //     }
-    //     return Promise.reject(`Not found.`);
-    // }
+    getEntities(query, pageNumber, itemCount, from, to) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
+            let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            if (messages) {
+                let messageTotalItems = yield this.MessageRepository.find(queryToEntities);
+                let users = yield this.UserRepository.find({ deleted: null });
+                let messageDetailView = [];
+                messages.map(mes => {
+                    let user = users.find(u => u._id == mes.userId);
+                    let toUser = users.find(u => u._id == mes.toUserId);
+                    messageDetailView.push({
+                        id: mes._id,
+                        userId: mes.userId,
+                        userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                        toUserId: mes.toUserId,
+                        toUserName: toUser ? (toUser.phone ? toUser.name + ' - ' + toUser.phone : toUser.name) : '',
+                        content: mes.content,
+                        delivered: mes.delivered,
+                        created: mes.created,
+                        updated: mes.updated
+                    });
+                });
+                let messageDetailViews = { messages: messageDetailView, totalItems: messageTotalItems.length };
+                return Promise.resolve(messageDetailViews);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
     /** Get Message by Id */
     getEntity(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -200,13 +200,20 @@ __decorate([
     __metadata("design:type", Object)
 ], MessageApiController.prototype, "UserRepository", void 0);
 __decorate([
-    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('{id}'),
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get(),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()), __param(3, tsoa_1.Query()), __param(4, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number, Number, String, String]),
+    __metadata("design:returntype", Promise)
+], MessageApiController.prototype, "getEntities", null);
+__decorate([
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getbyid/{id}'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getEntity", null);
 __decorate([
-    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get(),
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforapp'),
     __param(0, tsoa_1.Query()),
     __param(1, tsoa_1.Query()),
     __param(2, tsoa_1.Query()),

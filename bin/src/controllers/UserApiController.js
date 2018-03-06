@@ -283,7 +283,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getDetailViewById", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('create-or-update-role'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role/{userId}/{roleType}'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Number]),
     __metadata("design:returntype", Promise)
