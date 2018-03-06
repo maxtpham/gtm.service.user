@@ -5,6 +5,11 @@ export interface MessageViewWithPagination {
     totalItems: number;
 }
 
+export interface MessageViewWithPaginationApp {
+    messages: {userId: string, userName: string ,messageDetailView: MessageDetailView[]}[];
+    totalItems: number;
+}
+
 export interface MessageDetailView {
     id: string;
     userId: string;

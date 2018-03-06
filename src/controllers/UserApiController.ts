@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { injectableSingleton } from "@gtm/lib.common";
 import { Get, Post, Route, Body, Query, Header, Path, SuccessResponse, Controller, Request, Response, Delete, Put, } from 'tsoa';
 import * as express from 'express';
-import { ApiController } from "@gtm/lib.service";
+import { ApiController, AttachmentView } from "@gtm/lib.service";
 import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
@@ -119,6 +119,35 @@ export class UserApiController extends ApiController {
 
         return Promise.reject(`Not found.`);
     }
+
+    /** Update user with profiles */
+    @Tags('User') @Security('jwt') @Post('/update-avatar')
+    public async updateAvatar(
+        @Body() avatar: AttachmentView,
+        @Request() req: express.Request
+    ): Promise<UserEntity> {
+
+        try {
+            let users = await this.UserRepository.findOne({ _id: (<JwtToken>req.user).user });
+            if (!users) {
+                return Promise.reject("User not exist");
+            }
+
+            users.avatar = avatar;
+            users.updated = new Date().getTime();
+
+            let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
+            if (userSave) {
+                return Promise.resolve(userSave);
+            }
+           
+        } catch (e) {
+            console.log(e);
+            Promise.reject(`User not exist`);
+        }
+       
+    }
+
 
     /** Get users with pagination */
     @Tags('User') @Security('jwt') @Get('/entities')

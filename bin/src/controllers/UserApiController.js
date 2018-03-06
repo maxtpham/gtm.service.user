@@ -129,6 +129,27 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
+    /** Update user with profiles */
+    updateAvatar(avatar, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let users = yield this.UserRepository.findOne({ _id: req.user.user });
+                if (!users) {
+                    return Promise.reject("User not exist");
+                }
+                users.avatar = avatar;
+                users.updated = new Date().getTime();
+                let userSave = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, users);
+                if (userSave) {
+                    return Promise.resolve(userSave);
+                }
+            }
+            catch (e) {
+                console.log(e);
+                Promise.reject(`User not exist`);
+            }
+        });
+    }
     /** Get users with pagination */
     getEntities(query, pageNumber, itemCount) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -240,6 +261,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "updateUserProfiles", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-avatar'),
+    __param(0, tsoa_1.Body()),
+    __param(1, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "updateAvatar", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/entities'),
     __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
