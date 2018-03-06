@@ -6,7 +6,7 @@ import { MongoClient } from "@gtm/lib.service";
 import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
 import { RoleEntity, RoleSchema } from '../entities/RoleEntity';
-import { RoleDetailView } from "../views/RoleView";
+import { RoleDetailView, MRoleView } from "../views/RoleView";
 
 export interface RoleDocument extends RoleEntity, Document { }
 
@@ -14,11 +14,13 @@ export const RoleRepositoryTYPE = Symbol("RoleRepository");
 
 export interface RoleRepository extends Repository<RoleEntity> {
     buildClientRole: (role: RoleEntity) => RoleDetailView;
+    getRoleByType: (roleCode: string) => Promise<MRoleView>;
 }
 
 @injectableSingleton(RoleRepositoryTYPE)
 export class RoleRepositoryImpl extends RepositoryImpl<RoleDocument> implements RoleRepository {
-    constructor( @inject(DefaultMongoClientTYPE) mongoclient: MongoClient) {
+
+    constructor(@inject(DefaultMongoClientTYPE) mongoclient: MongoClient) {
         super(mongoclient, "role", RoleSchema);
     }
 
@@ -30,5 +32,16 @@ export class RoleRepositoryImpl extends RepositoryImpl<RoleDocument> implements 
             created: role.created,
             updated: role.updated,
         }
+    }
+
+    public async getRoleByType(roleCode: string): Promise<MRoleView> {
+        let role = await this.findOne({ code: roleCode });
+        if (!role) {
+            throw new Error('Role code does not exist');
+        }
+        return <MRoleView>{
+            id: role.id,
+            code: role.code
+        };
     }
 }

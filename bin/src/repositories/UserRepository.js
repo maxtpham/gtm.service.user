@@ -113,6 +113,15 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
         });
         return mUsers;
     }
+    getUserRole(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let user = yield this.findOneById(id);
+            if (user) {
+                return user.roles;
+            }
+            throw new Error("User not found");
+        });
+    }
 };
 UserRepositoryImpl = __decorate([
     lib_common_1.injectableSingleton(exports.UserRepositoryTYPE),

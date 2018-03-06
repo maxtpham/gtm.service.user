@@ -7,7 +7,7 @@ import { injectableSingleton } from "@gtm/lib.common";
 import { MongoClient } from "@gtm/lib.service";
 import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
-import { UserEntity, UserSchema } from '../entities/UserEntity';
+import { UserEntity, UserSchema, UserRole } from '../entities/UserEntity';
 import { MUserView } from "../views/MUserView";
 import { Utils, OAuth2ProfileExt } from "@gtm/lib.service.auth";
 
@@ -21,6 +21,7 @@ export interface UserRepository extends Repository<UserEntity> {
     buildClientUser: (user: UserEntity) => MUserView;
     buildClientUsers: (users: UserEntity[]) => MUserView[];
     getByName(name: string): Promise<UserEntity[]>;
+    getUserRole(id: string): Promise<UserRole[]>;
 }
 
 @injectableSingleton(UserRepositoryTYPE)
@@ -36,7 +37,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         let users = await (<UserRepository>this).find({ code: profile.id });
         if (users && users.length > 0 && users[0]._id) {
             // Check to update user (if name or profile is changed)
-            let updatedUser: UserEntity = <UserEntity>{ };
+            let updatedUser: UserEntity = <UserEntity>{};
             const currentUser = users[0];
             const currentProfile = currentUser.profiles[profile.provider];
             if (currentProfile && deepEqual(currentProfile, (<any>profile)._json, { strict: true })) {
@@ -100,5 +101,13 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             });
         });
         return mUsers;
+    }
+
+    public async getUserRole(id: string): Promise<UserRole[]> {
+        let user = await this.findOneById(id);
+        if (user) {
+            return user.roles;
+        }
+        throw new Error("User not found");
     }
 }

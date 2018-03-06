@@ -44,6 +44,25 @@ const models: TsoaRoute.Models = {
             "scope": { "dataType": "string" },
         },
     },
+    "MessageDetailView": {
+        "properties": {
+            "id": { "dataType": "string", "required": true },
+            "userId": { "dataType": "string", "required": true },
+            "userName": { "dataType": "string", "required": true },
+            "toUserId": { "dataType": "string", "required": true },
+            "toUserName": { "dataType": "string", "required": true },
+            "content": { "dataType": "string", "required": true },
+            "delivered": { "dataType": "double", "required": true },
+            "created": { "dataType": "double", "required": true },
+            "updated": { "dataType": "double", "required": true },
+        },
+    },
+    "MessageViewWithPagination": {
+        "properties": {
+            "messages": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
+            "totalItems": { "dataType": "double", "required": true },
+        },
+    },
     "MessageEntity": {
         "properties": {
             "_id": { "dataType": "any", "required": true },
@@ -56,9 +75,16 @@ const models: TsoaRoute.Models = {
             "delivered": { "dataType": "double" },
         },
     },
+    "MessageDetailViewApp": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "userName": { "dataType": "string", "required": true },
+            "messageDetailView": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
+        },
+    },
     "MessageViewWithPaginationApp": {
         "properties": {
-            "messages": { "dataType": "array", "array": { "dataType": "any" }, "required": true },
+            "messages": { "dataType": "array", "array": { "ref": "MessageDetailViewApp" }, "required": true },
             "totalItems": { "dataType": "double", "required": true },
         },
     },
@@ -387,7 +413,31 @@ export function RegisterRoutes(app: any) {
             const promise = controller.deleteEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/user/v1/Message/:id',
+    app.get('/api/user/v1/Message',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                query: { "in": "query", "name": "query", "dataType": "string" },
+                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+                from: { "in": "query", "name": "from", "dataType": "string" },
+                to: { "in": "query", "name": "to", "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<MessageApiController>(MessageApiController);
+
+
+            const promise = controller.getEntities.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/Message/getbyid/:id',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -407,7 +457,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/user/v1/Message',
+    app.get('/api/user/v1/Message/getforapp',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -676,6 +726,27 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.getDetailViewById.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/user/create-or-update-role/:userId/:roleType',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+                roleType: { "in": "path", "name": "roleType", "required": true, "dataType": "enum", "enums": ["1", "2", "3"] },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.createOrUpdateUserRole.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/account/get-all',

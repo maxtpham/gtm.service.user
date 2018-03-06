@@ -6,8 +6,14 @@ export interface MessageViewWithPagination {
 }
 
 export interface MessageViewWithPaginationApp {
-    messages: {userId: string, userName: string ,messageDetailView: MessageDetailView[]}[];
+    messages: MessageDetailViewApp[];
     totalItems: number;
+}
+
+export interface MessageDetailViewApp {
+    userId: string,
+    userName: string,
+    messageDetailView: MessageDetailView[],
 }
 
 export interface MessageDetailView {

@@ -110,6 +110,71 @@
 			],
 			"type": "object"
 		},
+		"MessageDetailView": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"userName": {
+					"type": "string"
+				},
+				"toUserId": {
+					"type": "string"
+				},
+				"toUserName": {
+					"type": "string"
+				},
+				"content": {
+					"type": "string"
+				},
+				"delivered": {
+					"type": "number",
+					"format": "double"
+				},
+				"created": {
+					"type": "number",
+					"format": "double"
+				},
+				"updated": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"id",
+				"userId",
+				"userName",
+				"toUserId",
+				"toUserName",
+				"content",
+				"delivered",
+				"created",
+				"updated"
+			],
+			"type": "object"
+		},
+		"MessageViewWithPagination": {
+			"properties": {
+				"messages": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/MessageDetailView"
+					}
+				},
+				"totalItems": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"messages",
+				"totalItems"
+			],
+			"type": "object"
+		},
 		"MessageEntity": {
 			"properties": {
 				"_id": {
@@ -149,12 +214,34 @@
 			],
 			"type": "object"
 		},
+		"MessageDetailViewApp": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"userName": {
+					"type": "string"
+				},
+				"messageDetailView": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/MessageDetailView"
+					}
+				}
+			},
+			"required": [
+				"userId",
+				"userName",
+				"messageDetailView"
+			],
+			"type": "object"
+		},
 		"MessageViewWithPaginationApp": {
 			"properties": {
 				"messages": {
 					"type": "array",
 					"items": {
-						"type": "object"
+						"$ref": "#/definitions/MessageDetailViewApp"
 					}
 				},
 				"totalItems": {
@@ -976,9 +1063,9 @@
 				]
 			}
 		},
-		"/api/user/v1/Message/{id}": {
+		"/api/user/v1/Message": {
 			"get": {
-				"operationId": "GetEntity",
+				"operationId": "GetEntities",
 				"produces": [
 					"application/json"
 				],
@@ -986,111 +1073,11 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/MessageEntity"
+							"$ref": "#/definitions/MessageViewWithPagination"
 						}
 					}
 				},
 				"description": "Get Messages ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"type": "string"
-					}
-				]
-			},
-			"put": {
-				"operationId": "UpdateEntity",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageEntity"
-						}
-					}
-				},
-				"description": "Update Message ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "body",
-						"name": "messageView",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/MessageView"
-						}
-					}
-				]
-			},
-			"delete": {
-				"operationId": "DeleteEntity",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"204": {
-						"description": "No content"
-					}
-				},
-				"description": "Delete Message ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"type": "string"
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message": {
-			"get": {
-				"operationId": "GetListMessageForApp",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageViewWithPaginationApp"
-						}
-					}
-				},
-				"description": "Get List Messages For App",
 				"tags": [
 					"Message"
 				],
@@ -1164,6 +1151,167 @@
 						"schema": {
 							"$ref": "#/definitions/MessageView"
 						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/Message/getbyid/{id}": {
+			"get": {
+				"operationId": "GetEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MessageEntity"
+						}
+					}
+				},
+				"description": "Get Message by Id ",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/Message/getforapp": {
+			"get": {
+				"operationId": "GetListMessageForApp",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MessageViewWithPaginationApp"
+						}
+					}
+				},
+				"description": "Get List Messages For App",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "pageNumber",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "from",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "to",
+						"required": false,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/Message/{id}": {
+			"put": {
+				"operationId": "UpdateEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MessageEntity"
+						}
+					}
+				},
+				"description": "Update Message ",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "messageView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MessageView"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete Message ",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
 					}
 				]
 			}
@@ -1468,6 +1616,50 @@
 						"name": "id",
 						"required": true,
 						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/create-or-update-role/{userId}/{roleType}": {
+			"post": {
+				"operationId": "CreateOrUpdateUserRole",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/ProfileView"
+						}
+					}
+				},
+				"description": "Create or update User Role ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "path",
+						"name": "roleType",
+						"required": true,
+						"type": "string",
+						"enum": [
+							"1",
+							"2",
+							"3"
+						]
 					}
 				]
 			}

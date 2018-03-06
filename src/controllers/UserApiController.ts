@@ -10,6 +10,8 @@ import { UserRepository, UserRepositoryTYPE } from '../repositories/UserReposito
 import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails } from '../views/MUserView';
 import { UserEntity, User, ProfileView } from '../entities/UserEntity';
 import { MProfileView } from '../views/MProfileView';
+import { RoleType } from '../views/RoleView';
+import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
 import { MAttachmentView } from '../views/MAttachmentView';
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
@@ -18,6 +20,7 @@ var Mongoose = require('mongoose'),
 @Route('api/user/v1/user')
 export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
+    @inject(RoleRepositoryTYPE) private RoleRepository: RoleRepository;
 
     /** Get all user lite */
     @Tags('User') @Security('jwt') @Get('/get-user-lite')
@@ -131,6 +134,7 @@ export class UserApiController extends ApiController {
                 return Promise.reject("User not exist");
             }
 
+
             console.log(avatar);
 
             // users.avatar = avatar;
@@ -188,5 +192,28 @@ export class UserApiController extends ApiController {
             return Promise.resolve(User.toDetailViews(userEntity));
         }
         return Promise.reject(`Not found.`);
+    }
+
+    /** Create or update User Role */
+    @Tags('User') @Security('jwt') @Post('/create-or-update-role/{userId}/{roleType}')
+    public async createOrUpdateUserRole(userId: string, roleType: RoleType): Promise<ProfileView> {
+        let user = await this.UserRepository.findOneById(userId);
+        if (!user) {
+            return Promise.reject("User does not exist");
+        }
+
+        if (!(roleType in RoleType)) {
+            return Promise.reject(`Role type ${roleType} does not exist`);
+        }
+
+        if (user.roles && user.roles.some(us => us.code == RoleType[roleType])) {
+            // Update
+        }
+        else {
+            let roleLookup = await this.RoleRepository.getRoleByType(RoleType[roleType]);
+            if (roleLookup) {
+                let newUserRoles = user.roles.push(roleLookup);
+            }
+        }
     }
 }

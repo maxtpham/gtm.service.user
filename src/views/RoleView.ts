@@ -13,6 +13,11 @@ export interface RoleDetailView {
     updated: number;
 }
 
+export interface MRoleView {
+    id: string;
+    code: string;
+}
+
 export interface RoleView {
     /** role code */
     code: string;
@@ -20,7 +25,6 @@ export interface RoleView {
     /** role scope */
     scope?: string;
 }
-
 
 
 export enum RoleType {
