@@ -41,6 +41,7 @@ const UserEntity_1 = require("../entities/UserEntity");
 const RoleView_1 = require("../views/RoleView");
 const RoleRepository_1 = require("../repositories/RoleRepository");
 const coreClient = require("@scg/lib.client.core");
+const bson_1 = require("bson");
 var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get all user lite */
@@ -139,13 +140,18 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!users) {
                     return Promise.reject("User not exist");
                 }
-                console.log(avatar);
-                // users.avatar = avatar;
-                // users.updated = new Date().getTime();
-                // let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
-                // if (userSave) {
-                //     return Promise.resolve(userSave);
-                // }
+                let bf = new Buffer(avatar.data, "base64");
+                let av = {
+                    media: avatar.media,
+                    data: new bson_1.Binary(bf, bson_1.Binary.SUBTYPE_BYTE_ARRAY)
+                };
+                users.avatar = av;
+                users.updated = new Date().getTime();
+                let userSave = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, users);
+                if (userSave) {
+                    console.log("Update avartar success " + userSave._id);
+                    return Promise.resolve(userSave);
+                }
             }
             catch (e) {
                 console.log(e);
