@@ -13,6 +13,7 @@ import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
 import { MAttachmentView } from '../views/MAttachmentView';
+import { Binary } from 'bson';
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
 
@@ -134,16 +135,21 @@ export class UserApiController extends ApiController {
                 return Promise.reject("User not exist");
             }
 
+            let bf = new Buffer(avatar.data, "base64");
 
-            console.log(avatar);
+            let av: AttachmentView = {
+                media: avatar.media,
+                data: new Binary(bf, Binary.SUBTYPE_BYTE_ARRAY)
+            };
 
-            // users.avatar = avatar;
-            // users.updated = new Date().getTime();
+            users.avatar = av;
+            users.updated = new Date().getTime();
 
-            // let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
-            // if (userSave) {
-            //     return Promise.resolve(userSave);
-            // }
+            let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
+            if (userSave) {
+                console.log("Update avartar success " + userSave._id);
+                return Promise.resolve(userSave);
+            }
            
         } catch (e) {
             console.log(e);
