@@ -89,6 +89,14 @@ const models = {
             "totalItems": { "dataType": "double", "required": true },
         },
     },
+    "MessageViewWithPaginationAnUserApp": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "userName": { "dataType": "string", "required": true },
+            "messages": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
+            "totalItems": { "dataType": "double", "required": true },
+        },
+    },
     "MessageView": {
         "properties": {
             "userId": { "dataType": "string", "required": true },
@@ -433,6 +441,27 @@ function RegisterRoutes(app) {
         }
         const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
         const promise = controller.getListMessageForApp.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/Message/getforanuserapp', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            userIdToGetMessage: { "in": "query", "name": "userIdToGetMessage", "required": true, "dataType": "string" },
+            query: { "in": "query", "name": "query", "dataType": "string" },
+            pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+            itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+            from: { "in": "query", "name": "from", "dataType": "string" },
+            to: { "in": "query", "name": "to", "dataType": "string" },
+            req: { "in": "request", "name": "req", "dataType": "object" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
+        const promise = controller.getListMessageOfUser.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.post('/api/user/v1/Message', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {

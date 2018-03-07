@@ -7,7 +7,7 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { MessageRepository, MessageRepositoryTYPE } from '../repositories/MessageRepository';
-import { MessageView, MessageViewWithPagination, MessageDetailView, MessageViewWithPaginationApp, MessageDetailViewApp } from '../views/MessageView';
+import { MessageView, MessageViewWithPagination, MessageDetailView, MessageViewWithPaginationApp, MessageDetailViewApp, MessageViewWithPaginationAnUserApp } from '../views/MessageView';
 import { MessageEntity } from '../entities/MessageEntity';
 import { UserRepositoryTYPE, UserRepository } from '../repositories/UserRepository';
 
@@ -151,7 +151,67 @@ export class MessageApiController extends ApiController {
                 }
             })
 
-            let messageDetailViewsApp = <MessageViewWithPaginationApp>{ messages: messageWithUser, totalItems: messageTotalItems.length };
+            let messageDetailViewsApp = <MessageViewWithPaginationApp>{ messages: messageWithUser, totalItems: messageWithUser.length };
+            return Promise.resolve(messageDetailViewsApp);
+        }
+        return Promise.reject(`Not found.`);
+    }
+
+    /** Get List Messages with an user for App*/
+    @Tags('Message') @Security('jwt') @Get('/getforanuserapp')
+    public async getListMessageOfUser(
+        @Query() userIdToGetMessage: string, 
+        @Query() query?: string,
+        @Query() pageNumber?: number, 
+        @Query() itemCount?: number, 
+        @Query() from?: string, 
+        @Query() to?: string, 
+        @Request() req?: express.Request,
+    )
+        : Promise<MessageViewWithPaginationAnUserApp> {
+        let userId = (<JwtToken>req.user).user;            
+        let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
+        let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+        let users = await this.UserRepository.find({ deleted: null });
+        let user = users.find(u => u._id == userId);
+        let userHaveMessage = users.find(u => u._id == userIdToGetMessage);
+        console.log(userHaveMessage);
+        if (messages) {
+            let messageTotalItems = await this.MessageRepository.find(queryToEntities);
+            let messageDetailView: MessageDetailView[] = [];
+
+            messages.map(mes => {
+                console.log("alibaba");
+                if (mes.userId === userId || mes.toUserId === userId) {
+                if (mes.userId === userIdToGetMessage) {
+                    messageDetailView.push({
+                        id: mes._id,
+                        userId: userIdToGetMessage,
+                        userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : user.name) : '',
+                        toUserId: mes.toUserId,
+                        toUserName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                        content: mes.content,
+                        delivered: mes.delivered,
+                        created: mes.created,
+                        updated: mes.updated   
+                    })
+                } else if (mes.toUserId === userIdToGetMessage){
+                    messageDetailView.push({
+                        id: mes._id,
+                        userId: userId,
+                        userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                        toUserId: userIdToGetMessage,
+                        toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                        content: mes.content,
+                        delivered: mes.delivered,
+                        created: mes.created,
+                        updated: mes.updated   
+                    })
+                }
+                }
+            })
+
+            let messageDetailViewsApp = <MessageViewWithPaginationAnUserApp>{ userId: userIdToGetMessage, userName: userHaveMessage.name,messages: messageDetailView, totalItems: messageDetailView.length };
             return Promise.resolve(messageDetailViewsApp);
         }
         return Promise.reject(`Not found.`);

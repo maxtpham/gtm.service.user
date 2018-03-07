@@ -255,6 +255,33 @@
 			],
 			"type": "object"
 		},
+		"MessageViewWithPaginationAnUserApp": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"userName": {
+					"type": "string"
+				},
+				"messages": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/MessageDetailView"
+					}
+				},
+				"totalItems": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"userId",
+				"userName",
+				"messages",
+				"totalItems"
+			],
+			"type": "object"
+		},
 		"MessageView": {
 			"properties": {
 				"userId": {
@@ -1235,6 +1262,71 @@
 					}
 				],
 				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "pageNumber",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "from",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "to",
+						"required": false,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/Message/getforanuserapp": {
+			"get": {
+				"operationId": "GetListMessageOfUser",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MessageViewWithPaginationAnUserApp"
+						}
+					}
+				},
+				"description": "Get List Messages with an user for App",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userIdToGetMessage",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"in": "query",
 						"name": "query",

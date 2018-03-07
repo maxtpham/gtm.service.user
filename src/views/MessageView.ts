@@ -10,6 +10,13 @@ export interface MessageViewWithPaginationApp {
     totalItems: number;
 }
 
+export interface MessageViewWithPaginationAnUserApp {
+    userId: string;
+    userName: string;
+    messages: MessageDetailView[];
+    totalItems: number;
+}
+
 export interface MessageDetailViewApp {
     userId: string,
     userName: string,

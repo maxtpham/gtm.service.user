@@ -88,6 +88,14 @@ const models: TsoaRoute.Models = {
             "totalItems": { "dataType": "double", "required": true },
         },
     },
+    "MessageViewWithPaginationAnUserApp": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "userName": { "dataType": "string", "required": true },
+            "messages": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
+            "totalItems": { "dataType": "double", "required": true },
+        },
+    },
     "MessageView": {
         "properties": {
             "userId": { "dataType": "string", "required": true },
@@ -489,6 +497,32 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.getListMessageForApp.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/Message/getforanuserapp',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                userIdToGetMessage: { "in": "query", "name": "userIdToGetMessage", "required": true, "dataType": "string" },
+                query: { "in": "query", "name": "query", "dataType": "string" },
+                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+                from: { "in": "query", "name": "from", "dataType": "string" },
+                to: { "in": "query", "name": "to", "dataType": "string" },
+                req: { "in": "request", "name": "req", "dataType": "object" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<MessageApiController>(MessageApiController);
+
+
+            const promise = controller.getListMessageOfUser.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/Message',

@@ -149,7 +149,57 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                         }
                     }
                 });
-                let messageDetailViewsApp = { messages: messageWithUser, totalItems: messageTotalItems.length };
+                let messageDetailViewsApp = { messages: messageWithUser, totalItems: messageWithUser.length };
+                return Promise.resolve(messageDetailViewsApp);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
+    /** Get List Messages with an user for App*/
+    getListMessageOfUser(userIdToGetMessage, query, pageNumber, itemCount, from, to, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userId = req.user.user;
+            let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
+            let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            let users = yield this.UserRepository.find({ deleted: null });
+            let user = users.find(u => u._id == userId);
+            let userHaveMessage = users.find(u => u._id == userIdToGetMessage);
+            console.log(userHaveMessage);
+            if (messages) {
+                let messageTotalItems = yield this.MessageRepository.find(queryToEntities);
+                let messageDetailView = [];
+                messages.map(mes => {
+                    console.log("alibaba");
+                    if (mes.userId === userId || mes.toUserId === userId) {
+                        if (mes.userId === userIdToGetMessage) {
+                            messageDetailView.push({
+                                id: mes._id,
+                                userId: userIdToGetMessage,
+                                userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : user.name) : '',
+                                toUserId: mes.toUserId,
+                                toUserName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                created: mes.created,
+                                updated: mes.updated
+                            });
+                        }
+                        else if (mes.toUserId === userIdToGetMessage) {
+                            messageDetailView.push({
+                                id: mes._id,
+                                userId: userId,
+                                userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                                toUserId: userIdToGetMessage,
+                                toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                created: mes.created,
+                                updated: mes.updated
+                            });
+                        }
+                    }
+                });
+                let messageDetailViewsApp = { userId: userIdToGetMessage, userName: userHaveMessage.name, messages: messageDetailView, totalItems: messageDetailView.length };
                 return Promise.resolve(messageDetailViewsApp);
             }
             return Promise.reject(`Not found.`);
@@ -224,6 +274,19 @@ __decorate([
     __metadata("design:paramtypes", [String, Number, Number, String, String, Object]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageForApp", null);
+__decorate([
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforanuserapp'),
+    __param(0, tsoa_1.Query()),
+    __param(1, tsoa_1.Query()),
+    __param(2, tsoa_1.Query()),
+    __param(3, tsoa_1.Query()),
+    __param(4, tsoa_1.Query()),
+    __param(5, tsoa_1.Query()),
+    __param(6, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Number, Number, String, String, Object]),
+    __metadata("design:returntype", Promise)
+], MessageApiController.prototype, "getListMessageOfUser", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Post(),
     __param(0, tsoa_1.Body()),
