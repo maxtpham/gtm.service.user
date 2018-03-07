@@ -721,6 +721,29 @@
 			],
 			"type": "object"
 		},
+		"RoleType": {
+			"enum": [
+				"1",
+				"2",
+				"3"
+			],
+			"type": "string"
+		},
+		"UserRoleView": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"roleType": {
+					"$ref": "#/definitions/RoleType"
+				}
+			},
+			"required": [
+				"userId",
+				"roleType"
+			],
+			"type": "object"
+		},
 		"AccountEntity": {
 			"properties": {
 				"_id": {
@@ -1620,7 +1643,7 @@
 				]
 			}
 		},
-		"/api/user/v1/user/create-or-update-role/{userId}/{roleType}": {
+		"/api/user/v1/user/create-or-update-role": {
 			"post": {
 				"operationId": "CreateOrUpdateUserRole",
 				"produces": [
@@ -1645,21 +1668,12 @@
 				],
 				"parameters": [
 					{
-						"in": "path",
-						"name": "userId",
+						"in": "body",
+						"name": "userRoleView",
 						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "path",
-						"name": "roleType",
-						"required": true,
-						"type": "string",
-						"enum": [
-							"1",
-							"2",
-							"3"
-						]
+						"schema": {
+							"$ref": "#/definitions/UserRoleView"
+						}
 					}
 				]
 			}

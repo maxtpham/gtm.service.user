@@ -1,4 +1,5 @@
 import { UserView } from "../entities/UserEntity";
+import { RoleType } from "./RoleView";
 
 export interface MUserView {
   id: string;
@@ -37,4 +38,9 @@ export interface UserViewDetails extends UserView {
   id: string;
   created: number;
   updated: number;
+}
+
+export interface UserRoleView {
+  userId: string;
+  roleType: RoleType;
 }

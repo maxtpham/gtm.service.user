@@ -34,11 +34,14 @@ const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
 const express = require("express");
 const lib_service_1 = require("@gtm/lib.service");
+const AppConfig_1 = require("./../config/AppConfig");
 const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
 const UserEntity_1 = require("../entities/UserEntity");
 const RoleView_1 = require("../views/RoleView");
 const RoleRepository_1 = require("../repositories/RoleRepository");
+const coreClient = require("@scg/lib.client.core");
+const bson_1 = require("bson");
 var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get all user lite */
@@ -137,13 +140,18 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!users) {
                     return Promise.reject("User not exist");
                 }
-                console.log(avatar);
-                // users.avatar = avatar;
-                // users.updated = new Date().getTime();
-                // let userSave = await this.UserRepository.findOneAndUpdate({ _id: (<JwtToken>req.user).user }, users);
-                // if (userSave) {
-                //     return Promise.resolve(userSave);
-                // }
+                let bf = new Buffer(avatar.data, "base64");
+                let av = {
+                    media: avatar.media,
+                    data: new bson_1.Binary(bf, bson_1.Binary.SUBTYPE_BYTE_ARRAY)
+                };
+                users.avatar = av;
+                users.updated = new Date().getTime();
+                let userSave = yield this.UserRepository.findOneAndUpdate({ _id: req.user.user }, users);
+                if (userSave) {
+                    console.log("Update avartar success " + userSave._id);
+                    return Promise.resolve(userSave);
+                }
             }
             catch (e) {
                 console.log(e);
@@ -192,23 +200,42 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Create or update User Role */
-    createOrUpdateUserRole(userId, roleType) {
+    createOrUpdateUserRole(userRoleView, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            let user = yield this.UserRepository.findOneById(userId);
-            if (!user) {
-                return Promise.reject("User does not exist");
-            }
-            if (!(roleType in RoleView_1.RoleType)) {
-                return Promise.reject(`Role type ${roleType} does not exist`);
-            }
-            if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
-                // Update
-            }
-            else {
-                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
-                if (roleLookup) {
-                    let newUserRoles = user.roles.push(roleLookup);
+            const coreApi = new coreClient.LendApi(AppConfig_1.default.services.core, req.cookies.jwt);
+            try {
+                let user = yield this.UserRepository.findOneById(userRoleView.userId);
+                if (!user) {
+                    return Promise.reject("User does not exist");
                 }
+                if (!(userRoleView.roleType in RoleView_1.RoleType)) {
+                    return Promise.reject(`Role type ${userRoleView.roleType} does not exist`);
+                }
+                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[userRoleView.roleType]);
+                let userUpdated;
+                if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[userRoleView.roleType])) {
+                    // Update if this role is existed and updated in role entity
+                    user.roles.map(ur => {
+                        if (ur.id == roleLookup.id) {
+                            ur.id = roleLookup.id,
+                                ur.code = roleLookup.code;
+                        }
+                    });
+                }
+                else {
+                    user.roles.push({ id: roleLookup.id, code: roleLookup.code });
+                    if (userRoleView.roleType == RoleView_1.RoleType.Lender) {
+                        // Create lender object with status is New = 2
+                        let lendObjectForUser = yield coreApi.addLendForUser({ userId: userRoleView.userId, status: 2 });
+                    }
+                }
+                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
+                if (userUpdated) {
+                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userRoleView.userId)));
+                }
+            }
+            catch (error) {
+                return Promise.reject(error);
             }
         });
     }
@@ -284,9 +311,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getDetailViewById", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role/{userId}/{roleType}'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role'),
+    __param(0, tsoa_1.Body()), __param(1, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "createOrUpdateUserRole", null);
 UserApiController = UserApiController_1 = __decorate([

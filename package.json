@@ -44,6 +44,7 @@
     "@gtm/lib.common": "^1.0.10",
     "@gtm/lib.service": "^1.0.8",
     "@gtm/lib.service.auth": "^1.0.25",
+    "@scg/lib.client.core": "^1.0.42",
     "config": "^1.30.0",
     "cross-env": "^5.1.3",
     "deep-equal": "^1.0.1",
