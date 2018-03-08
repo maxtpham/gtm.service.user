@@ -228,15 +228,12 @@ export class UserApiController extends ApiController {
             }
             else { // Create new role
                 user.roles.push({ id: roleLookup.id, code: roleLookup.code });
-                if (userRoleView.roleType == RoleType.Lender) {
-                    // Create lender object with status is New = 2
-                    let lendObjectForUser = await coreApi.addLendForUser({ userId: userRoleView.userId, status: 2 });
-                }
             }
             userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
             if (userUpdated) {
                 return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userRoleView.userId)));
             }
+            return Promise.reject('Not found.');
         } catch (error) {
             return Promise.reject(error);
         }
