@@ -89,7 +89,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             id: user._id,
             name: user.name,
             phone: user.phone,
-            houseHolder: user.profiles.default.houseHolder
+            houseHolder:  user.profiles.default ? user.profiles.default.houseHolder : ""
         }
     }
 
