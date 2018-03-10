@@ -84,10 +84,12 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
     }
 
     public buildClientUser(user: UserEntity): MUserView {
+        
         return <MUserView>{
             id: user._id,
             name: user.name,
-            phone: user.phone
+            phone: user.phone,
+            houseHolder: user.profiles.default.houseHolder
         }
     }
 
