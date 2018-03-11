@@ -109,6 +109,7 @@ const models: TsoaRoute.Models = {
             "id": { "dataType": "string", "required": true },
             "name": { "dataType": "string", "required": true },
             "phone": { "dataType": "string", "required": true },
+            "houseHolder": { "dataType": "any" },
         },
     },
     "UserRole": {

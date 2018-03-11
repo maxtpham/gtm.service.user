@@ -5,6 +5,7 @@ export interface MUserView {
   id: string;
   name: string;
   phone: string;
+  houseHolder?: any;
 }
 
 export interface UserViewFull {

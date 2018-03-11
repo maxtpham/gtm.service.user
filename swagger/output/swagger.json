@@ -315,6 +315,9 @@
 				},
 				"phone": {
 					"type": "string"
+				},
+				"houseHolder": {
+					"type": "object"
 				}
 			},
 			"required": [
