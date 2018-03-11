@@ -17,5 +17,9 @@
                 "clientSecret": "cd595d42b38dbc0213e36f7eee740c88"
             }
         }
+    },
+    "services": {
+        "user": "http://sc.dev:3001",
+        "core": "http://sc.dev:3002"
     }
 }
