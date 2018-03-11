@@ -92,10 +92,13 @@ export class MessageApiController extends ApiController {
                     userOther = mes.toUserId
                 }
 
+                let infoUserOther = users.find(u => u._id == userOther);
+                
+
                 if (messageWithUser.length === 0){
                     messageWithUser.push({
                         userId : userOther,
-                        userName: toUser ? (toUser.phone ? toUser.name + ' - ' + toUser.phone : toUser.name) : '',
+                        userName: infoUserOther ? (infoUserOther.phone ? infoUserOther.name + ' - ' + infoUserOther.phone : infoUserOther.name) : '',
                         messageDetailView : [{
                             id: mes._id,
                             userId: mes.userId,
