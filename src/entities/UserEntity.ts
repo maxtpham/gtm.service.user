@@ -33,6 +33,10 @@ export interface ProfileView {
     gender?: string;
     /** +/- UTC time */
     timezone?: number;
+
+    /** First Login */
+    isFirstLogin?: boolean;
+
 }
 
 export interface UserView extends ProfileView {
@@ -81,6 +85,7 @@ export const UserSchema = {
     gender: { type: mongoose.Schema.Types.String, required: false },
     timezone: { type: mongoose.Schema.Types.Number, required: false },
     avatar: { type: AttachmentSchema, required: false },
+    isFirstLogin: { type: mongoose.Schema.Types.Boolean, required: false},
 };
 
 export module User {

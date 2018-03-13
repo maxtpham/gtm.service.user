@@ -12,9 +12,9 @@ import { UserEntity, User, ProfileView, UserRole } from '../entities/UserEntity'
 import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
-import { MAttachmentView } from '../views/MAttachmentView';
 import * as coreClient from '@scg/lib.client.core';
 import { Binary } from 'bson';
+import { MAttachmentView } from '../views/MAttachmentView';
 
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
@@ -235,6 +235,65 @@ export class UserApiController extends ApiController {
             }
             return Promise.reject('Not found.');
         } catch (error) {
+            return Promise.reject(error);
+        }
+    }
+  
+    /** Create or update User Role */
+    @Tags('User') @Security('jwt') @Post('/create-or-update-role-mobile')
+    public async createOrUpdateUserRoleMobile(@Query() roleType: RoleType, @Request() req: express.Request): Promise<ProfileView> {
+        const lenderApi = new coreClient.LendApi(config.services.core, req.cookies.jwt);
+        let userIdCurrent = (<JwtToken>req.user).user;
+        try {
+            let user = await this.UserRepository.findOneById(userIdCurrent);
+            if (!user) {
+                return Promise.reject("User does not exist");
+            }
+
+            if (!(roleType in RoleType)) {
+                return Promise.reject(`Role type ${roleType} does not exist`);
+            }
+
+            try {
+
+                let roleLookup = await this.RoleRepository.getRoleByType(roleType+"");
+
+                let userUpdated;
+                if (user.roles && user.roles.some(us => us.code == RoleType[roleType])) {
+                    // Update if this role is existed and updated in role entity
+                    user.roles.map(ur => {
+                        if (ur.id == roleLookup.id) {
+                            ur.id = roleLookup.id,
+                                ur.code = roleLookup.code
+                        }
+                    });
+                }
+                else { // Create new role
+                    user.roles.push({ id: roleLookup.id, code: roleLookup.code });
+                }
+                user.isFirstLogin = true;
+                userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
+                
+                if(roleType === RoleType.Lender){
+                    let lender = await lenderApi.addLend();
+                    if (!lender) {
+                        Promise.reject("Dont create lender");
+                    }
+                }
+               
+
+                if (userUpdated) {
+                    return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userIdCurrent)));
+                }
+                return Promise.reject('Not found.');
+                
+            } catch(e) {
+                console.log("role dont exists");
+                return Promise.reject(e);
+            }
+            
+        } catch (error) {
+            console.log("Loi cmr");
             return Promise.reject(error);
         }
     }

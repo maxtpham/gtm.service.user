@@ -415,6 +415,10 @@
 					"type": "number",
 					"format": "double",
 					"description": "+/- UTC time "
+				},
+				"isFirstLogin": {
+					"type": "boolean",
+					"description": "First Login "
 				}
 			},
 			"required": [
@@ -562,6 +566,10 @@
 					"format": "double",
 					"description": "+/- UTC time "
 				},
+				"isFirstLogin": {
+					"type": "boolean",
+					"description": "First Login "
+				},
 				"profiles": {
 					"type": "object",
 					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
@@ -700,6 +708,10 @@
 					"type": "number",
 					"format": "double",
 					"description": "+/- UTC time "
+				},
+				"isFirstLogin": {
+					"type": "boolean",
+					"description": "First Login "
 				},
 				"profiles": {
 					"type": "object",
@@ -1769,6 +1781,44 @@
 						"schema": {
 							"$ref": "#/definitions/UserRoleView"
 						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/create-or-update-role-mobile": {
+			"post": {
+				"operationId": "CreateOrUpdateUserRoleMobile",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/ProfileView"
+						}
+					}
+				},
+				"description": "Create or update User Role ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "roleType",
+						"required": true,
+						"type": "string",
+						"enum": [
+							"1",
+							"2",
+							"3"
+						]
 					}
 				]
 			}

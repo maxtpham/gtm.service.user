@@ -236,6 +236,58 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
         });
     }
+    /** Create or update User Role */
+    createOrUpdateUserRoleMobile(roleType, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const lenderApi = new coreClient.LendApi(AppConfig_1.default.services.core, req.cookies.jwt);
+            let userIdCurrent = req.user.user;
+            try {
+                let user = yield this.UserRepository.findOneById(userIdCurrent);
+                if (!user) {
+                    return Promise.reject("User does not exist");
+                }
+                if (!(roleType in RoleView_1.RoleType)) {
+                    return Promise.reject(`Role type ${roleType} does not exist`);
+                }
+                try {
+                    let roleLookup = yield this.RoleRepository.getRoleByType(roleType + "");
+                    let userUpdated;
+                    if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
+                        // Update if this role is existed and updated in role entity
+                        user.roles.map(ur => {
+                            if (ur.id == roleLookup.id) {
+                                ur.id = roleLookup.id,
+                                    ur.code = roleLookup.code;
+                            }
+                        });
+                    }
+                    else {
+                        user.roles.push({ id: roleLookup.id, code: roleLookup.code });
+                    }
+                    user.isFirstLogin = true;
+                    userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
+                    if (roleType === RoleView_1.RoleType.Lender) {
+                        let lender = yield lenderApi.addLend();
+                        if (!lender) {
+                            Promise.reject("Dont create lender");
+                        }
+                    }
+                    if (userUpdated) {
+                        return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userIdCurrent)));
+                    }
+                    return Promise.reject('Not found.');
+                }
+                catch (e) {
+                    console.log("role dont exists");
+                    return Promise.reject(e);
+                }
+            }
+            catch (error) {
+                console.log("Loi cmr");
+                return Promise.reject(error);
+            }
+        });
+    }
 };
 __decorate([
     inversify_1.inject(UserRepository_1.UserRepositoryTYPE),
@@ -314,6 +366,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "createOrUpdateUserRole", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role-mobile'),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "createOrUpdateUserRoleMobile", null);
 UserApiController = UserApiController_1 = __decorate([
     lib_common_1.injectableSingleton(UserApiController_1),
     tsoa_1.Route('api/user/v1/user')

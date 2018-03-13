@@ -100,7 +100,7 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             id: user._id,
             name: user.name,
             phone: user.phone,
-            houseHolder: user.profiles.default.houseHolder
+            houseHolder: user.profiles.default ? user.profiles.default.houseHolder : ""
         };
     }
     buildClientUsers(users) {
