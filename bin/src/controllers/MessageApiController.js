@@ -74,7 +74,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
             let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
-            let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            let messages = yield this.MessageRepository.find({});
             if (messages) {
                 let messageTotalItems = yield this.MessageRepository.find(queryToEntities);
                 let users = yield this.UserRepository.find({ deleted: null });
@@ -161,7 +161,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
             let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
-            let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            let messages = yield this.MessageRepository.find({});
             let users = yield this.UserRepository.find({ deleted: null });
             let user = users.find(u => u._id == userId);
             let userHaveMessage = users.find(u => u._id == userIdToGetMessage);
@@ -170,7 +170,6 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                 let messageTotalItems = yield this.MessageRepository.find(queryToEntities);
                 let messageDetailView = [];
                 messages.map(mes => {
-                    console.log("alibaba");
                     if (mes.userId === userId || mes.toUserId === userId) {
                         if (mes.userId === userIdToGetMessage) {
                             messageDetailView.push({

@@ -73,7 +73,7 @@ export class MessageApiController extends ApiController {
         : Promise<MessageViewWithPaginationApp> {
         let userId = (<JwtToken>req.user).user;            
         let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
-        let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+        let messages = await this.MessageRepository.find({});
         
         if (messages) {
             let messageTotalItems = await this.MessageRepository.find(queryToEntities);
@@ -174,7 +174,7 @@ export class MessageApiController extends ApiController {
         : Promise<MessageViewWithPaginationAnUserApp> {
         let userId = (<JwtToken>req.user).user;            
         let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
-        let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+        let messages = await this.MessageRepository.find({});
         let users = await this.UserRepository.find({ deleted: null });
         let user = users.find(u => u._id == userId);
         let userHaveMessage = users.find(u => u._id == userIdToGetMessage);
@@ -184,7 +184,6 @@ export class MessageApiController extends ApiController {
             let messageDetailView: MessageDetailView[] = [];
 
             messages.map(mes => {
-                console.log("alibaba");
                 if (mes.userId === userId || mes.toUserId === userId) {
                 if (mes.userId === userIdToGetMessage) {
                     messageDetailView.push({
