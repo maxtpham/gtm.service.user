@@ -139,6 +139,7 @@ const models: TsoaRoute.Models = {
             "language": { "dataType": "string" },
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
+            "isFirstLogin": { "dataType": "boolean" },
         },
     },
     "Binary": {
@@ -179,6 +180,7 @@ const models: TsoaRoute.Models = {
             "language": { "dataType": "string" },
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
+            "isFirstLogin": { "dataType": "boolean" },
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
         },
@@ -220,6 +222,7 @@ const models: TsoaRoute.Models = {
             "language": { "dataType": "string" },
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
+            "isFirstLogin": { "dataType": "boolean" },
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
             "id": { "dataType": "string", "required": true },
@@ -791,6 +794,27 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.createOrUpdateUserRole.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/user/create-or-update-role-mobile',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                roleType: { "in": "query", "name": "roleType", "required": true, "dataType": "enum", "enums": ["1", "2", "3"] },
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.createOrUpdateUserRoleMobile.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/account/get-all',
