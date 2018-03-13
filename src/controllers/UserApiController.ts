@@ -238,10 +238,13 @@ export class UserApiController extends ApiController {
             return Promise.reject(error);
         }
     }
-  
+
     /** Create or update User Role */
     @Tags('User') @Security('jwt') @Post('/create-or-update-role-mobile')
-    public async createOrUpdateUserRoleMobile(@Query() roleType: RoleType, @Request() req: express.Request): Promise<ProfileView> {
+    public async createOrUpdateUserRoleMobile(
+        @Query() roleType: RoleType,
+        @Request() req: express.Request
+    ): Promise<ProfileView> {
         const lenderApi = new coreClient.LendApi(config.services.core, req.cookies.jwt);
         let userIdCurrent = (<JwtToken>req.user).user;
         try {
@@ -256,7 +259,7 @@ export class UserApiController extends ApiController {
 
             try {
 
-                let roleLookup = await this.RoleRepository.getRoleByType(roleType+"");
+                let roleLookup = await this.RoleRepository.getRoleByType(roleType + "");
 
                 let userUpdated;
                 if (user.roles && user.roles.some(us => us.code == RoleType[roleType])) {
@@ -273,25 +276,25 @@ export class UserApiController extends ApiController {
                 }
                 user.isFirstLogin = true;
                 userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
-                
-                if(roleType === RoleType.Lender){
+
+                if (roleType === RoleType.Lender) {
                     let lender = await lenderApi.addLend();
                     if (!lender) {
                         Promise.reject("Dont create lender");
                     }
                 }
-               
+
 
                 if (userUpdated) {
                     return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userIdCurrent)));
                 }
                 return Promise.reject('Not found.');
-                
-            } catch(e) {
+
+            } catch (e) {
                 console.log("role dont exists");
                 return Promise.reject(e);
             }
-            
+
         } catch (error) {
             console.log("Loi cmr");
             return Promise.reject(error);

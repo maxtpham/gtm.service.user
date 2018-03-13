@@ -368,7 +368,8 @@ __decorate([
 ], UserApiController.prototype, "createOrUpdateUserRole", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role-mobile'),
-    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Request()),
+    __param(0, tsoa_1.Query()),
+    __param(1, tsoa_1.Request()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
