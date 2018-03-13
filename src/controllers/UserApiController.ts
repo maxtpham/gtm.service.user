@@ -242,7 +242,7 @@ export class UserApiController extends ApiController {
     /** Create or update User Role */
     @Tags('User') @Security('jwt') @Post('/create-or-update-role-mobile')
     public async createOrUpdateUserRoleMobile(
-        @Query() roleType: RoleType,
+        @Query() roleType: number,
         @Request() req: express.Request
     ): Promise<ProfileView> {
         const lenderApi = new coreClient.LendApi(config.services.core, req.cookies.jwt);

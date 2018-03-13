@@ -671,7 +671,7 @@ function RegisterRoutes(app) {
     });
     app.post('/api/user/v1/user/create-or-update-role-mobile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            roleType: { "in": "query", "name": "roleType", "required": true, "dataType": "enum", "enums": ["1", "2", "3"] },
+            roleType: { "in": "query", "name": "roleType", "required": true, "dataType": "double" },
             req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
         let validatedArgs = [];

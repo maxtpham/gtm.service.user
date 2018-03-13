@@ -1813,12 +1813,8 @@
 						"in": "query",
 						"name": "roleType",
 						"required": true,
-						"type": "string",
-						"enum": [
-							"1",
-							"2",
-							"3"
-						]
+						"format": "double",
+						"type": "number"
 					}
 				]
 			}
