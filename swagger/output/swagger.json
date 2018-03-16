@@ -134,6 +134,9 @@
 					"type": "number",
 					"format": "double"
 				},
+				"announced": {
+					"type": "boolean"
+				},
 				"created": {
 					"type": "number",
 					"format": "double"
@@ -204,6 +207,9 @@
 				"delivered": {
 					"type": "number",
 					"format": "double"
+				},
+				"announced": {
+					"type": "boolean"
 				}
 			},
 			"required": [
@@ -243,15 +249,10 @@
 					"items": {
 						"$ref": "#/definitions/MessageDetailViewApp"
 					}
-				},
-				"totalItems": {
-					"type": "number",
-					"format": "double"
 				}
 			},
 			"required": [
-				"messages",
-				"totalItems"
+				"messages"
 			],
 			"type": "object"
 		},
@@ -268,17 +269,12 @@
 					"items": {
 						"$ref": "#/definitions/MessageDetailView"
 					}
-				},
-				"totalItems": {
-					"type": "number",
-					"format": "double"
 				}
 			},
 			"required": [
 				"userId",
 				"userName",
-				"messages",
-				"totalItems"
+				"messages"
 			],
 			"type": "object"
 		},
@@ -296,6 +292,9 @@
 				"delivered": {
 					"type": "number",
 					"format": "double"
+				},
+				"announced": {
+					"type": "boolean"
 				}
 			},
 			"required": [
@@ -1276,40 +1275,7 @@
 						"jwt": []
 					}
 				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "query",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "pageNumber",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "itemCount",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "from",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "to",
-						"required": false,
-						"type": "string"
-					}
-				]
+				"parameters": []
 			}
 		},
 		"/api/user/v1/Message/getforanuserapp": {
@@ -1341,40 +1307,34 @@
 						"name": "userIdToGetMessage",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "query",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "pageNumber",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "itemCount",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "from",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "to",
-						"required": false,
-						"type": "string"
 					}
 				]
+			}
+		},
+		"/api/user/v1/Message/get-message-to-notification": {
+			"get": {
+				"operationId": "GetMessageToNotification",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MessageViewWithPagination"
+						}
+					}
+				},
+				"description": "Get Messages to notification",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
 			}
 		},
 		"/api/user/v1/Message/{id}": {

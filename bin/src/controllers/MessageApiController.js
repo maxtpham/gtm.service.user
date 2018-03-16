@@ -70,13 +70,11 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         });
     }
     /** Get List Messages For App*/
-    getListMessageForApp(query, pageNumber, itemCount, from, to, req) {
+    getListMessageForApp(req) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
             let messages = yield this.MessageRepository.find({});
             if (messages) {
-                let messageTotalItems = yield this.MessageRepository.find(queryToEntities);
                 let users = yield this.UserRepository.find({ deleted: null });
                 let messageWithUser = [];
                 messages.map(mes => {
@@ -150,24 +148,22 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                         }
                     }
                 });
-                let messageDetailViewsApp = { messages: messageWithUser, totalItems: messageWithUser.length };
+                let messageDetailViewsApp = { messages: messageWithUser };
                 return Promise.resolve(messageDetailViewsApp);
             }
             return Promise.reject(`Not found.`);
         });
     }
     /** Get List Messages with an user for App*/
-    getListMessageOfUser(userIdToGetMessage, query, pageNumber, itemCount, from, to, req) {
+    getListMessageOfUser(userIdToGetMessage, req) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
             let messages = yield this.MessageRepository.find({});
             let users = yield this.UserRepository.find({ deleted: null });
             let user = users.find(u => u._id == userId);
             let userHaveMessage = users.find(u => u._id == userIdToGetMessage);
             console.log(userHaveMessage);
             if (messages) {
-                let messageTotalItems = yield this.MessageRepository.find(queryToEntities);
                 let messageDetailView = [];
                 messages.map(mes => {
                     if (mes.userId === userId || mes.toUserId === userId) {
@@ -199,8 +195,50 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                         }
                     }
                 });
-                let messageDetailViewsApp = { userId: userIdToGetMessage, userName: userHaveMessage.name, messages: messageDetailView, totalItems: messageDetailView.length };
+                let messageDetailViewsApp = { userId: userIdToGetMessage, userName: userHaveMessage.name, messages: messageDetailView };
                 return Promise.resolve(messageDetailViewsApp);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
+    /** Get Messages to notification*/
+    getMessageToNotification(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userId = req.user.user;
+            let messages = yield this.MessageRepository.find({});
+            if (messages) {
+                let users = yield this.UserRepository.find({ deleted: null });
+                let messageDetailView = [];
+                let messsageUpdate;
+                messages.map(mes => {
+                    let user = users.find(u => u._id == mes.userId);
+                    let toUser = users.find(u => u._id == mes.toUserId);
+                    if (mes.toUserId === userId) {
+                        if (mes.announced === false) {
+                            messageDetailView.push({
+                                id: mes._id,
+                                userId: mes.userId,
+                                userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                                toUserId: mes.toUserId,
+                                toUserName: toUser ? (toUser.phone ? toUser.name + ' - ' + toUser.phone : toUser.name) : '',
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                created: mes.created,
+                                updated: mes.updated
+                            });
+                            messsageUpdate = {
+                                userId: mes.userId,
+                                toUserId: mes.toUserId,
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                announced: true,
+                            };
+                            this.updateEntity(mes._id, messsageUpdate);
+                        }
+                    }
+                });
+                let messageDetailViews = { messages: messageDetailView, totalItems: messageDetailView.length };
+                return Promise.resolve(messageDetailViews);
             }
             return Promise.reject(`Not found.`);
         });
@@ -221,7 +259,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
     /** Update Message */
     updateEntity(id, messageView) {
         return __awaiter(this, void 0, void 0, function* () {
-            let message = yield this.MessageRepository.findOneAndUpdate({ _id: id }, { userId: messageView.userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
+            let message = yield this.MessageRepository.findOneAndUpdate({ _id: id }, { userId: messageView.userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
             if (message) {
                 return Promise.resolve(yield this.MessageRepository.findOneById(message._id));
             }
@@ -264,29 +302,26 @@ __decorate([
 ], MessageApiController.prototype, "getEntity", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforapp'),
-    __param(0, tsoa_1.Query()),
-    __param(1, tsoa_1.Query()),
-    __param(2, tsoa_1.Query()),
-    __param(3, tsoa_1.Query()),
-    __param(4, tsoa_1.Query()),
-    __param(5, tsoa_1.Request()),
+    __param(0, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number, String, String, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageForApp", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforanuserapp'),
     __param(0, tsoa_1.Query()),
-    __param(1, tsoa_1.Query()),
-    __param(2, tsoa_1.Query()),
-    __param(3, tsoa_1.Query()),
-    __param(4, tsoa_1.Query()),
-    __param(5, tsoa_1.Query()),
-    __param(6, tsoa_1.Request()),
+    __param(1, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Number, Number, String, String, Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageOfUser", null);
+__decorate([
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get("get-message-to-notification"),
+    __param(0, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MessageApiController.prototype, "getMessageToNotification", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Post(),
     __param(0, tsoa_1.Body()),

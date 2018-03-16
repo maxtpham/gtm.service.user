@@ -7,14 +7,12 @@ export interface MessageViewWithPagination {
 
 export interface MessageViewWithPaginationApp {
     messages: MessageDetailViewApp[];
-    totalItems: number;
 }
 
 export interface MessageViewWithPaginationAnUserApp {
     userId: string;
     userName: string;
     messages: MessageDetailView[];
-    totalItems: number;
 }
 
 export interface MessageDetailViewApp {
@@ -31,6 +29,7 @@ export interface MessageDetailView {
     toUserName: string;
     content: string;
     delivered: number;
+    announced?: boolean;    
     created: number;
     updated: number;
 }
@@ -40,4 +39,5 @@ export interface MessageView {
     toUserId: string;
     content: string;
     delivered?: number;
+    announced?: boolean;
 }

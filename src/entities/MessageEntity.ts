@@ -6,6 +6,7 @@ export interface MessageEntity extends DbEntity {
     toUserId: string;
     content: string;
     delivered?: number;
+    announced?: boolean;
 }
 
 export const MessageSchema = {
@@ -14,4 +15,5 @@ export const MessageSchema = {
     toUserId: { type: mongoose.Schema.Types.String, required: true },
     content: { type: mongoose.Schema.Types.String, required: true },
     delivered: { type: mongoose.Schema.Types.Number, required: false },
+    announced: { type: mongoose.Schema.Types.Boolean, required: false },
 };
