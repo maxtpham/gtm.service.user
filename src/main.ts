@@ -20,9 +20,8 @@ export function main(test?: common.InitAppFunction) {
                 swaggerBaseDir: __dirname,
                 jwtIgnoreUrls: ['/api/user/v1/system/loggedin', '/web/auth/session', '/web/auth/jwt']
             },
-            config, {
-                createJwtToken: (<CreateJwtTokenFunction>authService.createJwtToken).bind(authService),
-            }
+            config,
+            (<CreateJwtTokenFunction>authService.createJwtToken).bind(authService)
         );
     
         // Register Web/Controllers
