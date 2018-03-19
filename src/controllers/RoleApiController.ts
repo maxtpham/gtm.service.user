@@ -5,7 +5,6 @@ import * as express from 'express';
 import { ApiController } from "@gtm/lib.service";
 import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
-import { JwtToken } from '@gtm/lib.service.auth';
 import { RoleRepository, RoleRepositoryTYPE } from '../repositories/RoleRepository';
 import { RoleView, RoleViewWithPagination, RoleDetailView } from '../views/RoleView';
 import { RoleEntity } from '../entities/RoleEntity';

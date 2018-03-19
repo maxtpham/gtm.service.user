@@ -9,7 +9,8 @@ import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
 import { UserEntity, UserSchema, UserRole } from '../entities/UserEntity';
 import { MUserView } from "../views/MUserView";
-import { Utils, OAuth2ProfileExt } from "@gtm/lib.service.auth";
+import { Utils } from "@gtm/lib.service.auth";
+import { OAuth2ProfileExt } from "../oauth2/types";
 
 export interface UserDocument extends UserEntity, Document { }
 

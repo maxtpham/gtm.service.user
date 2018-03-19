@@ -6,9 +6,10 @@ import * as jwt from "jsonwebtoken";
 import config from './../config/AppConfig';
 import { injectableNamed } from "@gtm/lib.common";
 import { WebController } from "@gtm/lib.service";
-import { JwtToken, IOAuth2Config } from '@gtm/lib.service.auth';
+import { JwtToken } from '@gtm/lib.service.auth';
 import { SessionRepository, SessionRepositoryTYPE } from '../repositories/SessionRepository';
 import { AuthService, AuthServiceTYPE } from '../services/AuthService';
+import { IOAuth2Config } from '../oauth2/config';
 
 interface JwtSession {
     id: string;

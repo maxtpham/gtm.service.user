@@ -8,7 +8,6 @@ import { MongoClient } from "@gtm/lib.service";
 import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
 import { AccountEntity, AccountSchema } from '../entities/AccountEnity';
-import { Utils, OAuth2ProfileExt } from "@gtm/lib.service.auth";
 
 export interface AccountDocument extends AccountEntity, Document { }
 

@@ -4,12 +4,13 @@ import * as mongoose from "mongoose";
 
 import { injectableSingleton } from "@gtm/lib.common";
 import { Service, ServiceImpl } from "@gtm/lib.service";
-import { ProviderSession, JwtToken, OAuth2ProfileExt } from "@gtm/lib.service.auth";
+import { JwtToken } from "@gtm/lib.service.auth";
 import { SessionEntity, SessionSchema } from '../entities/SessionEntity';
 import { SessionRepository, SessionRepositoryTYPE } from '../repositories/SessionRepository';
 import { UserEntity } from "../entities/UserEntity";
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
 import config from "../config/AppConfig";
+import { ProviderSession, OAuth2ProfileExt } from "../oauth2/types";
 
 export const AuthServiceTYPE = Symbol("AuthService");
 

@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
 import { DbEntity, DbSchema } from "@gtm/lib.service"
-import * as auth from "@gtm/lib.service.auth";
+import { ProviderSession } from "../oauth2/types";
 
 /**
  * Logged in Session object
@@ -25,7 +25,7 @@ export interface SessionEntity extends DbEntity {
     expiresIn?: number;
 
     /* OAuth2 provider: google, facebook */
-    provider?: auth.ProviderSession;
+    provider?: ProviderSession;
 }
 
 export const SessionSchema = {
