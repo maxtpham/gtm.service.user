@@ -247,7 +247,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
     createEntity(messageView, req) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered });
+            let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
             if (message) {
                 return Promise.resolve(yield this.MessageRepository.findOneById(message._id));
             }
