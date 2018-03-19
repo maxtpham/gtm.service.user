@@ -638,21 +638,6 @@
 			],
 			"type": "object"
 		},
-		"MAttachmentView": {
-			"properties": {
-				"media": {
-					"type": "string"
-				},
-				"data": {
-					"type": "string"
-				}
-			},
-			"required": [
-				"media",
-				"data"
-			],
-			"type": "object"
-		},
 		"UserViewDetails": {
 			"properties": {
 				"code": {
@@ -782,6 +767,48 @@
 			"required": [
 				"userId",
 				"roleType"
+			],
+			"type": "object"
+		},
+		"UserUpdateView": {
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"dob": {
+					"type": "number",
+					"format": "double"
+				},
+				"email": {
+					"type": "string"
+				},
+				"gender": {
+					"type": "string"
+				},
+				"status": {
+					"type": "boolean"
+				},
+				"role": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/UserRole"
+					}
+				},
+				"address": {
+					"type": "string"
+				},
+				"avatar": {
+					"$ref": "#/definitions/AttachmentView"
+				}
+			},
+			"required": [
+				"name",
+				"gender",
+				"status",
+				"role"
 			],
 			"type": "object"
 		},
@@ -1624,7 +1651,7 @@
 						"name": "avatar",
 						"required": true,
 						"schema": {
-							"$ref": "#/definitions/MAttachmentView"
+							"$ref": "#/definitions/AttachmentView"
 						}
 					}
 				]
@@ -1775,6 +1802,47 @@
 						"required": true,
 						"format": "double",
 						"type": "number"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/update-user-details/{userId}": {
+			"post": {
+				"operationId": "UpdateUserDetail",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/UserEntity"
+						}
+					}
+				},
+				"description": "Update user details ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "userDetails",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/UserUpdateView"
+						}
 					}
 				]
 			}

@@ -203,12 +203,6 @@ const models = {
             "houseHolder": { "dataType": "string" },
         },
     },
-    "MAttachmentView": {
-        "properties": {
-            "media": { "dataType": "string", "required": true },
-            "data": { "dataType": "string", "required": true },
-        },
-    },
     "UserViewDetails": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -245,6 +239,19 @@ const models = {
         "properties": {
             "userId": { "dataType": "string", "required": true },
             "roleType": { "ref": "RoleType", "required": true },
+        },
+    },
+    "UserUpdateView": {
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string" },
+            "dob": { "dataType": "double" },
+            "email": { "dataType": "string" },
+            "gender": { "dataType": "string", "required": true },
+            "status": { "dataType": "boolean", "required": true },
+            "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
+            "address": { "dataType": "string" },
+            "avatar": { "ref": "AttachmentView" },
         },
     },
     "AccountEntity": {
@@ -613,7 +620,7 @@ function RegisterRoutes(app) {
     });
     app.post('/api/user/v1/user/update-avatar', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            avatar: { "in": "body", "name": "avatar", "required": true, "ref": "MAttachmentView" },
+            avatar: { "in": "body", "name": "avatar", "required": true, "ref": "AttachmentView" },
             req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
         let validatedArgs = [];
@@ -689,6 +696,23 @@ function RegisterRoutes(app) {
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
         const promise = controller.createOrUpdateUserRoleMobile.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.post('/api/user/v1/user/update-user-details/:userId', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+            userDetails: { "in": "body", "name": "userDetails", "required": true, "ref": "UserUpdateView" },
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.updateUserDetail.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.get('/api/user/v1/account/get-all', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {

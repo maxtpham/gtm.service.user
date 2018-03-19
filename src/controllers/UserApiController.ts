@@ -7,7 +7,7 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
-import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView } from '../views/MUserView';
+import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView } from '../views/MUserView';
 import { UserEntity, User, ProfileView, UserRole } from '../entities/UserEntity';
 import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
@@ -126,7 +126,7 @@ export class UserApiController extends ApiController {
     /** Update user with profiles */
     @Tags('User') @Security('jwt') @Post('/update-avatar')
     public async updateAvatar(
-        @Body() avatar: MAttachmentView,
+        @Body() avatar: AttachmentView,
         @Request() req: express.Request
     ): Promise<UserEntity> {
 
@@ -136,7 +136,7 @@ export class UserApiController extends ApiController {
                 return Promise.reject("User not exist");
             }
 
-            let bf = new Buffer(avatar.data, "base64");
+            let bf = new Buffer(avatar.data.toString(), "base64");
 
             let av: AttachmentView = {
                 media: avatar.media,
@@ -299,5 +299,46 @@ export class UserApiController extends ApiController {
             console.log("Loi cmr");
             return Promise.reject(error);
         }
+    }
+
+    /** Update user details */
+    @Tags('User') @Security('jwt') @Post('/update-user-details/{userId}')
+    public async updateUserDetail(
+        userId: string,
+        @Body() userDetails: UserUpdateView,
+        @Request() req: express.Request
+    ): Promise<UserEntity> {
+        try {
+            let user = await this.UserRepository.findOneById(userId);
+            if (!user) {
+                return Promise.reject('User is not found.');
+            }
+
+            user.active = userDetails.status || user.active;
+            user.name = userDetails.name || user.name;
+            user.phone = userDetails.phone || user.phone;
+            user.birthday = userDetails.dob || user.birthday;
+            user.roles = userDetails.role || user.roles;
+            user.email = userDetails.email || user.email;
+
+            if (userDetails.avatar && userDetails.avatar != user.avatar) {
+                let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
+                let newAvatar: AttachmentView = {
+                    media: userDetails.avatar.media,
+                    data: new Binary(bf, Binary.SUBTYPE_BYTE_ARRAY)
+                };
+                user.avatar = newAvatar;
+            }
+            user.updated = new Date().getTime();
+            let userToUpdate = await this.UserRepository.findOneAndUpdate({ _id: userId }, user);
+            if (user) {
+                return Promise.resolve(await this.UserRepository.findOneById(userId));
+            }
+
+        } catch (e) {
+            console.log(e);
+            Promise.reject(`User not exist`);
+        }
+
     }
 }

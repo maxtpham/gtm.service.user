@@ -202,12 +202,6 @@ const models: TsoaRoute.Models = {
             "houseHolder": { "dataType": "string" },
         },
     },
-    "MAttachmentView": {
-        "properties": {
-            "media": { "dataType": "string", "required": true },
-            "data": { "dataType": "string", "required": true },
-        },
-    },
     "UserViewDetails": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -244,6 +238,19 @@ const models: TsoaRoute.Models = {
         "properties": {
             "userId": { "dataType": "string", "required": true },
             "roleType": { "ref": "RoleType", "required": true },
+        },
+    },
+    "UserUpdateView": {
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string" },
+            "dob": { "dataType": "double" },
+            "email": { "dataType": "string" },
+            "gender": { "dataType": "string", "required": true },
+            "status": { "dataType": "boolean", "required": true },
+            "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
+            "address": { "dataType": "string" },
+            "avatar": { "ref": "AttachmentView" },
         },
     },
     "AccountEntity": {
@@ -727,7 +734,7 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                avatar: { "in": "body", "name": "avatar", "required": true, "ref": "MAttachmentView" },
+                avatar: { "in": "body", "name": "avatar", "required": true, "ref": "AttachmentView" },
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             };
 
@@ -826,6 +833,28 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.createOrUpdateUserRoleMobile.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/user/update-user-details/:userId',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+                userDetails: { "in": "body", "name": "userDetails", "required": true, "ref": "UserUpdateView" },
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.updateUserDetail.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/account/get-all',

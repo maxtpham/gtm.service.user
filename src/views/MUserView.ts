@@ -1,5 +1,6 @@
-import { UserView } from "../entities/UserEntity";
+import { UserView, UserRole } from "../entities/UserEntity";
 import { RoleType } from "./RoleView";
+import { AttachmentView } from "@gtm/lib.service/bin";
 
 export interface MUserView {
   id: string;
@@ -44,4 +45,16 @@ export interface UserViewDetails extends UserView {
 export interface UserRoleView {
   userId: string;
   roleType: RoleType;
+}
+
+export interface UserUpdateView {
+  name: string;
+  phone?: string;
+  dob?: number;
+  email?: string;
+  gender: string;
+  status: boolean;
+  role: UserRole[];
+  address?: string;
+  avatar?: AttachmentView;
 }

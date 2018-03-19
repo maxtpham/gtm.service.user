@@ -140,7 +140,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!users) {
                     return Promise.reject("User not exist");
                 }
-                let bf = new Buffer(avatar.data, "base64");
+                let bf = new Buffer(avatar.data.toString(), "base64");
                 let av = {
                     media: avatar.media,
                     data: new bson_1.Binary(bf, bson_1.Binary.SUBTYPE_BYTE_ARRAY)
@@ -288,6 +288,40 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
         });
     }
+    /** Update user details */
+    updateUserDetail(userId, userDetails, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let user = yield this.UserRepository.findOneById(userId);
+                if (!user) {
+                    return Promise.reject('User is not found.');
+                }
+                user.active = userDetails.status || user.active;
+                user.name = userDetails.name || user.name;
+                user.phone = userDetails.phone || user.phone;
+                user.birthday = userDetails.dob || user.birthday;
+                user.roles = userDetails.role || user.roles;
+                user.email = userDetails.email || user.email;
+                if (userDetails.avatar && userDetails.avatar != user.avatar) {
+                    let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
+                    let newAvatar = {
+                        media: userDetails.avatar.media,
+                        data: new bson_1.Binary(bf, bson_1.Binary.SUBTYPE_BYTE_ARRAY)
+                    };
+                    user.avatar = newAvatar;
+                }
+                user.updated = new Date().getTime();
+                let userToUpdate = yield this.UserRepository.findOneAndUpdate({ _id: userId }, user);
+                if (user) {
+                    return Promise.resolve(yield this.UserRepository.findOneById(userId));
+                }
+            }
+            catch (e) {
+                console.log(e);
+                Promise.reject(`User not exist`);
+            }
+        });
+    }
 };
 __decorate([
     inversify_1.inject(UserRepository_1.UserRepositoryTYPE),
@@ -374,6 +408,14 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "createOrUpdateUserRoleMobile", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-details/{userId}'),
+    __param(1, tsoa_1.Body()),
+    __param(2, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "updateUserDetail", null);
 UserApiController = UserApiController_1 = __decorate([
     lib_common_1.injectableSingleton(UserApiController_1),
     tsoa_1.Route('api/user/v1/user')
