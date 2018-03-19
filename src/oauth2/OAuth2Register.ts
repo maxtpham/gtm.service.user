@@ -21,7 +21,7 @@ let logoutRegistered: boolean = false;
  */
 export function registerOAuth2Internal(
     app: express.Application, provider: string, config: IOAuth2Config, createJwtToken: CreateJwtTokenFunction,
-    publicLoginURL: string, publicCallbackURL: string, publicFailureRedirect: string, secureLogoutURL: string,
+    publicLoginURL: string, publicCallbackURL: string, publicFailureRedirect: string, publicAppTokenURL: string, secureLogoutURL: string,
     loggedinHandler?: express.RequestHandler, loginFailureHandler?: express.RequestHandler, loggedoutHandler?: express.RequestHandler
 ) {
     // Register Passport.js OAuth2 Stratergy
@@ -74,6 +74,27 @@ class PublicLoginHandler {
 }
 
 class PublicCallbackHandler {
+    private defaultPassportHandler: express.Handler;
+    constructor(provider: string, failureRedirectUrl: string) {
+        this.defaultPassportHandler = passport.authenticate(provider, <passport.AuthenticateOptions>{
+            failureRedirect: failureRedirectUrl, // DO NOT USE: successRedirect: config.rootUrl + `/web/auth/callback/success/${provider}`,
+            session: false
+        });
+    }
+
+    private _handler(req: ReturnUrlRequest, res: express.Response, next: express.NextFunction): any {
+        if (!!req.query.state) {
+            req._returnUrl = decodeURIComponent(req.query.state);
+        }
+        return this.defaultPassportHandler(req, res, next);
+    }
+
+    public get handler(): express.Handler {
+        return this._handler.bind(this);
+    }
+}
+
+class PublicAppTokenHandler {
     private defaultPassportHandler: express.Handler;
     constructor(provider: string, failureRedirectUrl: string) {
         this.defaultPassportHandler = passport.authenticate(provider, <passport.AuthenticateOptions>{

@@ -38,6 +38,7 @@ export async function registerOAuth2(
         `${oauth2BaseUrl || '/pub/auth'}/login/${provider}`,
         `${oauth2BaseUrl || '/pub/auth'}/callback/${provider}`,
         `${oauth2BaseUrl || '/pub/auth'}/failure/${provider}`,
+        `${oauth2BaseUrl || '/pub/auth'}/token/${provider}`,
         oauth2LogoutUrl || '/web/auth/logout'
     ));
 }
