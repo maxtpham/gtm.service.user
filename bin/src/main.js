@@ -22,9 +22,7 @@ function main(test) {
         yield register_1.registerOAuth2(app, {
             swaggerBaseDir: __dirname,
             jwtIgnoreUrls: ['/api/user/v1/system/loggedin', '/web/auth/session', '/web/auth/jwt']
-        }, config, {
-            createJwtToken: authService.createJwtToken.bind(authService),
-        });
+        }, config, authService.createJwtToken.bind(authService));
         // Register Web/Controllers
         yield controllers.register(app, config, iocContainer);
     }));
