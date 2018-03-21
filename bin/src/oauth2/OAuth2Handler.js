@@ -9,6 +9,11 @@ class AuthHandler {
         this.jwtSecret = jwtSecret;
         this.cookiePaths = cookiePaths;
     }
+    tokenHandler(req, res, next) {
+        // Persist the jwt cookie to body for App Token
+        const cookieValue = jwt.sign(req.user, this.jwtSecret, { expiresIn: Math.round((req.user.expires - Date.now()) / 1000) });
+        res.send(cookieValue);
+    }
     loggedinHandler(req, res, next) {
         // Persist the jwt cookie to submit along with every application request
         const cookieValue = jwt.sign(req.user, this.jwtSecret, { expiresIn: Math.round((req.user.expires - Date.now()) / 1000) });

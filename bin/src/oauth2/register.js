@@ -12,6 +12,7 @@ const config_1 = require("./config");
 const auth = require("@gtm/lib.service.auth");
 const SwaggerUi_1 = require("./SwaggerUi");
 const OAuth2Register_1 = require("./OAuth2Register");
+const AppToken_1 = require("./AppToken");
 /**
  * Register OAuth2/JWT & Swagger routes, this function will call register for standard Auth
  * @param app Express.js application instance
@@ -29,8 +30,11 @@ function registerOAuth2(app, authParams, config, createJwtToken, oauth2BaseUrl, 
         const defaultSwaggerConfigUrl = yield auth.registerAuth(app, config, authParams, true);
         // Register Swagger-UI 
         yield SwaggerUi_1.registerSwaggerUiInternal(app, config, defaultSwaggerConfigUrl, createJwtToken);
-        // Finally register JWT/OAuth2 with all supported passport.js Providers (Google, Facebook)
-        Object.keys(config.auth).map((provider) => OAuth2Register_1.registerOAuth2Internal(app, provider, config, createJwtToken, `${oauth2BaseUrl || '/pub/auth'}/login/${provider}`, `${oauth2BaseUrl || '/pub/auth'}/callback/${provider}`, `${oauth2BaseUrl || '/pub/auth'}/failure/${provider}`, oauth2LogoutUrl || '/web/auth/logout'));
+        // Register JWT/OAuth2 with all supported passport.js Providers (Google, Facebook)
+        Object.keys(config.auth).map((provider) => {
+            OAuth2Register_1.registerOAuth2Internal(app, provider, config, createJwtToken, `${oauth2BaseUrl || '/pub/auth'}/login/${provider}`, `${oauth2BaseUrl || '/pub/auth'}/callback/${provider}`, `${oauth2BaseUrl || '/pub/auth'}/failure/${provider}`, oauth2LogoutUrl || '/web/auth/logout');
+            AppToken_1.registerAppToken(app, provider, config, createJwtToken, `${oauth2BaseUrl || '/pub/auth'}/token/${provider}`);
+        });
     });
 }
 exports.registerOAuth2 = registerOAuth2;
