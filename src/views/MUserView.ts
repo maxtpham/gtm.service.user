@@ -56,5 +56,5 @@ export interface UserUpdateView {
   status: boolean;
   role: UserRole[];
   address?: string;
-  avatar?: AttachmentView;
+  // avatar?: AttachmentView;
 }

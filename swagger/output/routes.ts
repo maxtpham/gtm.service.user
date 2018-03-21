@@ -250,7 +250,6 @@ const models: TsoaRoute.Models = {
             "status": { "dataType": "boolean", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },
-            "avatar": { "ref": "AttachmentView" },
         },
     },
     "AccountEntity": {
