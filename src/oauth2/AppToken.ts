@@ -27,8 +27,8 @@ export function registerAppTokenGoogle(
     requestHandler?: express.RequestHandler
 ) {
     passport.use(new GoogleTokenStrategy.Strategy({
-        clientID: '162769265494-3q8o3gar8pjso775oq7kj3qfd8nreb45.apps.googleusercontent.com',//config.auth[provider].options.clientID,
-        secretOrKey: '2NwIOtKbn21wYBq8tGlDKJS1', //config.auth[provider].options.clientSecret,
+        clientID: process.env.NODE_ENV === 'production' ? '162769265494-u1s1qm60pqbcmhr2mpvjuff9aolc6l52.apps.googleusercontent.com' : '162769265494-3q8o3gar8pjso775oq7kj3qfd8nreb45.apps.googleusercontent.com',//config.auth[provider].options.clientID,
+        secretOrKey: process.env.NODE_ENV === 'production' ? 'dNceKqZqCDaT82rsKnnlOvHg' : '2NwIOtKbn21wYBq8tGlDKJS1', //config.auth[provider].options.clientSecret,
         jwtFromRequest: GoogleTokenStrategy.ExtractJwt.fromAuthHeader(),
         passReqToCallback: true
     }, new JwtGoogleAuthLibraryStrategyVerify(provider, createJwtToken).handler));

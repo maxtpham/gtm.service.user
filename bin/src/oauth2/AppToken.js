@@ -25,8 +25,8 @@ function registerAppToken(app, provider, config, createJwtToken, url, requestHan
 exports.registerAppToken = registerAppToken;
 function registerAppTokenGoogle(app, provider, config, createJwtToken, url, requestHandler) {
     passport.use(new GoogleTokenStrategy.Strategy({
-        clientID: '162769265494-3q8o3gar8pjso775oq7kj3qfd8nreb45.apps.googleusercontent.com',
-        secretOrKey: '2NwIOtKbn21wYBq8tGlDKJS1',
+        clientID: process.env.NODE_ENV === 'production' ? '162769265494-u1s1qm60pqbcmhr2mpvjuff9aolc6l52.apps.googleusercontent.com' : '162769265494-3q8o3gar8pjso775oq7kj3qfd8nreb45.apps.googleusercontent.com',
+        secretOrKey: process.env.NODE_ENV === 'production' ? 'dNceKqZqCDaT82rsKnnlOvHg' : '2NwIOtKbn21wYBq8tGlDKJS1',
         jwtFromRequest: GoogleTokenStrategy.ExtractJwt.fromAuthHeader(),
         passReqToCallback: true
     }, new JwtGoogleAuthLibraryStrategyVerify(provider, createJwtToken).handler));
