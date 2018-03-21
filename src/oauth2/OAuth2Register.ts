@@ -94,7 +94,6 @@ class PublicCallbackHandler {
     }
 }
 
-
 class RedirectRoute {
     private url: string;
     constructor(url: string) { this.url = url; }

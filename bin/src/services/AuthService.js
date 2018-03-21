@@ -90,6 +90,7 @@ let AuthServiceImpl = class AuthServiceImpl extends lib_service_1.ServiceImpl {
             });
             if (session) {
                 console.log(`Reuse existing ${profile.provider} session ${session._id} for user '${profile.displayName}' [${session.userId}]`);
+                return Promise.resolve(session);
             }
             else {
                 const user = yield this.UserRepository.getByProfile(profile, profileExt);

@@ -5,6 +5,7 @@ import { normalizeOAuth2, IOAuth2Config } from "./config";
 import * as auth from "@gtm/lib.service.auth";
 import { registerSwaggerUiInternal } from "./SwaggerUi";
 import { registerOAuth2Internal } from "./OAuth2Register";
+import { registerAppToken } from "./AppToken";
 
 /**
  * Register OAuth2/JWT & Swagger routes, this function will call register for standard Auth
@@ -32,12 +33,18 @@ export async function registerOAuth2(
     // Register Swagger-UI 
     await registerSwaggerUiInternal(app, config, defaultSwaggerConfigUrl, createJwtToken);
 
-    // Finally register JWT/OAuth2 with all supported passport.js Providers (Google, Facebook)
-    Object.keys(config.auth).map((provider: string) => registerOAuth2Internal(
-        app, provider, config, createJwtToken,
-        `${oauth2BaseUrl || '/pub/auth'}/login/${provider}`,
-        `${oauth2BaseUrl || '/pub/auth'}/callback/${provider}`,
-        `${oauth2BaseUrl || '/pub/auth'}/failure/${provider}`,
-        oauth2LogoutUrl || '/web/auth/logout'
-    ));
+    // Register JWT/OAuth2 with all supported passport.js Providers (Google, Facebook)
+    Object.keys(config.auth).map((provider: string) => {
+        registerOAuth2Internal(
+            app, provider, config, createJwtToken,
+            `${oauth2BaseUrl || '/pub/auth'}/login/${provider}`,
+            `${oauth2BaseUrl || '/pub/auth'}/callback/${provider}`,
+            `${oauth2BaseUrl || '/pub/auth'}/failure/${provider}`,
+            oauth2LogoutUrl || '/web/auth/logout'
+        );
+        registerAppToken(
+            app, provider, config, createJwtToken,
+            `${oauth2BaseUrl || '/pub/auth'}/token/${provider}`
+        );
+    });
 }

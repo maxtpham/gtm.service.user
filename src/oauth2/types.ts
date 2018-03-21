@@ -24,3 +24,6 @@ export type CreateJwtTokenFunction =
 
 export type VerifyJwtTokenFunction =
     (accessToken: string, refreshToken: string, providerSession: ProviderSession, profile: passport.Profile, done: (error: any, user?: any, info?: any) => void) => Promise<void>;
+
+export type VerifyJwtTokenFunction0 =
+    (accessToken: string, refreshToken: string, profile: passport.Profile, done: (error: any, user?: any, info?: any) => void) => Promise<void>;
