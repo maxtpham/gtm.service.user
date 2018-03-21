@@ -202,6 +202,12 @@ const models: TsoaRoute.Models = {
             "houseHolder": { "dataType": "string" },
         },
     },
+    "MAvatarView": {
+        "properties": {
+            "media": { "dataType": "string", "required": true },
+            "data": { "dataType": "string", "required": true },
+        },
+    },
     "UserViewDetails": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -250,7 +256,6 @@ const models: TsoaRoute.Models = {
             "status": { "dataType": "boolean", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },
-            "avatar": { "ref": "AttachmentView" },
         },
     },
     "AccountEntity": {
@@ -734,7 +739,7 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                avatar: { "in": "body", "name": "avatar", "required": true, "ref": "AttachmentView" },
+                avatar: { "in": "body", "name": "avatar", "required": true, "ref": "MAvatarView" },
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             };
 

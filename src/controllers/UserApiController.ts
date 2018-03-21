@@ -14,7 +14,7 @@ import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
 import * as coreClient from '@scg/lib.client.core';
 import { Binary } from 'bson';
-import { MAttachmentView } from '../views/MAttachmentView';
+import { MAvatarView } from '../views/MAvatarView';
 
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
@@ -126,7 +126,7 @@ export class UserApiController extends ApiController {
     /** Update user with profiles */
     @Tags('User') @Security('jwt') @Post('/update-avatar')
     public async updateAvatar(
-        @Body() avatar: AttachmentView,
+        @Body() avatar: MAvatarView,
         @Request() req: express.Request
     ): Promise<UserEntity> {
 
@@ -321,14 +321,14 @@ export class UserApiController extends ApiController {
             user.roles = userDetails.role || user.roles;
             user.email = userDetails.email || user.email;
 
-            if (userDetails.avatar && userDetails.avatar != user.avatar) {
-                let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
-                let newAvatar: AttachmentView = {
-                    media: userDetails.avatar.media,
-                    data: new Binary(bf, Binary.SUBTYPE_BYTE_ARRAY)
-                };
-                user.avatar = newAvatar;
-            }
+            // if (userDetails.avatar && userDetails.avatar != user.avatar) {
+            //     let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
+            //     let newAvatar: AttachmentView = {
+            //         media: userDetails.avatar.media,
+            //         data: new Binary(bf, Binary.SUBTYPE_BYTE_ARRAY)
+            //     };
+            //     user.avatar = newAvatar;
+            // }
             user.updated = new Date().getTime();
             let userToUpdate = await this.UserRepository.findOneAndUpdate({ _id: userId }, user);
             if (user) {
