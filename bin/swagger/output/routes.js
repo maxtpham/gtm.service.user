@@ -203,6 +203,12 @@ const models = {
             "houseHolder": { "dataType": "string" },
         },
     },
+    "MAvatarView": {
+        "properties": {
+            "media": { "dataType": "string", "required": true },
+            "data": { "dataType": "string", "required": true },
+        },
+    },
     "UserViewDetails": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -251,7 +257,6 @@ const models = {
             "status": { "dataType": "boolean", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },
-            "avatar": { "ref": "AttachmentView" },
         },
     },
     "AccountEntity": {
@@ -620,7 +625,7 @@ function RegisterRoutes(app) {
     });
     app.post('/api/user/v1/user/update-avatar', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            avatar: { "in": "body", "name": "avatar", "required": true, "ref": "AttachmentView" },
+            avatar: { "in": "body", "name": "avatar", "required": true, "ref": "MAvatarView" },
             req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
         let validatedArgs = [];

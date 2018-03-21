@@ -14,7 +14,7 @@ import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
 import * as coreClient from '@scg/lib.client.core';
 import { Binary } from 'bson';
-import { MAttachmentView } from '../views/MAttachmentView';
+import { MAvatarView } from '../views/MAvatarView';
 
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
@@ -126,7 +126,7 @@ export class UserApiController extends ApiController {
     /** Update user with profiles */
     @Tags('User') @Security('jwt') @Post('/update-avatar')
     public async updateAvatar(
-        @Body() avatar: AttachmentView,
+        @Body() avatar: MAvatarView,
         @Request() req: express.Request
     ): Promise<UserEntity> {
 
