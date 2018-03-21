@@ -37,7 +37,7 @@ export function registerAppTokenGoogle(
     const authHandler = new AuthHandler(config, provider, config.jwt.secret, config.jwt.paths.concat([config.swagger.baseUrl]));
     app.post(url,
         passport.authenticate('jwt-google-auth-library', <passport.AuthenticateOptions>{ session: false }),
-        !requestHandler ? [authHandler.loggedinHandler.bind(authHandler)] : [authHandler.loggedinHandler.bind(authHandler), requestHandler]
+        !requestHandler ? [authHandler.tokenHandler.bind(authHandler)] : [authHandler.tokenHandler.bind(authHandler), requestHandler]
     );
 }
 
@@ -52,7 +52,7 @@ export function registerAppTokenFacebook(
     const authHandler = new AuthHandler(config, provider, config.jwt.secret, config.jwt.paths.concat([config.swagger.baseUrl]));
     app.post(url,
         passport.authenticate('facebook-token', <passport.AuthenticateOptions>{ session: false }),
-        !requestHandler ? [authHandler.loggedinHandler.bind(authHandler)] : [authHandler.loggedinHandler.bind(authHandler), requestHandler]
+        !requestHandler ? [authHandler.tokenHandler.bind(authHandler)] : [authHandler.tokenHandler.bind(authHandler), requestHandler]
     );
 }
 

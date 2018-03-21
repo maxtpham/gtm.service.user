@@ -90,6 +90,7 @@ export class AuthServiceImpl extends ServiceImpl implements AuthService {
         });
         if (session) {
             console.log(`Reuse existing ${profile.provider} session ${session._id} for user '${profile.displayName}' [${session.userId}]`);
+            return Promise.resolve(session);
         } else {
             const user: UserEntity = await this.UserRepository.getByProfile(profile, profileExt);
             
