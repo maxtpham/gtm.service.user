@@ -445,11 +445,10 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                query: { "in": "query", "name": "query", "dataType": "string" },
-                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
-                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
                 from: { "in": "query", "name": "from", "dataType": "string" },
                 to: { "in": "query", "name": "to", "dataType": "string" },
+                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
             };
 
             let validatedArgs: any[] = [];

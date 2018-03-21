@@ -30,9 +30,9 @@ const MessageRepository_1 = require("../repositories/MessageRepository");
 const UserRepository_1 = require("../repositories/UserRepository");
 let MessageApiController = MessageApiController_1 = class MessageApiController extends lib_service_1.ApiController {
     /** Get Messages */
-    getEntities(query, pageNumber, itemCount, from, to) {
+    getEntities(from, to, pageNumber, itemCount) {
         return __awaiter(this, void 0, void 0, function* () {
-            let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
+            let queryToEntities = this.MessageRepository.buildQuery(from, to);
             let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
             if (messages) {
                 let messageTotalItems = yield this.MessageRepository.find(queryToEntities);
@@ -289,9 +289,9 @@ __decorate([
 ], MessageApiController.prototype, "UserRepository", void 0);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get(),
-    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()), __param(3, tsoa_1.Query()), __param(4, tsoa_1.Query()),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()), __param(3, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number, String, String]),
+    __metadata("design:paramtypes", [String, String, Number, Number]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getEntities", null);
 __decorate([

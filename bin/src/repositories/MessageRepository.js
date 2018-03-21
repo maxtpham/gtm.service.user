@@ -22,9 +22,9 @@ let MessageRepositoryImpl = class MessageRepositoryImpl extends lib_service_1.Re
     constructor(mongoclient) {
         super(mongoclient, "message", MessageEntity_1.MessageSchema);
     }
-    buildQuery(query, from, to) {
+    buildQuery(from, to) {
         let queryToEntities;
-        if (!!query || !!from || !!to) {
+        if (!!from || !!to) {
             queryToEntities = {
                 $and: [
                     {
@@ -32,9 +32,6 @@ let MessageRepositoryImpl = class MessageRepositoryImpl extends lib_service_1.Re
                     }
                 ]
             };
-            if (!!query) {
-                queryToEntities.$and.push({ content: { $regex: query, $options: 'i' } });
-            }
             if (!!from) {
                 queryToEntities.$and.push({ userId: from });
             }

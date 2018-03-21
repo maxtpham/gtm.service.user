@@ -251,7 +251,6 @@ const models = {
             "status": { "dataType": "boolean", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },
-            "avatar": { "ref": "AttachmentView" },
         },
     },
     "AccountEntity": {
@@ -403,11 +402,10 @@ function RegisterRoutes(app) {
     });
     app.get('/api/user/v1/Message', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            query: { "in": "query", "name": "query", "dataType": "string" },
-            pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
-            itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
             from: { "in": "query", "name": "from", "dataType": "string" },
             to: { "in": "query", "name": "to", "dataType": "string" },
+            pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+            itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
         };
         let validatedArgs = [];
         try {

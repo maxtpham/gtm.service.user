@@ -19,9 +19,9 @@ export class MessageApiController extends ApiController {
 
     /** Get Messages */
     @Tags('Message') @Security('jwt') @Get()
-    public async getEntities( @Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number, @Query() from?: string, @Query() to?: string)
+    public async getEntities(@Query() from?: string, @Query() to?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
         : Promise<MessageViewWithPagination> {
-        let queryToEntities = this.MessageRepository.buildQuery(query, from, to);
+        let queryToEntities = this.MessageRepository.buildQuery(from, to);
         let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
         if (messages) {
             let messageTotalItems = await this.MessageRepository.find(queryToEntities);
@@ -221,7 +221,7 @@ export class MessageApiController extends ApiController {
                 let toUser = users.find(u => u._id == mes.toUserId);
 
                 if (mes.toUserId === userId) {
-                    if (mes.announced === false){
+                    if (mes.announced === false) {
                         messageDetailView.push({
                             id: mes._id,
                             userId: mes.userId,
@@ -236,10 +236,10 @@ export class MessageApiController extends ApiController {
                         messsageUpdate = {
                             userId: mes.userId,
                             toUserId: mes.toUserId,
-                            content: mes.content,                            
+                            content: mes.content,
                             delivered: mes.delivered,
                             announced: true,
-                        } 
+                        }
                         this.updateEntity(mes._id, messsageUpdate);
                     }
                 }
