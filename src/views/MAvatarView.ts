@@ -1,4 +1,4 @@
-export interface MAttachmentView {
+export interface MAvatarView {
     media: string;
     data: string;
 }
