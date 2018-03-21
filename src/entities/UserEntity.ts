@@ -85,7 +85,7 @@ export const UserSchema = {
     gender: { type: mongoose.Schema.Types.String, required: false },
     timezone: { type: mongoose.Schema.Types.Number, required: false },
     avatar: { type: AttachmentSchema, required: false },
-    isFirstLogin: { type: mongoose.Schema.Types.Boolean, required: false},
+    isFirstLogin: { type: mongoose.Schema.Types.Boolean, required: false },
 };
 
 export module User {
@@ -130,6 +130,7 @@ export module User {
             location: item.location,
             language: item.language,
             gender: item.gender,
+            roles: item.roles,
             avatar: item.avatar,
             created: item.created,
             updated: item.updated,

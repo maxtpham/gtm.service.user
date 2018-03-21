@@ -61,6 +61,7 @@ var User;
             location: item.location,
             language: item.language,
             gender: item.gender,
+            roles: item.roles,
             avatar: item.avatar,
             created: item.created,
             updated: item.updated,
