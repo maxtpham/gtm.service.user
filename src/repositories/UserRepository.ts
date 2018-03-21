@@ -23,6 +23,7 @@ export interface UserRepository extends Repository<UserEntity> {
     buildClientUsers: (users: UserEntity[]) => MUserView[];
     getByName(name: string): Promise<UserEntity[]>;
     getUserRole(id: string): Promise<UserRole[]>;
+    buildQuery: (status?: string, userId?: string) => any;
 }
 
 @injectableSingleton(UserRepositoryTYPE)
@@ -79,18 +80,47 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         return Promise.resolve(user);
     }
 
+    public buildQuery(status?: string, userId?: string) {
+        let queryToEntities;
+        if (!!status || !!userId) {
+            queryToEntities = {
+                $and: [
+                    {
+                        deleted: null
+                    }
+                ]
+            };
+
+            if (!!status) {
+                let statusToInt = parseInt(status);
+                let statusMap = isNaN(statusToInt) ? 0 : statusToInt;
+                queryToEntities.$and.push({ status: statusMap });
+            }
+            if (!!userId) {
+                queryToEntities.$and.push({ _id: userId });
+            }
+
+        } else {
+            queryToEntities = {
+                deleted: null
+            }
+        }
+
+        return queryToEntities;
+    }
+
     public async getByName(name: string): Promise<UserEntity[]> {
         let users = await (<UserRepository>this).find({ name: RegExp(name) });
         return Promise.resolve(users);
     }
 
     public buildClientUser(user: UserEntity): MUserView {
-        
+
         return <MUserView>{
             id: user._id,
             name: user.name,
             phone: user.phone,
-            houseHolder:  user.profiles.default ? user.profiles.default.houseHolder : ""
+            houseHolder: user.profiles.default ? user.profiles.default.houseHolder : ""
         }
     }
 

@@ -759,7 +759,8 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                query: { "in": "query", "name": "query", "dataType": "string" },
+                status: { "in": "query", "name": "status", "dataType": "string" },
+                userId: { "in": "query", "name": "userId", "dataType": "string" },
                 pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
                 itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
             };

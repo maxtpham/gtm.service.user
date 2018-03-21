@@ -89,6 +89,32 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             return Promise.resolve(user);
         });
     }
+    buildQuery(status, userId) {
+        let queryToEntities;
+        if (!!status || !!userId) {
+            queryToEntities = {
+                $and: [
+                    {
+                        deleted: null
+                    }
+                ]
+            };
+            if (!!status) {
+                let statusToInt = parseInt(status);
+                let statusMap = isNaN(statusToInt) ? 0 : statusToInt;
+                queryToEntities.$and.push({ status: statusMap });
+            }
+            if (!!userId) {
+                queryToEntities.$and.push({ _id: userId });
+            }
+        }
+        else {
+            queryToEntities = {
+                deleted: null
+            };
+        }
+        return queryToEntities;
+    }
     getByName(name) {
         return __awaiter(this, void 0, void 0, function* () {
             let users = yield this.find({ name: RegExp(name) });

@@ -1689,7 +1689,13 @@
 				"parameters": [
 					{
 						"in": "query",
-						"name": "query",
+						"name": "status",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "userId",
 						"required": false,
 						"type": "string"
 					},

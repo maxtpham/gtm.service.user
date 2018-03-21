@@ -161,22 +161,9 @@ export class UserApiController extends ApiController {
 
     /** Get users with pagination */
     @Tags('User') @Security('jwt') @Get('/entities')
-    public async getEntities(@Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
+    public async getEntities(@Query() status?: string, @Query() userId?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
         : Promise<UserViewWithPagination> {
-        let queryToEntities = !!query ? {
-            $and: [
-                {
-                    $or: [{
-                        name: { $regex: query, $options: 'i' }
-                    },
-                    { email: { $regex: query, $options: 'i' } }
-                        , { phone: { $regex: query, $options: 'i' } }]
-                },
-                {
-                    deleted: null
-                }
-            ]
-        } : { deleted: null };
+        let queryToEntities = this.UserRepository.buildQuery(status, userId);
         let users = await this.UserRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
         if (users) {
             let userTotalItems = await this.UserRepository.find(queryToEntities);
