@@ -16,7 +16,7 @@ exports.UserRoleSchema = {
     code: { type: mongoose.Schema.Types.String, required: true },
     _id: false
 };
-exports.UserSchema = Object.assign({}, lib_service_1.DbSchema, { code: { type: mongoose.Schema.Types.String, required: true }, name: { type: mongoose.Schema.Types.String, required: true }, provider: { type: mongoose.Schema.Types.String, required: true }, profiles: { type: mongoose.Schema.Types.Mixed, required: true }, roles: { type: [exports.UserRoleSchema], required: false }, active: { type: mongoose.Schema.Types.Boolean, required: false }, birthday: { type: mongoose.Schema.Types.Number, required: false }, address: { type: mongoose.Schema.Types.String, required: false }, location: { type: lib_service_1.LocationSchema, required: false }, phone: { type: mongoose.Schema.Types.String, required: false }, email: { type: mongoose.Schema.Types.String, required: false }, language: { type: mongoose.Schema.Types.String, required: false }, gender: { type: mongoose.Schema.Types.String, required: false }, timezone: { type: mongoose.Schema.Types.Number, required: false }, avatar: { type: lib_service_1.AttachmentSchema, required: false }, isFirstLogin: { type: mongoose.Schema.Types.Boolean, required: false } });
+exports.UserSchema = Object.assign({}, lib_service_1.DbSchema, { code: { type: mongoose.Schema.Types.String, required: true }, name: { type: mongoose.Schema.Types.String, required: true }, provider: { type: mongoose.Schema.Types.String, required: true }, profiles: { type: mongoose.Schema.Types.Mixed, required: true }, roles: { type: [exports.UserRoleSchema], required: false }, active: { type: mongoose.Schema.Types.Boolean, required: false }, status: { type: mongoose.Schema.Types.Number, required: false }, birthday: { type: mongoose.Schema.Types.Number, required: false }, address: { type: mongoose.Schema.Types.String, required: false }, location: { type: lib_service_1.LocationSchema, required: false }, phone: { type: mongoose.Schema.Types.String, required: false }, email: { type: mongoose.Schema.Types.String, required: false }, language: { type: mongoose.Schema.Types.String, required: false }, gender: { type: mongoose.Schema.Types.String, required: false }, timezone: { type: mongoose.Schema.Types.Number, required: false }, avatar: { type: lib_service_1.AttachmentSchema, required: false }, isFirstLogin: { type: mongoose.Schema.Types.Boolean, required: false } });
 var User;
 (function (User) {
     function toProfileView(entity) {
@@ -33,6 +33,7 @@ var User;
                 provider: item.profiles,
                 roles: item.roles,
                 active: item.active,
+                status: item.status,
                 birthday: item.birthday,
                 address: item.address,
                 location: item.location,
@@ -55,6 +56,7 @@ var User;
             phone: item.phone,
             email: item.email,
             active: item.active,
+            status: item.status,
             provider: item.provider,
             profiles: item.profiles,
             address: item.address,

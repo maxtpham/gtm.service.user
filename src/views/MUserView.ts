@@ -30,7 +30,11 @@ export interface ScProfileView {
 
   laiXuatMacDinh?: number;
 }
-
+export enum UserStatus {
+  InActive = 0,
+  Active = 1,
+  New = 2
+}
 export interface UserViewWithPagination {
   users: UserViewDetails[];
   totalItems: number;
@@ -53,7 +57,7 @@ export interface UserUpdateView {
   dob?: number;
   email?: string;
   gender: string;
-  status: boolean;
+  status: UserStatus;
   role: UserRole[];
   address?: string;
   // avatar?: AttachmentView;

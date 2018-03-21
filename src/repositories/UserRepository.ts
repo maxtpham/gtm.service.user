@@ -94,7 +94,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             if (!!status) {
                 let statusToInt = parseInt(status);
                 let statusMap = isNaN(statusToInt) ? 0 : statusToInt;
-                queryToEntities.$and.push({ status: statusMap });
+                queryToEntities.$and.push({ status: status });
             }
             if (!!userId) {
                 queryToEntities.$and.push({ _id: userId });

@@ -7,7 +7,7 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
-import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView } from '../views/MUserView';
+import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView, UserStatus } from '../views/MUserView';
 import { UserEntity, User, ProfileView, UserRole } from '../entities/UserEntity';
 import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
@@ -301,7 +301,8 @@ export class UserApiController extends ApiController {
                 return Promise.reject('User is not found.');
             }
 
-            user.active = userDetails.status || user.active;
+            user.active = userDetails.status === UserStatus.New ? null : (userDetails.status === UserStatus.Active ? true : false);
+            user.status = userDetails.status || user.status;
             user.name = userDetails.name || user.name;
             user.phone = userDetails.phone || user.phone;
             user.birthday = userDetails.dob || user.birthday;

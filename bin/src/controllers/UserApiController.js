@@ -37,6 +37,7 @@ const lib_service_1 = require("@gtm/lib.service");
 const AppConfig_1 = require("./../config/AppConfig");
 const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
+const MUserView_1 = require("../views/MUserView");
 const UserEntity_1 = require("../entities/UserEntity");
 const RoleView_1 = require("../views/RoleView");
 const RoleRepository_1 = require("../repositories/RoleRepository");
@@ -283,7 +284,8 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!user) {
                     return Promise.reject('User is not found.');
                 }
-                user.active = userDetails.status || user.active;
+                user.active = userDetails.status === MUserView_1.UserStatus.New ? null : (userDetails.status === MUserView_1.UserStatus.Active ? true : false);
+                user.status = userDetails.status || user.status;
                 user.name = userDetails.name || user.name;
                 user.phone = userDetails.phone || user.phone;
                 user.birthday = userDetails.dob || user.birthday;

@@ -120,6 +120,9 @@ const models = {
             "code": { "dataType": "string", "required": true },
         },
     },
+    "UserStatus": {
+        "enums": ["0", "1", "2"],
+    },
     "LocationView": {
         "properties": {
             "x": { "dataType": "double", "required": true },
@@ -133,6 +136,7 @@ const models = {
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
             "active": { "dataType": "boolean" },
+            "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
             "address": { "dataType": "string" },
             "location": { "ref": "LocationView" },
@@ -174,6 +178,7 @@ const models = {
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
             "active": { "dataType": "boolean" },
+            "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
             "address": { "dataType": "string" },
             "location": { "ref": "LocationView" },
@@ -216,6 +221,7 @@ const models = {
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
             "active": { "dataType": "boolean" },
+            "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
             "address": { "dataType": "string" },
             "location": { "ref": "LocationView" },

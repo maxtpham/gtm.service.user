@@ -119,6 +119,9 @@ const models: TsoaRoute.Models = {
             "code": { "dataType": "string", "required": true },
         },
     },
+    "UserStatus": {
+        "enums": ["0", "1", "2"],
+    },
     "LocationView": {
         "properties": {
             "x": { "dataType": "double", "required": true },
@@ -132,6 +135,7 @@ const models: TsoaRoute.Models = {
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
             "active": { "dataType": "boolean" },
+            "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
             "address": { "dataType": "string" },
             "location": { "ref": "LocationView" },
@@ -173,6 +177,7 @@ const models: TsoaRoute.Models = {
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
             "active": { "dataType": "boolean" },
+            "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
             "address": { "dataType": "string" },
             "location": { "ref": "LocationView" },
@@ -215,6 +220,7 @@ const models: TsoaRoute.Models = {
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
             "active": { "dataType": "boolean" },
+            "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
             "address": { "dataType": "string" },
             "location": { "ref": "LocationView" },
@@ -253,7 +259,7 @@ const models: TsoaRoute.Models = {
             "dob": { "dataType": "double" },
             "email": { "dataType": "string" },
             "gender": { "dataType": "string", "required": true },
-            "status": { "dataType": "boolean", "required": true },
+            "status": { "ref": "UserStatus", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },
         },

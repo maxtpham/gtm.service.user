@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
 import { DbEntity, DbSchema, LocationView, AttachmentView, LocationSchema, AttachmentSchema } from "@gtm/lib.service"
-import { UserViewDetails } from "../views/MUserView";
+import { UserViewDetails, UserStatus } from "../views/MUserView";
 
 export interface ProfileView {
     /** Google/FB profile id*/
@@ -20,6 +20,7 @@ export interface ProfileView {
      * [<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process */
     active?: boolean;
 
+    status?: UserStatus;
     /** UTC tick only date without time component */
     birthday?: number;
 
@@ -75,7 +76,7 @@ export const UserSchema = {
     profiles: { type: mongoose.Schema.Types.Mixed, required: true },
     roles: { type: [UserRoleSchema], required: false },
     active: { type: mongoose.Schema.Types.Boolean, required: false },
-
+    status: { type: mongoose.Schema.Types.Number, required: false },
     birthday: { type: mongoose.Schema.Types.Number, required: false },
     address: { type: mongoose.Schema.Types.String, required: false },
     location: { type: LocationSchema, required: false },
@@ -102,6 +103,7 @@ export module User {
                 provider: item.profiles,
                 roles: item.roles,
                 active: item.active,
+                status: item.status,
                 birthday: item.birthday,
                 address: item.address,
                 location: item.location,
@@ -124,6 +126,7 @@ export module User {
             phone: item.phone,
             email: item.email,
             active: item.active,
+            status: item.status,
             provider: item.provider,
             profiles: item.profiles,
             address: item.address,
