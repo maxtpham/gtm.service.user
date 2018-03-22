@@ -288,7 +288,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 user.status = userDetails.status || user.status;
                 user.name = userDetails.name || user.name;
                 user.phone = userDetails.phone || user.phone;
-                user.birthday = userDetails.dob || user.birthday;
+                user.birthday = userDetails.birthday || user.birthday;
                 user.roles = userDetails.role || user.roles;
                 user.email = userDetails.email || user.email;
                 // if (userDetails.avatar && userDetails.avatar != user.avatar) {

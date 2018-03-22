@@ -54,7 +54,7 @@ export interface UserRoleView {
 export interface UserUpdateView {
   name: string;
   phone?: string;
-  dob?: number;
+  birthday?: number;
   email?: string;
   gender: string;
   status: UserStatus;

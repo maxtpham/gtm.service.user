@@ -256,7 +256,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "name": { "dataType": "string", "required": true },
             "phone": { "dataType": "string" },
-            "dob": { "dataType": "double" },
+            "birthday": { "dataType": "double" },
             "email": { "dataType": "string" },
             "gender": { "dataType": "string", "required": true },
             "status": { "ref": "UserStatus", "required": true },

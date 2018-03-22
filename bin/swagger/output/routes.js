@@ -257,10 +257,10 @@ const models = {
         "properties": {
             "name": { "dataType": "string", "required": true },
             "phone": { "dataType": "string" },
-            "dob": { "dataType": "double" },
+            "birthday": { "dataType": "double" },
             "email": { "dataType": "string" },
             "gender": { "dataType": "string", "required": true },
-            "status": { "dataType": "boolean", "required": true },
+            "status": { "ref": "UserStatus", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },
         },

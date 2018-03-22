@@ -810,7 +810,7 @@
 				"phone": {
 					"type": "string"
 				},
-				"dob": {
+				"birthday": {
 					"type": "number",
 					"format": "double"
 				},
