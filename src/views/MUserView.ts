@@ -1,6 +1,7 @@
 import { UserView, UserRole } from "../entities/UserEntity";
 import { RoleType } from "./RoleView";
 import { AttachmentView } from "@gtm/lib.service/bin";
+import { AccountView } from "./AccountView";
 
 export interface MUserView {
   id: string;
@@ -42,6 +43,7 @@ export interface UserViewWithPagination {
 
 export interface UserViewDetails extends UserView {
   id: string;
+  account?: AccountView;
   created: number;
   updated: number;
 }

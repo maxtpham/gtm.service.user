@@ -43,6 +43,7 @@ const RoleView_1 = require("../views/RoleView");
 const RoleRepository_1 = require("../repositories/RoleRepository");
 const coreClient = require("@scg/lib.client.core");
 const bson_1 = require("bson");
+const AccountRepository_1 = require("../repositories/AccountRepository");
 var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get all user lite */
@@ -168,9 +169,10 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             if (users) {
                 let userTotalItems = yield this.UserRepository.find(queryToEntities);
                 let userDetailViews = [];
-                users.map(user => {
-                    userDetailViews.push(UserEntity_1.User.toDetailViews(user));
-                });
+                Promise.all(users.map((user) => __awaiter(this, void 0, void 0, function* () {
+                    let userAccount = yield this.AccountRepository.findOne({ userId: user._id });
+                    userDetailViews.push(UserEntity_1.User.toDetailViews(user, userAccount || null));
+                })));
                 let userViews = { users: userDetailViews, totalItems: userTotalItems.length };
                 return Promise.resolve(userViews);
             }
@@ -182,7 +184,8 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = yield this.UserRepository.findOneById(id);
             if (userEntity) {
-                return Promise.resolve(UserEntity_1.User.toDetailViews(userEntity));
+                let userAccount = yield this.AccountRepository.findOne({ userId: userEntity._id });
+                return Promise.resolve(UserEntity_1.User.toDetailViews(userEntity, userAccount || null));
             }
             return Promise.reject(`Not found.`);
         });
@@ -291,6 +294,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 user.birthday = userDetails.birthday || user.birthday;
                 user.roles = userDetails.role || user.roles;
                 user.email = userDetails.email || user.email;
+                user.address = userDetails.address || user.address;
                 // if (userDetails.avatar && userDetails.avatar != user.avatar) {
                 //     let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
                 //     let newAvatar: AttachmentView = {
@@ -299,7 +303,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 //     };
                 //     user.avatar = newAvatar;
                 // }
-                user.updated = new Date().getTime();
+                user.updated = Date.now();
                 let userToUpdate = yield this.UserRepository.findOneAndUpdate({ _id: userId }, user);
                 if (user) {
                     return Promise.resolve(yield this.UserRepository.findOneById(userId));
@@ -320,6 +324,10 @@ __decorate([
     inversify_1.inject(RoleRepository_1.RoleRepositoryTYPE),
     __metadata("design:type", Object)
 ], UserApiController.prototype, "RoleRepository", void 0);
+__decorate([
+    inversify_1.inject(AccountRepository_1.AccountRepositoryTYPE),
+    __metadata("design:type", Object)
+], UserApiController.prototype, "AccountRepository", void 0);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-lite'),
     __metadata("design:type", Function),

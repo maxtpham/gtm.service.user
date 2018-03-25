@@ -667,6 +667,26 @@
 			],
 			"type": "object"
 		},
+		"AccountView": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"balance": {
+					"type": "number",
+					"format": "double"
+				},
+				"bonus": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"userId",
+				"balance"
+			],
+			"type": "object"
+		},
 		"UserViewDetails": {
 			"properties": {
 				"code": {
@@ -739,6 +759,9 @@
 				},
 				"id": {
 					"type": "string"
+				},
+				"account": {
+					"$ref": "#/definitions/AccountView"
 				},
 				"created": {
 					"type": "number",
@@ -883,26 +906,6 @@
 					"type": "string"
 				},
 				"balance": {
-					"type": "number",
-					"format": "double"
-				}
-			},
-			"required": [
-				"userId",
-				"balance"
-			],
-			"type": "object"
-		},
-		"AccountView": {
-			"properties": {
-				"userId": {
-					"type": "string"
-				},
-				"balance": {
-					"type": "number",
-					"format": "double"
-				},
-				"bonus": {
 					"type": "number",
 					"format": "double"
 				}

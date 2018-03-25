@@ -15,6 +15,7 @@ import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleReposito
 import * as coreClient from '@scg/lib.client.core';
 import { Binary } from 'bson';
 import { MAvatarView } from '../views/MAvatarView';
+import { AccountRepositoryTYPE, AccountRepository } from '../repositories/AccountRepository';
 
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
@@ -24,6 +25,7 @@ var Mongoose = require('mongoose'),
 export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
     @inject(RoleRepositoryTYPE) private RoleRepository: RoleRepository;
+    @inject(AccountRepositoryTYPE) private AccountRepository: AccountRepository;
 
     /** Get all user lite */
     @Tags('User') @Security('jwt') @Get('/get-user-lite')
@@ -168,9 +170,10 @@ export class UserApiController extends ApiController {
         if (users) {
             let userTotalItems = await this.UserRepository.find(queryToEntities);
             let userDetailViews: UserViewDetails[] = [];
-            users.map(user => {
-                userDetailViews.push(User.toDetailViews(user));
-            })
+            Promise.all(users.map(async user => {
+                let userAccount = await this.AccountRepository.findOne({ userId: user._id });
+                userDetailViews.push(User.toDetailViews(user, userAccount || null));
+            }))
             let userViews = <UserViewWithPagination>{ users: userDetailViews, totalItems: userTotalItems.length };
             return Promise.resolve(userViews);
         }
@@ -182,7 +185,9 @@ export class UserApiController extends ApiController {
     public async getDetailViewById(id: string): Promise<UserViewDetails> {
         let userEntity = await this.UserRepository.findOneById(id);
         if (userEntity) {
-            return Promise.resolve(User.toDetailViews(userEntity));
+            let userAccount = await this.AccountRepository.findOne({ userId: userEntity._id });
+
+            return Promise.resolve(User.toDetailViews(userEntity, userAccount || null));
         }
         return Promise.reject(`Not found.`);
     }
@@ -308,6 +313,7 @@ export class UserApiController extends ApiController {
             user.birthday = userDetails.birthday || user.birthday;
             user.roles = userDetails.role || user.roles;
             user.email = userDetails.email || user.email;
+            user.address = userDetails.address || user.address;
 
             // if (userDetails.avatar && userDetails.avatar != user.avatar) {
             //     let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
@@ -317,7 +323,7 @@ export class UserApiController extends ApiController {
             //     };
             //     user.avatar = newAvatar;
             // }
-            user.updated = new Date().getTime();
+            user.updated = Date.now();
             let userToUpdate = await this.UserRepository.findOneAndUpdate({ _id: userId }, user);
             if (user) {
                 return Promise.resolve(await this.UserRepository.findOneById(userId));

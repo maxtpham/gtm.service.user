@@ -1,6 +1,7 @@
 import * as mongoose from "mongoose";
 import { DbEntity, DbSchema, LocationView, AttachmentView, LocationSchema, AttachmentSchema } from "@gtm/lib.service"
 import { UserViewDetails, UserStatus } from "../views/MUserView";
+import { AccountView } from "../views/AccountView";
 
 export interface ProfileView {
     /** Google/FB profile id*/
@@ -118,7 +119,7 @@ export module User {
         return profilesList;
     }
 
-    export function toDetailViews(item: UserEntity): UserViewDetails {
+    export function toDetailViews(item: UserEntity, account: AccountView): UserViewDetails {
         let userDetails: UserViewDetails = {
             id: item._id,
             name: item.name,
@@ -134,6 +135,7 @@ export module User {
             language: item.language,
             gender: item.gender,
             roles: item.roles,
+            account: account,
             birthday: item.birthday,
             timezone: item.timezone,
             avatar: item.avatar,

@@ -214,6 +214,13 @@ const models = {
             "data": { "dataType": "string", "required": true },
         },
     },
+    "AccountView": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "balance": { "dataType": "double", "required": true },
+            "bonus": { "dataType": "double" },
+        },
+    },
     "UserViewDetails": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -234,6 +241,7 @@ const models = {
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
             "id": { "dataType": "string", "required": true },
+            "account": { "ref": "AccountView" },
             "created": { "dataType": "double", "required": true },
             "updated": { "dataType": "double", "required": true },
         },
@@ -280,13 +288,6 @@ const models = {
         "properties": {
             "userId": { "dataType": "string", "required": true },
             "balance": { "dataType": "double", "required": true },
-        },
-    },
-    "AccountView": {
-        "properties": {
-            "userId": { "dataType": "string", "required": true },
-            "balance": { "dataType": "double", "required": true },
-            "bonus": { "dataType": "double" },
         },
     },
 };
