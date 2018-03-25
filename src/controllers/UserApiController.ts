@@ -170,7 +170,7 @@ export class UserApiController extends ApiController {
         if (users) {
             let userTotalItems = await this.UserRepository.find(queryToEntities);
             let userDetailViews: UserViewDetails[] = [];
-            Promise.all(users.map(async user => {
+            await Promise.all(users.map(async user => {
                 let userAccount = await this.AccountRepository.findOne({ userId: user._id });
                 userDetailViews.push(User.toDetailViews(user, userAccount || null));
             }))

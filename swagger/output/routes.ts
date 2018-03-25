@@ -23,6 +23,33 @@ const models: TsoaRoute.Models = {
             "expires": { "dataType": "double", "required": true },
         },
     },
+    "ProviderSession": {
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "access_token": { "dataType": "string", "required": true },
+            "refresh_token": { "dataType": "string" },
+            "expires_in": { "dataType": "double", "required": true },
+            "token_type": { "dataType": "string", "required": true },
+        },
+    },
+    "SessionView": {
+        "properties": {
+            "id": { "dataType": "string", "required": true },
+            "userId": { "dataType": "string", "required": true },
+            "code": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "roles": { "dataType": "array", "array": { "dataType": "string" } },
+            "scope": { "dataType": "string" },
+            "expiresIn": { "dataType": "double" },
+            "provider": { "ref": "ProviderSession" },
+        },
+    },
+    "SessionViewWithPagination": {
+        "properties": {
+            "sessions": { "dataType": "array", "array": { "ref": "SessionView" }, "required": true },
+            "totalItems": { "dataType": "double", "required": true },
+        },
+    },
     "RoleDetailView": {
         "properties": {
             "id": { "dataType": "string", "required": true },
@@ -349,6 +376,28 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.getCurrent.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/session/entities',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                userId: { "in": "query", "name": "userId", "dataType": "string" },
+                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<SessionApiController>(SessionApiController);
+
+
+            const promise = controller.getEntities.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/role',

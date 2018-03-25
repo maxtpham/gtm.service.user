@@ -20,11 +20,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const inversify_1 = require("inversify");
 const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
 const express = require("express");
 const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
+const SessionView_1 = require("../views/SessionView");
+const SessionRepository_1 = require("../repositories/SessionRepository");
+const UserRepository_1 = require("../repositories/UserRepository");
 let SessionApiController = SessionApiController_1 = class SessionApiController extends lib_service_1.ApiController {
     /** Check current session info */
     getCurrent(req) {
@@ -32,7 +36,33 @@ let SessionApiController = SessionApiController_1 = class SessionApiController e
             return Promise.resolve(!req.user ? undefined : req.user);
         });
     }
+    /** Get sessions with pagination */
+    getEntities(userId, pageNumber, itemCount) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let queryToEntities = this.SessionRepository.buildQuery(userId);
+            let sessions = yield this.SessionRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            if (sessions) {
+                let sessionTotalItems = yield this.SessionRepository.find(queryToEntities);
+                let sessionDetailViews = [];
+                yield Promise.all(sessions.map((session) => __awaiter(this, void 0, void 0, function* () {
+                    let user = yield this.UserRepository.findOneById(session.userId.toHexString());
+                    sessionDetailViews.push(SessionView_1.SessionModule.toSession(session, user ? user.roles : null));
+                })));
+                let sessionViews = { sessions: sessionDetailViews, totalItems: sessionTotalItems.length };
+                return Promise.resolve(sessionViews);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
 };
+__decorate([
+    inversify_1.inject(SessionRepository_1.SessionRepositoryTYPE),
+    __metadata("design:type", Object)
+], SessionApiController.prototype, "SessionRepository", void 0);
+__decorate([
+    inversify_1.inject(UserRepository_1.UserRepositoryTYPE),
+    __metadata("design:type", Object)
+], SessionApiController.prototype, "UserRepository", void 0);
 __decorate([
     tsoa_2.Tags('Session'), tsoa_2.Security('jwt'), tsoa_1.Get('current'),
     __param(0, tsoa_1.Request()),
@@ -40,6 +70,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], SessionApiController.prototype, "getCurrent", null);
+__decorate([
+    tsoa_2.Tags('Session'), tsoa_2.Security('jwt'), tsoa_1.Get('/entities'),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:returntype", Promise)
+], SessionApiController.prototype, "getEntities", null);
 SessionApiController = SessionApiController_1 = __decorate([
     lib_common_1.injectableSingleton(SessionApiController_1),
     tsoa_1.Route('api/user/v1/session')

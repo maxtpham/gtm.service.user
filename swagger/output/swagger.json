@@ -47,6 +47,91 @@
 			],
 			"type": "object"
 		},
+		"ProviderSession": {
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"access_token": {
+					"type": "string"
+				},
+				"refresh_token": {
+					"type": "string"
+				},
+				"expires_in": {
+					"type": "number",
+					"format": "double"
+				},
+				"token_type": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"name",
+				"access_token",
+				"expires_in",
+				"token_type"
+			],
+			"type": "object"
+		},
+		"SessionView": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"code": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"roles": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"scope": {
+					"type": "string"
+				},
+				"expiresIn": {
+					"type": "number",
+					"format": "double"
+				},
+				"provider": {
+					"$ref": "#/definitions/ProviderSession"
+				}
+			},
+			"required": [
+				"id",
+				"userId",
+				"code",
+				"name"
+			],
+			"type": "object"
+		},
+		"SessionViewWithPagination": {
+			"properties": {
+				"sessions": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/SessionView"
+					}
+				},
+				"totalItems": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"sessions",
+				"totalItems"
+			],
+			"type": "object"
+		},
 		"RoleDetailView": {
 			"properties": {
 				"id": {
@@ -1001,6 +1086,53 @@
 					}
 				],
 				"parameters": []
+			}
+		},
+		"/api/user/v1/session/entities": {
+			"get": {
+				"operationId": "GetEntities",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/SessionViewWithPagination"
+						}
+					}
+				},
+				"description": "Get sessions with pagination ",
+				"tags": [
+					"Session"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "pageNumber",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					}
+				]
 			}
 		},
 		"/api/user/v1/role": {

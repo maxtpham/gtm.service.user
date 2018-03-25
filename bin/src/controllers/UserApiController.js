@@ -169,7 +169,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             if (users) {
                 let userTotalItems = yield this.UserRepository.find(queryToEntities);
                 let userDetailViews = [];
-                Promise.all(users.map((user) => __awaiter(this, void 0, void 0, function* () {
+                yield Promise.all(users.map((user) => __awaiter(this, void 0, void 0, function* () {
                     let userAccount = yield this.AccountRepository.findOne({ userId: user._id });
                     userDetailViews.push(UserEntity_1.User.toDetailViews(user, userAccount || null));
                 })));

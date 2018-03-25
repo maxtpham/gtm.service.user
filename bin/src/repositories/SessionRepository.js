@@ -22,6 +22,27 @@ let SessionRepositoryImpl = class SessionRepositoryImpl extends lib_service_1.Re
     constructor(mongoclient) {
         super(mongoclient, "session", SessionEntity_1.SessionSchema);
     }
+    buildQuery(userId) {
+        let queryToEntities;
+        if (!!userId) {
+            queryToEntities = {
+                $and: [
+                    {
+                        deleted: null
+                    }
+                ]
+            };
+            if (!!userId) {
+                queryToEntities.$and.push({ userId: userId });
+            }
+        }
+        else {
+            queryToEntities = {
+                deleted: null
+            };
+        }
+        return queryToEntities;
+    }
 };
 SessionRepositoryImpl = __decorate([
     lib_common_1.injectableSingleton(exports.SessionRepositoryTYPE),
