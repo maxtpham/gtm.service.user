@@ -42,6 +42,8 @@ const models: TsoaRoute.Models = {
             "scope": { "dataType": "string" },
             "expiresIn": { "dataType": "double" },
             "provider": { "ref": "ProviderSession" },
+            "created": { "dataType": "double" },
+            "updated": { "dataType": "double" },
         },
     },
     "SessionViewWithPagination": {

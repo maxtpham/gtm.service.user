@@ -16,8 +16,11 @@ export interface SessionView {
 
     expiresIn?: number;
 
-    /* OAuth2 provider: google, facebook */
     provider?: ProviderSession;
+
+    created?: number;
+
+    updated?: number;
 }
 
 export interface SessionViewWithPagination {
@@ -39,6 +42,8 @@ export module SessionModule {
             scope: item.scope,
             expiresIn: item.expiresIn,
             provider: item.provider,
+            created: item.created,
+            updated: item.updated
         }
         return sessionDetail;
     }

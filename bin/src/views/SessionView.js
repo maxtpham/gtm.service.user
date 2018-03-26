@@ -12,6 +12,8 @@ var SessionModule;
             scope: item.scope,
             expiresIn: item.expiresIn,
             provider: item.provider,
+            created: item.created,
+            updated: item.updated
         };
         return sessionDetail;
     }

@@ -103,6 +103,14 @@
 				},
 				"provider": {
 					"$ref": "#/definitions/ProviderSession"
+				},
+				"created": {
+					"type": "number",
+					"format": "double"
+				},
+				"updated": {
+					"type": "number",
+					"format": "double"
 				}
 			},
 			"required": [

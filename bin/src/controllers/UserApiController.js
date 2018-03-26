@@ -295,6 +295,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 user.roles = userDetails.role || user.roles;
                 user.email = userDetails.email || user.email;
                 user.address = userDetails.address || user.address;
+                user.gender = userDetails.address || user.gender;
                 // if (userDetails.avatar && userDetails.avatar != user.avatar) {
                 //     let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
                 //     let newAvatar: AttachmentView = {
