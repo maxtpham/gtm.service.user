@@ -76,7 +76,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
     /** Update Role */
     updateEntity(id, roleView) {
         return __awaiter(this, void 0, void 0, function* () {
-            let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { code: roleView.code, scope: roleView.scope });
+            let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { code: roleView.code, scope: roleView.scope, updated: Date.now() });
             if (role) {
                 return Promise.resolve(this.RoleRepository.buildClientRole(yield this.RoleRepository.findOneById(role._id)));
             }
@@ -121,7 +121,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RoleApiController.prototype, "createEntity", null);
 __decorate([
-    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Put('{id}'),
+    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Post('{id}'),
     __param(1, tsoa_1.Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),

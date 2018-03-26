@@ -105,7 +105,7 @@ export class AccountApiController extends ApiController {
     }
 
     let accountToSave = <AccountEntity> accountView;
-    accountToSave.updated = new Date().getTime();
+    accountToSave.updated = Date.now();
     accountToSave.balance = account.balance + accountView.balance;
     let accountSave = await this.AccountRepository.findOneAndUpdate({ _id: account._id}, accountToSave);
 

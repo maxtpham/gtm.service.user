@@ -102,7 +102,7 @@ let AccountApiController = AccountApiController_1 = class AccountApiController e
                     return Promise.reject("Account not exist");
                 }
                 let accountToSave = accountView;
-                accountToSave.updated = new Date().getTime();
+                accountToSave.updated = Date.now();
                 accountToSave.balance = account.balance + accountView.balance;
                 let accountSave = yield this.AccountRepository.findOneAndUpdate({ _id: account._id }, accountToSave);
                 if (accountSave) {

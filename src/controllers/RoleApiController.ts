@@ -16,11 +16,11 @@ export class RoleApiController extends ApiController {
 
     /** Get Roles */
     @Tags('Role') @Security('jwt') @Get()
-    public async getEntities( @Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
+    public async getEntities(@Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
         : Promise<RoleViewWithPagination> {
         let queryToEntities = !!query ? {
             $and: [
-                { $or: [{ code: { $regex: query, $options: 'i' } }, { scope: { $regex: query, $options: 'i' }}] },
+                { $or: [{ code: { $regex: query, $options: 'i' } }, { scope: { $regex: query, $options: 'i' } }] },
                 {
                     deleted: null
                 }
@@ -51,7 +51,7 @@ export class RoleApiController extends ApiController {
 
     /** Create New Role */
     @Tags('Role') @Security('jwt') @Post()
-    public async createEntity( @Body() roleView?: RoleView): Promise<RoleDetailView> {
+    public async createEntity(@Body() roleView?: RoleView): Promise<RoleDetailView> {
         let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope });
         if (role) {
             return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
@@ -62,9 +62,9 @@ export class RoleApiController extends ApiController {
     }
 
     /** Update Role */
-    @Tags('Role') @Security('jwt') @Put('{id}')
+    @Tags('Role') @Security('jwt') @Post('{id}')
     public async updateEntity(id: string, @Body() roleView?: RoleView): Promise<RoleDetailView> {
-        let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ code: roleView.code, scope: roleView.scope });
+        let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ code: roleView.code, scope: roleView.scope, updated: Date.now() });
         if (role) {
             return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
         }
