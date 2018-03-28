@@ -140,7 +140,15 @@ const models = {
             "id": { "dataType": "string", "required": true },
             "name": { "dataType": "string", "required": true },
             "phone": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
             "houseHolder": { "dataType": "any" },
+        },
+    },
+    "MUserFind": {
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
         },
     },
     "UserRole": {
@@ -428,7 +436,7 @@ function RegisterRoutes(app) {
         const promise = controller.createEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.put('/api/user/v1/role/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.post('/api/user/v1/role/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
             roleView: { "in": "body", "name": "roleView", "ref": "RoleView" },
@@ -613,9 +621,9 @@ function RegisterRoutes(app) {
         const promise = controller.getById.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/user/v1/user/get-by-user-name', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.post('/api/user/v1/user/find-user', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            userName: { "in": "query", "name": "userName", "required": true, "dataType": "string" },
+            mUserFind: { "in": "body", "name": "mUserFind", "required": true, "ref": "MUserFind" },
         };
         let validatedArgs = [];
         try {
@@ -625,7 +633,7 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.getUserByName.apply(controller, validatedArgs);
+        const promise = controller.findUser.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.get('/api/user/v1/user/profile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {

@@ -139,7 +139,15 @@ const models: TsoaRoute.Models = {
             "id": { "dataType": "string", "required": true },
             "name": { "dataType": "string", "required": true },
             "phone": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
             "houseHolder": { "dataType": "any" },
+        },
+    },
+    "MUserFind": {
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
         },
     },
     "UserRole": {
@@ -464,7 +472,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.createEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.put('/api/user/v1/role/:id',
+    app.post('/api/user/v1/role/:id',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -710,11 +718,11 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getById.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/user/v1/user/get-by-user-name',
+    app.post('/api/user/v1/user/find-user',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                userName: { "in": "query", "name": "userName", "required": true, "dataType": "string" },
+                mUserFind: { "in": "body", "name": "mUserFind", "required": true, "ref": "MUserFind" },
             };
 
             let validatedArgs: any[] = [];
@@ -727,7 +735,7 @@ export function RegisterRoutes(app: any) {
             const controller = iocContainer.get<UserApiController>(UserApiController);
 
 
-            const promise = controller.getUserByName.apply(controller, validatedArgs);
+            const promise = controller.findUser.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/profile',
