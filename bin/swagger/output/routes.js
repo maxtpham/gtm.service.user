@@ -786,6 +786,22 @@ function RegisterRoutes(app) {
         const promise = controller.updateUserDetail.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
+    app.post('/api/user/v1/user/get-user-account/:userId', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.getUserAccount.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
     app.post('/api/user/v1/user/update-user-account/:userId', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             req: { "in": "request", "name": "req", "required": true, "dataType": "object" },

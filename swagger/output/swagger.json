@@ -2055,6 +2055,39 @@
 				]
 			}
 		},
+		"/api/user/v1/user/get-user-account/{userId}": {
+			"post": {
+				"operationId": "GetUserAccount",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/UserAccount"
+						}
+					}
+				},
+				"description": "Get user account ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/api/user/v1/user/update-user-account/{userId}": {
 			"post": {
 				"operationId": "UpdateUserAccount",
@@ -2069,7 +2102,7 @@
 						}
 					}
 				},
-				"description": "Update user details ",
+				"description": "Update user account ",
 				"tags": [
 					"User"
 				],

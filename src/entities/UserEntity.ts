@@ -128,7 +128,7 @@ export module User {
         return profilesList;
     }
 
-    export function toDetailViews(item: UserEntity, account: AccountView): UserViewDetails {
+    export function toDetailViews(item: UserEntity): UserViewDetails {
         let userDetails: UserViewDetails = {
             id: item._id,
             name: item.name,
@@ -144,7 +144,7 @@ export module User {
             language: item.language,
             gender: item.gender,
             roles: item.roles,
-            account: <UserAccount>account,
+            account: item.account,
             birthday: item.birthday,
             timezone: item.timezone,
             avatar: item.avatar,

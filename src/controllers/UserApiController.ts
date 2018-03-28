@@ -25,7 +25,6 @@ var Mongoose = require('mongoose'),
 export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
     @inject(RoleRepositoryTYPE) private RoleRepository: RoleRepository;
-    @inject(AccountRepositoryTYPE) private AccountRepository: AccountRepository;
 
     /** Get all user lite */
     @Tags('User') @Security('jwt') @Get('/get-user-lite')
@@ -171,8 +170,7 @@ export class UserApiController extends ApiController {
             let userTotalItems = await this.UserRepository.find(queryToEntities);
             let userDetailViews: UserViewDetails[] = [];
             await Promise.all(users.map(async user => {
-                let userAccount = await this.AccountRepository.findOne({ userId: user._id });
-                userDetailViews.push(User.toDetailViews(user, userAccount || null));
+                userDetailViews.push(User.toDetailViews(user));
             }))
             let userViews = <UserViewWithPagination>{ users: userDetailViews, totalItems: userTotalItems.length };
             return Promise.resolve(userViews);
@@ -185,9 +183,7 @@ export class UserApiController extends ApiController {
     public async getDetailViewById(id: string): Promise<UserViewDetails> {
         let userEntity = await this.UserRepository.findOneById(id);
         if (userEntity) {
-            let userAccount = await this.AccountRepository.findOne({ userId: userEntity._id });
-
-            return Promise.resolve(User.toDetailViews(userEntity, userAccount || null));
+            return Promise.resolve(User.toDetailViews(userEntity));
         }
         return Promise.reject(`Not found.`);
     }
@@ -327,7 +323,25 @@ export class UserApiController extends ApiController {
         }
     }
 
-    /** Update user details */
+    /** Get user account */
+    @Tags('User') @Security('jwt') @Post('/get-user-account/{userId}')
+    public async getUserAccount(
+        @Request() req: express.Request,
+        userId: string,
+    ): Promise<UserAccount> {
+        try {
+            let userAccount = await this.UserRepository.findAndGetOneById(userId, 'account');
+            if (!userAccount.account) {
+                return Promise.reject('User account not found');
+            }
+            return Promise.resolve(User.toUserAccountView(userAccount));
+        } catch (e) {
+            console.log(e);
+            Promise.reject(`User does not exist`);
+        }
+    }
+
+    /** Update user account */
     @Tags('User') @Security('jwt') @Post('/update-user-account/{userId}')
     public async updateUserAccount(
         @Request() req: express.Request,
@@ -341,10 +355,10 @@ export class UserApiController extends ApiController {
                 return Promise.reject('User account not found');
             }
 
-            if (userAccount.account.bonus != userAccountView.bonus) {
+            if (userAccountView.bonus && userAccount.account.bonus != userAccountView.bonus) {
                 userAccount.account.bonus = userAccountView.bonus;
             }
-         
+
             if (type === 'Deposit') {
                 userAccount.account.balance = userAccount.account.balance + userAccountView.balance;
             }

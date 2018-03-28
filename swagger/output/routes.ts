@@ -933,6 +933,27 @@ export function RegisterRoutes(app: any) {
             const promise = controller.updateUserDetail.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.post('/api/user/v1/user/get-user-account/:userId',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+                userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.getUserAccount.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
     app.post('/api/user/v1/user/update-user-account/:userId',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {

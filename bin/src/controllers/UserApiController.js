@@ -43,7 +43,6 @@ const RoleView_1 = require("../views/RoleView");
 const RoleRepository_1 = require("../repositories/RoleRepository");
 const coreClient = require("@scg/lib.client.core");
 const bson_1 = require("bson");
-const AccountRepository_1 = require("../repositories/AccountRepository");
 var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
     /** Get all user lite */
@@ -170,8 +169,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 let userTotalItems = yield this.UserRepository.find(queryToEntities);
                 let userDetailViews = [];
                 yield Promise.all(users.map((user) => __awaiter(this, void 0, void 0, function* () {
-                    let userAccount = yield this.AccountRepository.findOne({ userId: user._id });
-                    userDetailViews.push(UserEntity_1.User.toDetailViews(user, userAccount || null));
+                    userDetailViews.push(UserEntity_1.User.toDetailViews(user));
                 })));
                 let userViews = { users: userDetailViews, totalItems: userTotalItems.length };
                 return Promise.resolve(userViews);
@@ -184,8 +182,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = yield this.UserRepository.findOneById(id);
             if (userEntity) {
-                let userAccount = yield this.AccountRepository.findOne({ userId: userEntity._id });
-                return Promise.resolve(UserEntity_1.User.toDetailViews(userEntity, userAccount || null));
+                return Promise.resolve(UserEntity_1.User.toDetailViews(userEntity));
             }
             return Promise.reject(`Not found.`);
         });
@@ -308,7 +305,23 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
         });
     }
-    /** Update user details */
+    /** Get user account */
+    getUserAccount(req, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let userAccount = yield this.UserRepository.findAndGetOneById(userId, 'account');
+                if (!userAccount.account) {
+                    return Promise.reject('User account not found');
+                }
+                return Promise.resolve(UserEntity_1.User.toUserAccountView(userAccount));
+            }
+            catch (e) {
+                console.log(e);
+                Promise.reject(`User does not exist`);
+            }
+        });
+    }
+    /** Update user account */
     updateUserAccount(req, userId, userAccountView, type) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -316,7 +329,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!userAccount.account) {
                     return Promise.reject('User account not found');
                 }
-                if (userAccount.account.bonus != userAccountView.bonus) {
+                if (userAccountView.bonus && userAccount.account.bonus != userAccountView.bonus) {
                     userAccount.account.bonus = userAccountView.bonus;
                 }
                 if (type === 'Deposit') {
@@ -349,10 +362,6 @@ __decorate([
     inversify_1.inject(RoleRepository_1.RoleRepositoryTYPE),
     __metadata("design:type", Object)
 ], UserApiController.prototype, "RoleRepository", void 0);
-__decorate([
-    inversify_1.inject(AccountRepository_1.AccountRepositoryTYPE),
-    __metadata("design:type", Object)
-], UserApiController.prototype, "AccountRepository", void 0);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-lite'),
     __metadata("design:type", Function),
@@ -438,6 +447,13 @@ __decorate([
     __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "updateUserDetail", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/get-user-account/{userId}'),
+    __param(0, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getUserAccount", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-account/{userId}'),
     __param(0, tsoa_1.Request()),

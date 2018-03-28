@@ -48,7 +48,7 @@ var User;
         return profilesList;
     }
     User.toProfileViews = toProfileViews;
-    function toDetailViews(item, account) {
+    function toDetailViews(item) {
         let userDetails = {
             id: item._id,
             name: item.name,
@@ -64,7 +64,7 @@ var User;
             language: item.language,
             gender: item.gender,
             roles: item.roles,
-            account: account,
+            account: item.account,
             birthday: item.birthday,
             timezone: item.timezone,
             avatar: item.avatar,
