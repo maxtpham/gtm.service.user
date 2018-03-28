@@ -16,7 +16,7 @@ let logoutRegistered = false;
 function registerOAuth2Internal(app, provider, config, createJwtToken, publicLoginURL, publicCallbackURL, publicFailureRedirect, secureLogoutURL, loggedinHandler, loginFailureHandler, loggedoutHandler) {
     // Register Passport.js OAuth2 Stratergy
     const options = config.auth[provider].options;
-    if (!options.callbackURL)
+    if (!options.callbackURL) // Build callback Url
         options.callbackURL = config.rootUrl + publicCallbackURL;
     const npm = config.auth[provider].npm;
     const OAuth2Strategy = require(npm.library)[npm.class]; // Load the Google/Facebook-Stratergy class (from npm package)

@@ -161,11 +161,12 @@ export class AccountApiController extends ApiController {
   /** add account */
   @Tags('Account') @Security('jwt') @Post('create')
   public async addAccount(
+    @Query() userId: string,
     @Body() account: AccountView
   ): Promise<AccountEntity> {
     try {
 
-      let accountTemp = await this.AccountRepository.find({ userId: account.userId });
+      let accountTemp = await this.AccountRepository.find({ userId: userId });
       if (accountTemp.length > 0) {
         return Promise.reject("Account is exist");
       }

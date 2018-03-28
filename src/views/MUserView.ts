@@ -33,6 +33,11 @@ export interface UserViewLite {
   status: number;
 }
 
+export interface UserAccountView {
+  balance: number;
+  bonus?: number;
+}; 
+
 export interface ScProfileView {
   balance: number;
   bonus: number;

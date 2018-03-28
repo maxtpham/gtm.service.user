@@ -52,7 +52,7 @@ class JwtGoogleAuthLibraryStrategyVerify {
             // Then create the session with Provider accessToken then generate new jwt as accessToken for client
             // Query for the user info & generate new token for the requested scope
             const profile = yield SwaggerUiAuth_1.SwaggerUiAuthProvider.queryGoogleProfile(request.body.accessToken);
-            if (jwt_payload.picture) {
+            if (jwt_payload.picture) { // better photo
                 profile.photos = [{ value: jwt_payload.picture }];
             }
             this.verifyJwtToken(request.body.accessToken, undefined, profile, done);
