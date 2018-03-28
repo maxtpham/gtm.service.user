@@ -326,7 +326,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
             catch (e) {
                 console.log(e);
-                Promise.reject(`User does not exist`);
+                Promise.reject(e);
             }
         });
     }
@@ -358,7 +358,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
             catch (e) {
                 console.log(e);
-                Promise.reject(`User does not exist`);
+                Promise.reject(e);
             }
         });
     }
@@ -457,7 +457,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "updateUserDetail", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/get-user-account/{userId}'),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-account/{userId}'),
     __param(0, tsoa_1.Request()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String]),

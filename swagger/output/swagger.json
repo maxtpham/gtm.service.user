@@ -2081,7 +2081,7 @@
 			}
 		},
 		"/api/user/v1/user/get-user-account/{userId}": {
-			"post": {
+			"get": {
 				"operationId": "GetUserAccount",
 				"produces": [
 					"application/json"

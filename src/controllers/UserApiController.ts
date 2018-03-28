@@ -331,7 +331,7 @@ export class UserApiController extends ApiController {
     }
 
     /** Get user account */
-    @Tags('User') @Security('jwt') @Post('/get-user-account/{userId}')
+    @Tags('User') @Security('jwt') @Get('/get-user-account/{userId}')
     public async getUserAccount(
         @Request() req: express.Request,
         userId: string,
@@ -344,7 +344,7 @@ export class UserApiController extends ApiController {
             return Promise.resolve(User.toUserAccountView(userAccount));
         } catch (e) {
             console.log(e);
-            Promise.reject(`User does not exist`);
+            Promise.reject(e);
         }
     }
 
@@ -384,7 +384,7 @@ export class UserApiController extends ApiController {
             }
         } catch (e) {
             console.log(e);
-            Promise.reject(`User does not exist`);
+            Promise.reject(e);
         }
     }
 }

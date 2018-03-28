@@ -941,7 +941,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.updateUserDetail.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.post('/api/user/v1/user/get-user-account/:userId',
+    app.get('/api/user/v1/user/get-user-account/:userId',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
