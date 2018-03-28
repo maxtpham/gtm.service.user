@@ -408,6 +408,9 @@
 				"phone": {
 					"type": "string"
 				},
+				"email": {
+					"type": "string"
+				},
 				"houseHolder": {
 					"type": "object"
 				}
@@ -415,7 +418,27 @@
 			"required": [
 				"id",
 				"name",
-				"phone"
+				"phone",
+				"email"
+			],
+			"type": "object"
+		},
+		"MUserFind": {
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"name",
+				"phone",
+				"email"
 			],
 			"type": "object"
 		},
@@ -1697,9 +1720,9 @@
 				]
 			}
 		},
-		"/api/user/v1/user/get-by-user-name": {
-			"get": {
-				"operationId": "GetUserByName",
+		"/api/user/v1/user/find-user": {
+			"post": {
+				"operationId": "FindUser",
 				"produces": [
 					"application/json"
 				],
@@ -1724,10 +1747,12 @@
 				],
 				"parameters": [
 					{
-						"in": "query",
-						"name": "userName",
+						"in": "body",
+						"name": "mUserFind",
 						"required": true,
-						"type": "string"
+						"schema": {
+							"$ref": "#/definitions/MUserFind"
+						}
 					}
 				]
 			}

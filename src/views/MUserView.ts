@@ -7,8 +7,16 @@ export interface MUserView {
   id: string;
   name: string;
   phone: string;
+  email: string;
   houseHolder?: any;
 }
+
+export interface MUserFind {
+  name: string;
+  phone: string;
+  email: string;
+}
+
 
 export interface UserViewFull {
   code: string;

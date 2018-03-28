@@ -116,9 +116,13 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
         }
         return queryToEntities;
     }
-    getByName(name) {
+    findUser(mUserFind) {
         return __awaiter(this, void 0, void 0, function* () {
-            let users = yield this.find({ name: RegExp(name) });
+            let users = yield this.find({ $or: [
+                    { name: RegExp(mUserFind.name) },
+                    { phone: RegExp(mUserFind.phone) },
+                    { email: RegExp(mUserFind.email) },
+                ] });
             return Promise.resolve(users);
         });
     }
@@ -136,7 +140,8 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             mUsers.push({
                 id: item._id,
                 name: item.name,
-                phone: item.phone
+                phone: item.phone,
+                email: item.email
             });
         });
         return mUsers;

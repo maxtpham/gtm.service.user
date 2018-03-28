@@ -7,7 +7,7 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
-import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView, UserStatus, UserAccountView } from '../views/MUserView';
+import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView, UserStatus, MUserFind, UserAccountView } from '../views/MUserView';
 import { UserEntity, User, ProfileView, UserRole, UserAccount } from '../entities/UserEntity';
 import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
@@ -46,11 +46,18 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Not found.`);
     }
 
-    @Tags('User') @Security('jwt') @Get('/get-by-user-name')
-    public async getUserByName(
-        @Query() userName: string,
+    @Tags('User') @Security('jwt') @Post('/find-user')
+    public async findUser(
+       @Body() mUserFind: MUserFind
     ): Promise<MUserView[]> {
-        let userEntity = await this.UserRepository.getByName(userName);
+        let userEntity = [];
+        if(mUserFind.name !== "") {
+            userEntity = await this.UserRepository.find({ name: RegExp(mUserFind.name)});
+        } else if(mUserFind.phone) {
+            userEntity = await this.UserRepository.find({ phone: RegExp(mUserFind.phone)});
+        } else if(mUserFind.email) {
+            userEntity = await this.UserRepository.find({ email: RegExp(mUserFind.email)});
+        }
         if (userEntity) {
             return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
         }

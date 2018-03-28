@@ -65,9 +65,18 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
-    getUserByName(userName) {
+    findUser(mUserFind) {
         return __awaiter(this, void 0, void 0, function* () {
-            let userEntity = yield this.UserRepository.getByName(userName);
+            let userEntity = [];
+            if (mUserFind.name !== "") {
+                userEntity = yield this.UserRepository.find({ name: RegExp(mUserFind.name) });
+            }
+            else if (mUserFind.phone) {
+                userEntity = yield this.UserRepository.find({ phone: RegExp(mUserFind.phone) });
+            }
+            else if (mUserFind.email) {
+                userEntity = yield this.UserRepository.find({ email: RegExp(mUserFind.email) });
+            }
             if (userEntity) {
                 return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
             }
@@ -375,12 +384,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getById", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-by-user-name'),
-    __param(0, tsoa_1.Query()),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/find-user'),
+    __param(0, tsoa_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], UserApiController.prototype, "getUserByName", null);
+], UserApiController.prototype, "findUser", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/profile'),
     __param(0, tsoa_1.Request()),

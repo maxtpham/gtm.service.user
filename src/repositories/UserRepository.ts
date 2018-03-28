@@ -8,7 +8,7 @@ import { MongoClient } from "@gtm/lib.service";
 import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
 import { UserEntity, UserSchema, UserRole, UserAccount } from '../entities/UserEntity';
-import { MUserView } from "../views/MUserView";
+import { MUserView, MUserFind } from "../views/MUserView";
 import { Utils } from "@gtm/lib.service.auth";
 import { OAuth2ProfileExt } from "../oauth2/types";
 
@@ -21,7 +21,7 @@ export interface UserRepository extends Repository<UserEntity> {
     getByProfile(profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<UserEntity>;
     buildClientUser: (user: UserEntity) => MUserView;
     buildClientUsers: (users: UserEntity[]) => MUserView[];
-    getByName(name: string): Promise<UserEntity[]>;
+    findUser(mUserFind: MUserFind): Promise<UserEntity[]>;
     getUserRole(id: string): Promise<UserRole[]>;
     buildQuery: (status?: string, userId?: string) => any;
 }
@@ -110,8 +110,12 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         return queryToEntities;
     }
 
-    public async getByName(name: string): Promise<UserEntity[]> {
-        let users = await (<UserRepository>this).find({ name: RegExp(name) });
+    public async findUser(mUserFind: MUserFind): Promise<UserEntity[]> {
+        let users = await (<UserRepository>this).find({ $or: [
+            { name: RegExp(mUserFind.name) },
+            { phone: RegExp(mUserFind.phone) },
+            { email: RegExp(mUserFind.email) },
+        ] });
         return Promise.resolve(users);
     }
 
@@ -131,7 +135,8 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             mUsers.push({
                 id: item._id,
                 name: item.name,
-                phone: item.phone
+                phone: item.phone,
+                email: item.email
             });
         });
         return mUsers;
