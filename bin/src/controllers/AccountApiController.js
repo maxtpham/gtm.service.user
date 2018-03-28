@@ -146,10 +146,10 @@ let AccountApiController = AccountApiController_1 = class AccountApiController e
         });
     }
     /** add account */
-    addAccount(account) {
+    addAccount(userId, account) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let accountTemp = yield this.AccountRepository.find({ userId: account.userId });
+                let accountTemp = yield this.AccountRepository.find({ userId: userId });
                 if (accountTemp.length > 0) {
                     return Promise.reject("Account is exist");
                 }
@@ -216,9 +216,10 @@ __decorate([
 ], AccountApiController.prototype, "removeBalance", null);
 __decorate([
     tsoa_2.Tags('Account'), tsoa_2.Security('jwt'), tsoa_1.Post('create'),
-    __param(0, tsoa_1.Body()),
+    __param(0, tsoa_1.Query()),
+    __param(1, tsoa_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], AccountApiController.prototype, "addAccount", null);
 AccountApiController = AccountApiController_1 = __decorate([

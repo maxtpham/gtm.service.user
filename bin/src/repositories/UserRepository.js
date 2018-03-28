@@ -83,6 +83,7 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
                     address: profileExt.address,
                     timezone: profileExt.timezone,
                     language: profileExt.language,
+                    account: { balance: 0, bonus: 0 }
                 });
                 console.log(`Created new ${profile.provider} user profile`, user);
             }

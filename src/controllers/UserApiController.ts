@@ -7,15 +7,15 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
-import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView, UserStatus } from '../views/MUserView';
-import { UserEntity, User, ProfileView, UserRole } from '../entities/UserEntity';
+import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView, UserStatus, UserAccountView } from '../views/MUserView';
+import { UserEntity, User, ProfileView, UserRole, UserAccount } from '../entities/UserEntity';
 import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
 import * as coreClient from '@scg/lib.client.core';
 import { Binary } from 'bson';
-import { MAvatarView } from '../views/MAvatarView';
 import { AccountRepositoryTYPE, AccountRepository } from '../repositories/AccountRepository';
+import { MAvatarView } from '../views/MAvatarView';
 
 var Mongoose = require('mongoose'),
     Schema = Mongoose.Schema;
@@ -315,15 +315,6 @@ export class UserApiController extends ApiController {
             user.email = userDetails.email || user.email;
             user.address = userDetails.address || user.address;
             user.gender = userDetails.address || user.gender;
-
-            // if (userDetails.avatar && userDetails.avatar != user.avatar) {
-            //     let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
-            //     let newAvatar: AttachmentView = {
-            //         media: userDetails.avatar.media,
-            //         data: new Binary(bf, Binary.SUBTYPE_BYTE_ARRAY)
-            //     };
-            //     user.avatar = newAvatar;
-            // }
             user.updated = Date.now();
             let userToUpdate = await this.UserRepository.findOneAndUpdate({ _id: userId }, user);
             if (user) {
@@ -332,8 +323,47 @@ export class UserApiController extends ApiController {
 
         } catch (e) {
             console.log(e);
-            Promise.reject(`User not exist`);
+            Promise.reject(`User does not exist`);
         }
+    }
 
+    /** Update user details */
+    @Tags('User') @Security('jwt') @Post('/update-user-account/{userId}')
+    public async updateUserAccount(
+        @Request() req: express.Request,
+        userId: string,
+        @Body() userAccountView: UserAccountView,
+        @Query() type?: string,
+    ): Promise<UserAccount> {
+        try {
+            let userAccount = await this.UserRepository.findAndGetOneById(userId, 'account');
+            if (!userAccount.account) {
+                return Promise.reject('User account not found');
+            }
+
+            if (userAccount.account.bonus != userAccountView.bonus) {
+                userAccount.account.bonus = userAccountView.bonus;
+            }
+         
+            if (type === 'Deposit') {
+                userAccount.account.balance = userAccount.account.balance + userAccountView.balance;
+            }
+
+            if (type === 'WithDraw') {
+                if (userAccountView.balance > userAccount.account.balance) {
+                    return Promise.reject(`Số dư ${userAccount.account.balance} không đủ để thực hiện giao dịch này`);
+                }
+                userAccount.account.balance = userAccount.account.balance - userAccountView.balance;
+            }
+
+            userAccount.updated = Date.now();
+            let userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userId }, userAccount);
+            if (userUpdated) {
+                return Promise.resolve(User.toUserAccountView(await this.UserRepository.findAndGetOneById(userId, 'account')));
+            }
+        } catch (e) {
+            console.log(e);
+            Promise.reject(`User does not exist`);
+        }
     }
 }

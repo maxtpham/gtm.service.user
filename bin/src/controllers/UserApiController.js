@@ -213,7 +213,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                         }
                     });
                 }
-                else {
+                else { // Create new role
                     user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                 }
                 userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
@@ -252,7 +252,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                             }
                         });
                     }
-                    else {
+                    else { // Create new role
                         user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                     }
                     user.isFirstLogin = true;
@@ -296,14 +296,6 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 user.email = userDetails.email || user.email;
                 user.address = userDetails.address || user.address;
                 user.gender = userDetails.address || user.gender;
-                // if (userDetails.avatar && userDetails.avatar != user.avatar) {
-                //     let bf = new Buffer(userDetails.avatar.data.toString(), "base64");
-                //     let newAvatar: AttachmentView = {
-                //         media: userDetails.avatar.media,
-                //         data: new Binary(bf, Binary.SUBTYPE_BYTE_ARRAY)
-                //     };
-                //     user.avatar = newAvatar;
-                // }
                 user.updated = Date.now();
                 let userToUpdate = yield this.UserRepository.findOneAndUpdate({ _id: userId }, user);
                 if (user) {
@@ -312,7 +304,39 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
             catch (e) {
                 console.log(e);
-                Promise.reject(`User not exist`);
+                Promise.reject(`User does not exist`);
+            }
+        });
+    }
+    /** Update user details */
+    updateUserAccount(req, userId, userAccountView, type) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let userAccount = yield this.UserRepository.findAndGetOneById(userId, 'account');
+                if (!userAccount.account) {
+                    return Promise.reject('User account not found');
+                }
+                if (userAccount.account.bonus != userAccountView.bonus) {
+                    userAccount.account.bonus = userAccountView.bonus;
+                }
+                if (type === 'Deposit') {
+                    userAccount.account.balance = userAccount.account.balance + userAccountView.balance;
+                }
+                if (type === 'WithDraw') {
+                    if (userAccountView.balance > userAccount.account.balance) {
+                        return Promise.reject(`Số dư ${userAccount.account.balance} không đủ để thực hiện giao dịch này`);
+                    }
+                    userAccount.account.balance = userAccount.account.balance - userAccountView.balance;
+                }
+                userAccount.updated = Date.now();
+                let userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userId }, userAccount);
+                if (userUpdated) {
+                    return Promise.resolve(UserEntity_1.User.toUserAccountView(yield this.UserRepository.findAndGetOneById(userId, 'account')));
+                }
+            }
+            catch (e) {
+                console.log(e);
+                Promise.reject(`User does not exist`);
             }
         });
     }
@@ -414,6 +438,15 @@ __decorate([
     __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "updateUserDetail", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-account/{userId}'),
+    __param(0, tsoa_1.Request()),
+    __param(2, tsoa_1.Body()),
+    __param(3, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object, String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "updateUserAccount", null);
 UserApiController = UserApiController_1 = __decorate([
     lib_common_1.injectableSingleton(UserApiController_1),
     tsoa_1.Route('api/user/v1/user')

@@ -148,6 +148,12 @@ const models: TsoaRoute.Models = {
             "code": { "dataType": "string", "required": true },
         },
     },
+    "UserAccount": {
+        "properties": {
+            "balance": { "dataType": "double", "required": true },
+            "bonus": { "dataType": "double" },
+        },
+    },
     "UserStatus": {
         "enums": ["0", "1", "2"],
     },
@@ -163,6 +169,7 @@ const models: TsoaRoute.Models = {
             "name": { "dataType": "string", "required": true },
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
+            "account": { "ref": "UserAccount" },
             "active": { "dataType": "boolean" },
             "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
@@ -205,6 +212,7 @@ const models: TsoaRoute.Models = {
             "name": { "dataType": "string", "required": true },
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
+            "account": { "ref": "UserAccount" },
             "active": { "dataType": "boolean" },
             "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
@@ -244,7 +252,6 @@ const models: TsoaRoute.Models = {
     },
     "AccountView": {
         "properties": {
-            "userId": { "dataType": "string", "required": true },
             "balance": { "dataType": "double", "required": true },
             "bonus": { "dataType": "double" },
         },
@@ -255,6 +262,7 @@ const models: TsoaRoute.Models = {
             "name": { "dataType": "string", "required": true },
             "provider": { "dataType": "string", "required": true },
             "roles": { "dataType": "array", "array": { "ref": "UserRole" } },
+            "account": { "ref": "AccountView" },
             "active": { "dataType": "boolean" },
             "status": { "ref": "UserStatus" },
             "birthday": { "dataType": "double" },
@@ -269,7 +277,6 @@ const models: TsoaRoute.Models = {
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
             "id": { "dataType": "string", "required": true },
-            "account": { "ref": "AccountView" },
             "created": { "dataType": "double", "required": true },
             "updated": { "dataType": "double", "required": true },
         },
@@ -299,6 +306,12 @@ const models: TsoaRoute.Models = {
             "status": { "ref": "UserStatus", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },
+        },
+    },
+    "UserAccountView": {
+        "properties": {
+            "balance": { "dataType": "double", "required": true },
+            "bonus": { "dataType": "double" },
         },
     },
     "AccountEntity": {
@@ -464,7 +477,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.createEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.put('/api/user/v1/role/:id',
+    app.post('/api/user/v1/role/:id',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -920,6 +933,29 @@ export function RegisterRoutes(app: any) {
             const promise = controller.updateUserDetail.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.post('/api/user/v1/user/update-user-account/:userId',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+                userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+                userAccountView: { "in": "body", "name": "userAccountView", "required": true, "ref": "UserAccountView" },
+                type: { "in": "query", "name": "type", "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.updateUserAccount.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
     app.get('/api/user/v1/account/get-all',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
@@ -1045,6 +1081,7 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
+                userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
                 account: { "in": "body", "name": "account", "required": true, "ref": "AccountView" },
             };
 
