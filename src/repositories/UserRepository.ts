@@ -21,6 +21,7 @@ export interface UserRepository extends Repository<UserEntity> {
     getByProfile(profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<UserEntity>;
     buildClientUser: (user: UserEntity) => MUserView;
     buildClientUsers: (users: UserEntity[]) => MUserView[];
+    getByName(name: string): Promise<UserEntity[]>;
     findUser(mUserFind: MUserFind): Promise<UserEntity[]>;
     getUserRole(id: string): Promise<UserRole[]>;
     buildQuery: (status?: string, userId?: string) => any;
@@ -108,6 +109,11 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         }
 
         return queryToEntities;
+    }
+
+    public async getByName(name: string): Promise<UserEntity[]> {
+        let users = await (<UserRepository>this).find({ name: RegExp(name) });
+        return Promise.resolve(users);
     }
 
     public async findUser(mUserFind: MUserFind): Promise<UserEntity[]> {

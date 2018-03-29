@@ -634,6 +634,21 @@ function RegisterRoutes(app) {
         const promise = controller.getById.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
+    app.get('/api/user/v1/user/get-by-user-name', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            userName: { "in": "query", "name": "userName", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.getUserByName.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
     app.post('/api/user/v1/user/find-user', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             mUserFind: { "in": "body", "name": "mUserFind", "required": true, "ref": "MUserFind" },
