@@ -794,7 +794,7 @@ function RegisterRoutes(app) {
         const promise = controller.updateUserDetail.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.post('/api/user/v1/user/get-user-account/:userId', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.get('/api/user/v1/user/get-user-account/:userId', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
