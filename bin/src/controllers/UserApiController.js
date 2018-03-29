@@ -65,6 +65,15 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
+    getUserByName(userName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userEntity = yield this.UserRepository.getByName(userName);
+            if (userEntity) {
+                return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
     findUser(mUserFind) {
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = [];
@@ -383,6 +392,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getById", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-by-user-name'),
+    __param(0, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getUserByName", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/find-user'),
     __param(0, tsoa_1.Body()),

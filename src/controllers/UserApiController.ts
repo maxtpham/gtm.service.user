@@ -46,6 +46,17 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Not found.`);
     }
 
+    @Tags('User') @Security('jwt') @Get('/get-by-user-name')
+    public async getUserByName(
+        @Query() userName: string,
+    ): Promise<MUserView[]> {
+        let userEntity = await this.UserRepository.getByName(userName);
+        if (userEntity) {
+            return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
+        }
+        return Promise.reject(`Not found.`);
+    }
+
     @Tags('User') @Security('jwt') @Post('/find-user')
     public async findUser(
        @Body() mUserFind: MUserFind

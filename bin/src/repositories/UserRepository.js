@@ -116,6 +116,12 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
         }
         return queryToEntities;
     }
+    getByName(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield this.find({ name: RegExp(name) });
+            return Promise.resolve(users);
+        });
+    }
     findUser(mUserFind) {
         return __awaiter(this, void 0, void 0, function* () {
             let users = yield this.find({ $or: [

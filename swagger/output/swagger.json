@@ -1720,6 +1720,41 @@
 				]
 			}
 		},
+		"/api/user/v1/user/get-by-user-name": {
+			"get": {
+				"operationId": "GetUserByName",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MUserView"
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userName",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/api/user/v1/user/find-user": {
 			"post": {
 				"operationId": "FindUser",
