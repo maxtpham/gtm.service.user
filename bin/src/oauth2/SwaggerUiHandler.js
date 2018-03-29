@@ -61,6 +61,7 @@ class SwaggerUiHandler {
     }
     processFileIndex(source) {
         return source
+            // Parameters
             .replace('layout: "StandaloneLayout"', `
             layout: "StandaloneLayout",
             url: "${this.defaultSwaggerConfigUrl}",
@@ -70,6 +71,7 @@ class SwaggerUiHandler {
     }
     processSwaggerUiBundle(source) {
         return source
+            // Supports for submmit cookies along with OAuth2 token request
             .replace('delete t.headers["Content-Type"]),', `delete t.headers["Content-Type"]),t.credentials='same-origin',`);
     }
 }

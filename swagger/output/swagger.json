@@ -408,6 +408,9 @@
 				"phone": {
 					"type": "string"
 				},
+				"email": {
+					"type": "string"
+				},
 				"houseHolder": {
 					"type": "object"
 				}
@@ -415,7 +418,27 @@
 			"required": [
 				"id",
 				"name",
-				"phone"
+				"phone",
+				"email"
+			],
+			"type": "object"
+		},
+		"MUserFind": {
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"name",
+				"phone",
+				"email"
 			],
 			"type": "object"
 		},
@@ -431,6 +454,22 @@
 			"required": [
 				"id",
 				"code"
+			],
+			"type": "object"
+		},
+		"UserAccount": {
+			"properties": {
+				"balance": {
+					"type": "number",
+					"format": "double"
+				},
+				"bonus": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"balance"
 			],
 			"type": "object"
 		},
@@ -481,6 +520,10 @@
 						"$ref": "#/definitions/UserRole"
 					},
 					"description": "Link to [role] table "
+				},
+				"account": {
+					"$ref": "#/definitions/UserAccount",
+					"description": "user account "
 				},
 				"active": {
 					"type": "boolean",
@@ -635,6 +678,10 @@
 					},
 					"description": "Link to [role] table "
 				},
+				"account": {
+					"$ref": "#/definitions/UserAccount",
+					"description": "user account "
+				},
 				"active": {
 					"type": "boolean",
 					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
@@ -762,9 +809,6 @@
 		},
 		"AccountView": {
 			"properties": {
-				"userId": {
-					"type": "string"
-				},
 				"balance": {
 					"type": "number",
 					"format": "double"
@@ -775,7 +819,6 @@
 				}
 			},
 			"required": [
-				"userId",
 				"balance"
 			],
 			"type": "object"
@@ -800,6 +843,9 @@
 						"$ref": "#/definitions/UserRole"
 					},
 					"description": "Link to [role] table "
+				},
+				"account": {
+					"$ref": "#/definitions/AccountView"
 				},
 				"active": {
 					"type": "boolean",
@@ -852,9 +898,6 @@
 				},
 				"id": {
 					"type": "string"
-				},
-				"account": {
-					"$ref": "#/definitions/AccountView"
 				},
 				"created": {
 					"type": "number",
@@ -954,6 +997,22 @@
 				"gender",
 				"status",
 				"role"
+			],
+			"type": "object"
+		},
+		"UserAccountView": {
+			"properties": {
+				"balance": {
+					"type": "number",
+					"format": "double"
+				},
+				"bonus": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"balance"
 			],
 			"type": "object"
 		},
@@ -1255,7 +1314,7 @@
 					}
 				]
 			},
-			"put": {
+			"post": {
 				"operationId": "UpdateEntity",
 				"produces": [
 					"application/json"
@@ -1696,6 +1755,43 @@
 				]
 			}
 		},
+		"/api/user/v1/user/find-user": {
+			"post": {
+				"operationId": "FindUser",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MUserView"
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "mUserFind",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MUserFind"
+						}
+					}
+				]
+			}
+		},
 		"/api/user/v1/user/profile": {
 			"get": {
 				"operationId": "GetProfileCurrent",
@@ -2019,6 +2115,86 @@
 				]
 			}
 		},
+		"/api/user/v1/user/get-user-account/{userId}": {
+			"get": {
+				"operationId": "GetUserAccount",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/UserAccount"
+						}
+					}
+				},
+				"description": "Get user account ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/update-user-account/{userId}": {
+			"post": {
+				"operationId": "UpdateUserAccount",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/UserAccount"
+						}
+					}
+				},
+				"description": "Update user account ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "userAccountView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/UserAccountView"
+						}
+					},
+					{
+						"in": "query",
+						"name": "type",
+						"required": false,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/api/user/v1/account/get-all": {
 			"get": {
 				"operationId": "GetAccounts",
@@ -2234,6 +2410,12 @@
 					}
 				],
 				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"in": "body",
 						"name": "account",

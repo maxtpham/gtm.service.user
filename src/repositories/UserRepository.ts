@@ -7,8 +7,8 @@ import { injectableSingleton } from "@gtm/lib.common";
 import { MongoClient } from "@gtm/lib.service";
 import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
-import { UserEntity, UserSchema, UserRole } from '../entities/UserEntity';
-import { MUserView } from "../views/MUserView";
+import { UserEntity, UserSchema, UserRole, UserAccount } from '../entities/UserEntity';
+import { MUserView, MUserFind } from "../views/MUserView";
 import { Utils } from "@gtm/lib.service.auth";
 import { OAuth2ProfileExt } from "../oauth2/types";
 
@@ -22,6 +22,7 @@ export interface UserRepository extends Repository<UserEntity> {
     buildClientUser: (user: UserEntity) => MUserView;
     buildClientUsers: (users: UserEntity[]) => MUserView[];
     getByName(name: string): Promise<UserEntity[]>;
+    findUser(mUserFind: MUserFind): Promise<UserEntity[]>;
     getUserRole(id: string): Promise<UserRole[]>;
     buildQuery: (status?: string, userId?: string) => any;
 }
@@ -73,6 +74,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
                 address: profileExt.address,
                 timezone: profileExt.timezone,
                 language: profileExt.language,
+                account: <UserAccount>{ balance: 0, bonus: 0 }
             });
             console.log(`Created new ${profile.provider} user profile`, user);
         }
@@ -114,6 +116,15 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
         return Promise.resolve(users);
     }
 
+    public async findUser(mUserFind: MUserFind): Promise<UserEntity[]> {
+        let users = await (<UserRepository>this).find({ $or: [
+            { name: RegExp(mUserFind.name) },
+            { phone: RegExp(mUserFind.phone) },
+            { email: RegExp(mUserFind.email) },
+        ] });
+        return Promise.resolve(users);
+    }
+
     public buildClientUser(user: UserEntity): MUserView {
 
         return <MUserView>{
@@ -130,7 +141,8 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             mUsers.push({
                 id: item._id,
                 name: item.name,
-                phone: item.phone
+                phone: item.phone,
+                email: item.email
             });
         });
         return mUsers;

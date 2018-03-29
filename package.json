@@ -39,13 +39,13 @@
     "@types/passport-facebook-token": "^0.4.33",
     "nodemon": "^1.17.2",
     "ts-node": "^5.0.1",
-    "typescript": "^2.7.2"
+    "typescript": "^2.8.1"
   },
   "dependencies": {
     "@gtm/lib.common": "^1.0.10",
-    "@gtm/lib.service": "^1.0.13",
+    "@gtm/lib.service": "^1.0.18",
     "@gtm/lib.service.auth": "^1.0.27",
-    "@scg/lib.client.core": "^1.0.90",
+    "@scg/lib.client.core": "^1.0.95",
     "config": "^1.30.0",
     "cross-env": "^5.1.4",
     "deep-equal": "^1.0.1",
@@ -54,7 +54,7 @@
     "inversify": "^4.11.1",
     "inversify-express-utils": "^5.2.1",
     "jsonwebtoken": "^8.2.0",
-    "mongoose": "^5.0.11",
+    "mongoose": "^5.0.12",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
     "passport-jwt-google-auth-library": "^0.1.0",

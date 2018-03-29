@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
 import { DbEntity, DbSchema, LocationView, AttachmentView, LocationSchema, AttachmentSchema } from "@gtm/lib.service"
-import { UserViewDetails, UserStatus } from "../views/MUserView";
+import { UserViewDetails, UserStatus, UserAccountView } from "../views/MUserView";
 import { AccountView } from "../views/AccountView";
 
 export interface ProfileView {
@@ -15,6 +15,9 @@ export interface ProfileView {
 
     /** Link to [role] table */
     roles?: UserRole[];
+
+    /** user account */
+    account?: UserAccount;
 
     /** [true] - active user
      * [false] - inactive user
@@ -60,6 +63,11 @@ export interface UserRole {
     code: string;
 }
 
+export interface UserAccount {
+    balance: number;
+    bonus?: number;
+}
+
 export interface UserEntity extends DbEntity, UserView {
 }
 
@@ -76,6 +84,7 @@ export const UserSchema = {
     provider: { type: mongoose.Schema.Types.String, required: true },
     profiles: { type: mongoose.Schema.Types.Mixed, required: true },
     roles: { type: [UserRoleSchema], required: false },
+    account: { type: mongoose.Schema.Types.Mixed, required: false },
     active: { type: mongoose.Schema.Types.Boolean, required: false },
     status: { type: mongoose.Schema.Types.Number, required: false },
     birthday: { type: mongoose.Schema.Types.Number, required: false },
@@ -119,7 +128,7 @@ export module User {
         return profilesList;
     }
 
-    export function toDetailViews(item: UserEntity, account: AccountView): UserViewDetails {
+    export function toDetailViews(item: UserEntity): UserViewDetails {
         let userDetails: UserViewDetails = {
             id: item._id,
             name: item.name,
@@ -135,7 +144,7 @@ export module User {
             language: item.language,
             gender: item.gender,
             roles: item.roles,
-            account: account,
+            account: item.account,
             birthday: item.birthday,
             timezone: item.timezone,
             avatar: item.avatar,
@@ -143,5 +152,12 @@ export module User {
             updated: item.updated,
         };
         return userDetails;
+    }
+
+    export function toUserAccountView(entity: UserEntity): UserAccountView {
+        return <UserAccountView>{
+            balance: entity.account.balance,
+            bonus: entity.account.bonus
+        }
     }
 }
