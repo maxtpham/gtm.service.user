@@ -40,7 +40,7 @@ let SessionApiController = SessionApiController_1 = class SessionApiController e
     getEntities(userId, pageNumber, itemCount, sortName, sortType) {
         return __awaiter(this, void 0, void 0, function* () {
             let queryToEntities = this.SessionRepository.buildQuery(userId);
-            let sort = { name: sortName, type: sortType || 1 };
+            let sort = { name: sortName, type: sortType || -1 };
             let sessions = yield this.SessionRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
             if (sessions) {
                 let sessionTotalItems = yield this.SessionRepository.find(queryToEntities);

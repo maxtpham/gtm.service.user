@@ -30,7 +30,7 @@ export class SessionApiController extends ApiController {
     )
         : Promise<SessionViewWithPagination> {
         let queryToEntities = this.SessionRepository.buildQuery(userId);
-        let sort: Sort = { name: sortName, type: <SortType>sortType || 1 };
+        let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
         let sessions = await this.SessionRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
         if (sessions) {
             let sessionTotalItems = await this.SessionRepository.find(queryToEntities);

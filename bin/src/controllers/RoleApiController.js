@@ -38,7 +38,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
                     }
                 ]
             } : { deleted: null };
-            let sort = { name: sortName, type: sortType || 1 };
+            let sort = { name: sortName, type: sortType || -1 };
             let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
             if (roles) {
                 let roleTotalItems = yield this.RoleRepository.find(queryToEntities);

@@ -186,7 +186,7 @@ export class UserApiController extends ApiController {
     )
         : Promise<UserViewWithPagination> {
         let queryToEntities = this.UserRepository.buildQuery(status, userId);
-        let sort: Sort = { name: sortName, type: <SortType>sortType || 1 };
+        let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
         let users = await this.UserRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
         if (users) {
             let userTotalItems = await this.UserRepository.find(queryToEntities);

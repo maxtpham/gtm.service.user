@@ -33,7 +33,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
     getEntities(from, to, pageNumber, itemCount, sortName, sortType) {
         return __awaiter(this, void 0, void 0, function* () {
             let queryToEntities = this.MessageRepository.buildQuery(from, to);
-            let sort = { name: sortName, type: sortType || 1 };
+            let sort = { name: sortName, type: sortType || -1 };
             let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
             if (messages) {
                 let messageTotalItems = yield this.MessageRepository.find(queryToEntities);

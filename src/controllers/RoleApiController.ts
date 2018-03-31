@@ -29,7 +29,7 @@ export class RoleApiController extends ApiController {
                 }
             ]
         } : { deleted: null };
-        let sort: Sort = { name: sortName, type: <SortType>sortType || 1 };
+        let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
         let roles = await this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
         if (roles) {
             let roleTotalItems = await this.RoleRepository.find(queryToEntities);

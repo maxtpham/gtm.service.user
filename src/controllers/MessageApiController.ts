@@ -25,7 +25,7 @@ export class MessageApiController extends ApiController {
     )
         : Promise<MessageViewWithPagination> {
         let queryToEntities = this.MessageRepository.buildQuery(from, to);
-        let sort: Sort = { name: sortName, type: <SortType>sortType || 1 };
+        let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
         let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
         if (messages) {
             let messageTotalItems = await this.MessageRepository.find(queryToEntities);

@@ -182,7 +182,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     getEntities(status, userId, pageNumber, itemCount, sortName, sortType) {
         return __awaiter(this, void 0, void 0, function* () {
             let queryToEntities = this.UserRepository.buildQuery(status, userId);
-            let sort = { name: sortName, type: sortType || 1 };
+            let sort = { name: sortName, type: sortType || -1 };
             let users = yield this.UserRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
             if (users) {
                 let userTotalItems = yield this.UserRepository.find(queryToEntities);
