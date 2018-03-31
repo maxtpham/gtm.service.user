@@ -408,6 +408,8 @@ export function RegisterRoutes(app: any) {
                 userId: { "in": "query", "name": "userId", "dataType": "string" },
                 pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
                 itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
             };
 
             let validatedArgs: any[] = [];
@@ -430,6 +432,8 @@ export function RegisterRoutes(app: any) {
                 query: { "in": "query", "name": "query", "dataType": "string" },
                 pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
                 itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
             };
 
             let validatedArgs: any[] = [];
@@ -534,6 +538,8 @@ export function RegisterRoutes(app: any) {
                 to: { "in": "query", "name": "to", "dataType": "string" },
                 pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
                 itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
             };
 
             let validatedArgs: any[] = [];
@@ -862,6 +868,8 @@ export function RegisterRoutes(app: any) {
                 userId: { "in": "query", "name": "userId", "dataType": "string" },
                 pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
                 itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
             };
 
             let validatedArgs: any[] = [];

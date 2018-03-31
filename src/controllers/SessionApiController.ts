@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { injectableSingleton } from "@gtm/lib.common";
 import { Get, Post, Route, Body, Query, Header, Path, SuccessResponse, Controller, Request, Response } from 'tsoa';
 import * as express from 'express';
-import { ApiController } from "@gtm/lib.service";
+import { ApiController, Sort, SortType } from "@gtm/lib.service";
 import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
@@ -24,10 +24,14 @@ export class SessionApiController extends ApiController {
 
     /** Get sessions with pagination */
     @Tags('Session') @Security('jwt') @Get('/entities')
-    public async getEntities(@Query() userId?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
+    public async getEntities(@Query() userId?: string,
+        @Query() pageNumber?: number, @Query() itemCount?: number,
+        @Query() sortName?: string, @Query() sortType?: number,
+    )
         : Promise<SessionViewWithPagination> {
         let queryToEntities = this.SessionRepository.buildQuery(userId);
-        let sessions = await this.SessionRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+        let sort: Sort = { name: sortName, type: <SortType>sortType || 1 };
+        let sessions = await this.SessionRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
         if (sessions) {
             let sessionTotalItems = await this.SessionRepository.find(queryToEntities);
             let sessionDetailViews: SessionView[] = [];

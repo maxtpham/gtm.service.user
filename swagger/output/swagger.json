@@ -1198,6 +1198,19 @@
 						"required": false,
 						"format": "double",
 						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "sortName",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "sortType",
+						"required": false,
+						"format": "double",
+						"type": "number"
 					}
 				]
 			}
@@ -1242,6 +1255,19 @@
 					{
 						"in": "query",
 						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "sortName",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "sortType",
 						"required": false,
 						"format": "double",
 						"type": "number"
@@ -1431,6 +1457,19 @@
 					{
 						"in": "query",
 						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "sortName",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "sortType",
 						"required": false,
 						"format": "double",
 						"type": "number"
@@ -1965,6 +2004,19 @@
 					{
 						"in": "query",
 						"name": "itemCount",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "sortName",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "sortType",
 						"required": false,
 						"format": "double",
 						"type": "number"

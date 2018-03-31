@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { injectableSingleton } from "@gtm/lib.common";
 import { Get, Post, Route, Body, Query, Header, Path, SuccessResponse, Controller, Request, Response, Delete, Put, } from 'tsoa';
 import * as express from 'express';
-import { ApiController, AttachmentView } from "@gtm/lib.service";
+import { ApiController, AttachmentView, Sort, SortType } from "@gtm/lib.service";
 import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
@@ -59,15 +59,15 @@ export class UserApiController extends ApiController {
 
     @Tags('User') @Security('jwt') @Post('/find-user')
     public async findUser(
-       @Body() mUserFind: MUserFind
+        @Body() mUserFind: MUserFind
     ): Promise<MUserView[]> {
         let userEntity = [];
-        if(mUserFind.name !== "") {
-            userEntity = await this.UserRepository.find({ name: RegExp(mUserFind.name)});
-        } else if(mUserFind.phone) {
-            userEntity = await this.UserRepository.find({ phone: RegExp(mUserFind.phone)});
-        } else if(mUserFind.email) {
-            userEntity = await this.UserRepository.find({ email: RegExp(mUserFind.email)});
+        if (mUserFind.name !== "") {
+            userEntity = await this.UserRepository.find({ name: RegExp(mUserFind.name) });
+        } else if (mUserFind.phone) {
+            userEntity = await this.UserRepository.find({ phone: RegExp(mUserFind.phone) });
+        } else if (mUserFind.email) {
+            userEntity = await this.UserRepository.find({ email: RegExp(mUserFind.email) });
         }
         if (userEntity) {
             return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
@@ -180,10 +180,14 @@ export class UserApiController extends ApiController {
 
     /** Get users with pagination */
     @Tags('User') @Security('jwt') @Get('/entities')
-    public async getEntities(@Query() status?: string, @Query() userId?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
+    public async getEntities(@Query() status?: string, @Query() userId?: string,
+        @Query() pageNumber?: number, @Query() itemCount?: number,
+        @Query() sortName?: string, @Query() sortType?: number,
+    )
         : Promise<UserViewWithPagination> {
         let queryToEntities = this.UserRepository.buildQuery(status, userId);
-        let users = await this.UserRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+        let sort: Sort = { name: sortName, type: <SortType>sortType || 1 };
+        let users = await this.UserRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
         if (users) {
             let userTotalItems = await this.UserRepository.find(queryToEntities);
             let userDetailViews: UserViewDetails[] = [];

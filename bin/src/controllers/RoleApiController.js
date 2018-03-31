@@ -28,7 +28,7 @@ const tsoa_2 = require("tsoa");
 const RoleRepository_1 = require("../repositories/RoleRepository");
 let RoleApiController = RoleApiController_1 = class RoleApiController extends lib_service_1.ApiController {
     /** Get Roles */
-    getEntities(query, pageNumber, itemCount) {
+    getEntities(query, pageNumber, itemCount, sortName, sortType) {
         return __awaiter(this, void 0, void 0, function* () {
             let queryToEntities = !!query ? {
                 $and: [
@@ -38,7 +38,8 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
                     }
                 ]
             } : { deleted: null };
-            let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            let sort = { name: sortName, type: sortType || 1 };
+            let roles = yield this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
             if (roles) {
                 let roleTotalItems = yield this.RoleRepository.find(queryToEntities);
                 let roleDetailViews = [];
@@ -102,9 +103,11 @@ __decorate([
 ], RoleApiController.prototype, "RoleRepository", void 0);
 __decorate([
     tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Get(),
-    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __param(0, tsoa_1.Query()),
+    __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __param(3, tsoa_1.Query()), __param(4, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:paramtypes", [String, Number, Number, String, Number]),
     __metadata("design:returntype", Promise)
 ], RoleApiController.prototype, "getEntities", null);
 __decorate([

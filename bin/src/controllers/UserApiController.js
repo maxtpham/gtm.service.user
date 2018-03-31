@@ -179,10 +179,11 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Get users with pagination */
-    getEntities(status, userId, pageNumber, itemCount) {
+    getEntities(status, userId, pageNumber, itemCount, sortName, sortType) {
         return __awaiter(this, void 0, void 0, function* () {
             let queryToEntities = this.UserRepository.buildQuery(status, userId);
-            let users = yield this.UserRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            let sort = { name: sortName, type: sortType || 1 };
+            let users = yield this.UserRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
             if (users) {
                 let userTotalItems = yield this.UserRepository.find(queryToEntities);
                 let userDetailViews = [];
@@ -438,9 +439,11 @@ __decorate([
 ], UserApiController.prototype, "updateAvatar", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/entities'),
-    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()), __param(3, tsoa_1.Query()),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()),
+    __param(2, tsoa_1.Query()), __param(3, tsoa_1.Query()),
+    __param(4, tsoa_1.Query()), __param(5, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Number, Number]),
+    __metadata("design:paramtypes", [String, String, Number, Number, String, Number]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getEntities", null);
 __decorate([

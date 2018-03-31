@@ -37,10 +37,11 @@ let SessionApiController = SessionApiController_1 = class SessionApiController e
         });
     }
     /** Get sessions with pagination */
-    getEntities(userId, pageNumber, itemCount) {
+    getEntities(userId, pageNumber, itemCount, sortName, sortType) {
         return __awaiter(this, void 0, void 0, function* () {
             let queryToEntities = this.SessionRepository.buildQuery(userId);
-            let sessions = yield this.SessionRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+            let sort = { name: sortName, type: sortType || 1 };
+            let sessions = yield this.SessionRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
             if (sessions) {
                 let sessionTotalItems = yield this.SessionRepository.find(queryToEntities);
                 let sessionDetailViews = [];
@@ -72,9 +73,11 @@ __decorate([
 ], SessionApiController.prototype, "getCurrent", null);
 __decorate([
     tsoa_2.Tags('Session'), tsoa_2.Security('jwt'), tsoa_1.Get('/entities'),
-    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __param(0, tsoa_1.Query()),
+    __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __param(3, tsoa_1.Query()), __param(4, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:paramtypes", [String, Number, Number, String, Number]),
     __metadata("design:returntype", Promise)
 ], SessionApiController.prototype, "getEntities", null);
 SessionApiController = SessionApiController_1 = __decorate([

@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { injectableSingleton } from "@gtm/lib.common";
 import { Get, Post, Route, Body, Query, Header, Path, SuccessResponse, Controller, Request, Response, Delete, Put, } from 'tsoa';
 import * as express from 'express';
-import { ApiController } from "@gtm/lib.service";
+import { ApiController, Sort, SortType } from "@gtm/lib.service";
 import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { RoleRepository, RoleRepositoryTYPE } from '../repositories/RoleRepository';
@@ -16,7 +16,10 @@ export class RoleApiController extends ApiController {
 
     /** Get Roles */
     @Tags('Role') @Security('jwt') @Get()
-    public async getEntities(@Query() query?: string, @Query() pageNumber?: number, @Query() itemCount?: number)
+    public async getEntities(@Query() query?: string,
+        @Query() pageNumber?: number, @Query() itemCount?: number,
+        @Query() sortName?: string, @Query() sortType?: number,
+    )
         : Promise<RoleViewWithPagination> {
         let queryToEntities = !!query ? {
             $and: [
@@ -26,7 +29,8 @@ export class RoleApiController extends ApiController {
                 }
             ]
         } : { deleted: null };
-        let roles = await this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5);
+        let sort: Sort = { name: sortName, type: <SortType>sortType || 1 };
+        let roles = await this.RoleRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
         if (roles) {
             let roleTotalItems = await this.RoleRepository.find(queryToEntities);
             let roleDetailViews: RoleDetailView[] = [];
