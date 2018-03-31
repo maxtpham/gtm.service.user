@@ -310,7 +310,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 user.roles = userDetails.role || user.roles;
                 user.email = userDetails.email || user.email;
                 user.address = userDetails.address || user.address;
-                user.gender = userDetails.address || user.gender;
+                user.gender = userDetails.gender || user.gender;
                 user.updated = Date.now();
                 let userToUpdate = yield this.UserRepository.findOneAndUpdate({ _id: userId }, user);
                 if (user) {
