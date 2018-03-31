@@ -37,15 +37,15 @@
     "@types/mongoose": "^5.0.7",
     "@types/passport": "^0.4.3",
     "@types/passport-facebook-token": "^0.4.33",
-    "nodemon": "^1.17.2",
+    "nodemon": "^1.17.3",
     "ts-node": "^5.0.1",
     "typescript": "^2.8.1"
   },
   "dependencies": {
     "@gtm/lib.common": "^1.0.10",
-    "@gtm/lib.service": "^1.0.19",
+    "@gtm/lib.service": "^1.0.20",
     "@gtm/lib.service.auth": "^1.0.27",
-    "@scg/lib.client.core": "^1.0.96",
+    "@scg/lib.client.core": "^1.0.103",
     "config": "^1.30.0",
     "cross-env": "^5.1.4",
     "deep-equal": "^1.0.1",
