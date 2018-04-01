@@ -35,6 +35,7 @@ let RoleRepositoryImpl = class RoleRepositoryImpl extends lib_service_1.Reposito
             id: role._id,
             code: role.code,
             scope: role.scope,
+            status: role.status,
             created: role.created,
             updated: role.updated,
         };

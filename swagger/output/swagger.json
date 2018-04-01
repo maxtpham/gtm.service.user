@@ -140,6 +140,14 @@
 			],
 			"type": "object"
 		},
+		"RoleStatus": {
+			"enum": [
+				"0",
+				"1",
+				"2"
+			],
+			"type": "string"
+		},
 		"RoleDetailView": {
 			"properties": {
 				"id": {
@@ -150,6 +158,9 @@
 				},
 				"scope": {
 					"type": "string"
+				},
+				"status": {
+					"$ref": "#/definitions/RoleStatus"
 				},
 				"created": {
 					"type": "number",
@@ -196,6 +207,10 @@
 				"scope": {
 					"type": "string",
 					"description": "role scope "
+				},
+				"status": {
+					"$ref": "#/definitions/RoleStatus",
+					"description": "role status "
 				}
 			},
 			"required": [

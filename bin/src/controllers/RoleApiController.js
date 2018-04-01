@@ -26,6 +26,7 @@ const tsoa_1 = require("tsoa");
 const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const RoleRepository_1 = require("../repositories/RoleRepository");
+const RoleView_1 = require("../views/RoleView");
 let RoleApiController = RoleApiController_1 = class RoleApiController extends lib_service_1.ApiController {
     /** Get Roles */
     getEntities(query, pageNumber, itemCount, sortName, sortType) {
@@ -89,6 +90,13 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
     /** Delete Role */
     deleteEntity(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            let currentRole = yield this.RoleRepository.findOne({ _id: id, deleted: null });
+            if (!currentRole) {
+                return Promise.reject(`Role ${id} not found`);
+            }
+            if (currentRole.status == RoleView_1.RoleStatus.Active) {
+                return Promise.reject(`Could not delete role with status ${currentRole.status}`);
+            }
             let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
             if (role) {
                 return Promise.resolve('DELETE request to homepage');

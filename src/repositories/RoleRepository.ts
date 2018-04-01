@@ -29,6 +29,7 @@ export class RoleRepositoryImpl extends RepositoryImpl<RoleDocument> implements 
             id: role._id,
             code: role.code,
             scope: role.scope,
+            status: role.status,
             created: role.created,
             updated: role.updated,
         }

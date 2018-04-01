@@ -6,7 +6,7 @@ import { ApiController, Sort, SortType } from "@gtm/lib.service";
 import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { RoleRepository, RoleRepositoryTYPE } from '../repositories/RoleRepository';
-import { RoleView, RoleViewWithPagination, RoleDetailView } from '../views/RoleView';
+import { RoleView, RoleViewWithPagination, RoleDetailView, RoleStatus } from '../views/RoleView';
 import { RoleEntity } from '../entities/RoleEntity';
 
 @injectableSingleton(RoleApiController)
@@ -80,6 +80,14 @@ export class RoleApiController extends ApiController {
     /** Delete Role */
     @Tags('Role') @Security('jwt') @Delete('{id}')
     public async deleteEntity(id: string): Promise<string> {
+        let currentRole = await this.RoleRepository.findOne({ _id: id, deleted: null });
+        if (!currentRole) {
+            return Promise.reject(`Role ${id} not found`);
+        }
+
+        if (currentRole.status == RoleStatus.Active) {
+            return Promise.reject(`Could not delete role with status ${currentRole.status}`);
+        }
         let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
         if (role) {
             return Promise.resolve('DELETE request to homepage');

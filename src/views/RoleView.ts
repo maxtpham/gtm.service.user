@@ -9,6 +9,7 @@ export interface RoleDetailView {
     id: string;
     code: string;
     scope?: string;
+    status?: RoleStatus;
     created: number;
     updated: number;
 }
@@ -16,6 +17,7 @@ export interface RoleDetailView {
 export interface MRoleView {
     id: string;
     code: string;
+    status?: RoleStatus;
 }
 
 export interface RoleView {
@@ -24,8 +26,16 @@ export interface RoleView {
 
     /** role scope */
     scope?: string;
+
+    /** role status */
+    status?: RoleStatus;
 }
 
+export enum RoleStatus {
+    InActive = 0,
+    Active = 1,
+    New = 2,
+}
 
 export enum RoleType {
     Admin = 1,

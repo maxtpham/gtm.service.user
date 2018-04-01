@@ -53,11 +53,15 @@ const models = {
             "totalItems": { "dataType": "double", "required": true },
         },
     },
+    "RoleStatus": {
+        "enums": ["0", "1", "2"],
+    },
     "RoleDetailView": {
         "properties": {
             "id": { "dataType": "string", "required": true },
             "code": { "dataType": "string", "required": true },
             "scope": { "dataType": "string" },
+            "status": { "ref": "RoleStatus" },
             "created": { "dataType": "double", "required": true },
             "updated": { "dataType": "double", "required": true },
         },
@@ -72,6 +76,7 @@ const models = {
         "properties": {
             "code": { "dataType": "string", "required": true },
             "scope": { "dataType": "string" },
+            "status": { "ref": "RoleStatus" },
         },
     },
     "MessageDetailView": {
