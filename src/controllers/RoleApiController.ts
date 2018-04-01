@@ -56,42 +56,57 @@ export class RoleApiController extends ApiController {
     /** Create New Role */
     @Tags('Role') @Security('jwt') @Post()
     public async createEntity(@Body() roleView?: RoleView): Promise<RoleDetailView> {
-        let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope });
-        if (role) {
-            return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
-        }
-        if (role instanceof Error) {
-            return Promise.reject('Error');
+        try {
+            let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope });
+            if (role) {
+                return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
+            }
+        } catch (error) {
+            return Promise.reject(error);
         }
     }
 
     /** Update Role */
     @Tags('Role') @Security('jwt') @Post('{id}')
     public async updateEntity(id: string, @Body() roleView?: RoleView): Promise<RoleDetailView> {
-        let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ code: roleView.code, scope: roleView.scope, updated: Date.now() });
-        if (role) {
-            return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
-        }
-        if (role instanceof Error) {
-            return Promise.reject('Error');
+        try {
+            let currentRole = await this.RoleRepository.findOne({ _id: id, deleted: null });
+            if (!currentRole) {
+                return Promise.reject(`Role ${id} not found`);
+            }
+
+            if (currentRole.status == RoleStatus.Active) {
+                return Promise.reject(`Could not update role with status ${currentRole.status}`);
+            }
+
+            let roleUpdated = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ code: roleView.code, scope: roleView.scope, status: roleView.status, updated: Date.now() });
+            if (roleUpdated) {
+                return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(roleUpdated._id)));
+            }
+        } catch (error) {
+            return Promise.reject(error);
         }
     }
 
     /** Delete Role */
     @Tags('Role') @Security('jwt') @Delete('{id}')
     public async deleteEntity(id: string): Promise<string> {
-        let currentRole = await this.RoleRepository.findOne({ _id: id, deleted: null });
-        if (!currentRole) {
-            return Promise.reject(`Role ${id} not found`);
-        }
+        try {
+            let currentRole = await this.RoleRepository.findOne({ _id: id, deleted: null });
+            if (!currentRole) {
+                return Promise.reject(`Role ${id} not found`);
+            }
 
-        if (currentRole.status == RoleStatus.Active) {
-            return Promise.reject(`Could not delete role with status ${currentRole.status}`);
+            if (currentRole.status == RoleStatus.Active) {
+                return Promise.reject(`Could not delete role with status ${currentRole.status}`);
+            }
+            let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
+            if (role) {
+                return Promise.resolve('DELETE request to homepage');
+            }
+            return Promise.reject(`Not found.`);
+        } catch (error) {
+            return Promise.reject(error);
         }
-        let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
-        if (role) {
-            return Promise.resolve('DELETE request to homepage');
-        }
-        return Promise.reject(`Not found.`);
     }
 }
