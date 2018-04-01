@@ -1,9 +1,13 @@
 {
     "host": "sc.dev",
     "port": 3001,
+    "https": {
+        "pfx": "../scg/ssl/sc.dev.pfx",
+        "passphrase": "123456"
+    },
     "mongo": "mongodb://localhost/test",
-    "cors": [ "http://sc.dev:3000", "http://sc.dev:3001", "http://sc.dev:3002", "http://sc.dev:3003", "http://sc.dev:3004", "http://sc.dev:3005", "http://sc.dev:4000", "http://sc.dev:4001", "http://sc.dev:4002", "http://sc.dev:4003", "http://sc.dev:4004", "http://sc.dev:4005" ],
-    "returnUrl": "http://sc.dev:3000/bin/dev/",
+    "cors": [ "https://sc.dev:3000", "https://sc.dev:3001", "https://sc.dev:3002", "https://sc.dev:3003", "https://sc.dev:3004", "https://sc.dev:3005", "https://sc.dev:4000", "https://sc.dev:4001", "https://sc.dev:4002", "https://sc.dev:4003", "https://sc.dev:4004", "https://sc.dev:4005" ],
+    "returnUrl": "https://sc.dev:3000/bin/dev/",
     "auth": {
         "google": {
             "options": {
@@ -19,7 +23,7 @@
         }
     },
     "services": {
-        "user": "http://sc.dev:3001",
-        "core": "http://sc.dev:3002"
+        "user": "https://sc.dev:3001",
+        "core": "https://sc.dev:3002"
     }
 }
