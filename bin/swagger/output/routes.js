@@ -8,7 +8,6 @@ const SessionApiController_1 = require("./../../src/controllers/SessionApiContro
 const RoleApiController_1 = require("./../../src/controllers/RoleApiController");
 const MessageApiController_1 = require("./../../src/controllers/MessageApiController");
 const UserApiController_1 = require("./../../src/controllers/UserApiController");
-const AccountApiController_1 = require("./../../src/controllers/AccountApiController");
 const index_2 = require("./../index");
 const models = {
     "MapOfBoolean": {
@@ -326,23 +325,6 @@ const models = {
         "properties": {
             "balance": { "dataType": "double", "required": true },
             "bonus": { "dataType": "double" },
-        },
-    },
-    "AccountEntity": {
-        "properties": {
-            "_id": { "dataType": "any", "required": true },
-            "created": { "dataType": "double" },
-            "updated": { "dataType": "double" },
-            "deleted": { "dataType": "double" },
-            "userId": { "dataType": "string", "required": true },
-            "balance": { "dataType": "double", "required": true },
-            "bonus": { "dataType": "double" },
-        },
-    },
-    "MAccountView": {
-        "properties": {
-            "userId": { "dataType": "string", "required": true },
-            "balance": { "dataType": "double", "required": true },
         },
     },
 };
@@ -854,112 +836,6 @@ function RegisterRoutes(app) {
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
         const promise = controller.updateUserAccount.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.get('/api/user/v1/account/get-all', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {};
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
-        const promise = controller.getAccounts.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.get('/api/user/v1/account/get-by-id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
-        const promise = controller.getById.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.get('/api/user/v1/account/get-by-user-id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
-        const promise = controller.getByUserId.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.get('/api/user/v1/account/my-account', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
-        const promise = controller.getMyAccount.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.post('/api/user/v1/account/add-balance', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-            accountView: { "in": "body", "name": "accountView", "required": true, "ref": "MAccountView" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
-        const promise = controller.addBalance.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.post('/api/user/v1/account/remove-balance', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-            accountView: { "in": "body", "name": "accountView", "required": true, "ref": "MAccountView" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
-        const promise = controller.removeBalance.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.post('/api/user/v1/account/create', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
-            account: { "in": "body", "name": "account", "required": true, "ref": "AccountView" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
-        const promise = controller.addAccount.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     function authenticateMiddleware(security = []) {
