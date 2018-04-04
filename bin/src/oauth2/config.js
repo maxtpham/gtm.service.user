@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function normalizeOAuth2(config) {
     if (!config.rootUrl)
-        config.rootUrl = config._url;
+        config.rootUrl = (!!config.https ? config.https._url : config._url) || config._url;
     if (!config.returnUrl)
         config.returnUrl = '/';
     if (!config.auth)
