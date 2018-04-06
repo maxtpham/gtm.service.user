@@ -147,13 +147,6 @@ const models: TsoaRoute.Models = {
             "houseHolder": { "dataType": "any" },
         },
     },
-    "MUserFind": {
-        "properties": {
-            "name": { "dataType": "string", "required": true },
-            "phone": { "dataType": "string", "required": true },
-            "email": { "dataType": "string", "required": true },
-        },
-    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -744,11 +737,11 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getUserByName.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.post('/api/user/v1/user/find-user',
+    app.get('/api/user/v1/user/find-user',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                mUserFind: { "in": "body", "name": "mUserFind", "required": true, "ref": "MUserFind" },
+                find: { "in": "query", "name": "find", "required": true, "dataType": "string" },
             };
 
             let validatedArgs: any[] = [];

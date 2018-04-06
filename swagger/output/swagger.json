@@ -438,25 +438,6 @@
 			],
 			"type": "object"
 		},
-		"MUserFind": {
-			"properties": {
-				"name": {
-					"type": "string"
-				},
-				"phone": {
-					"type": "string"
-				},
-				"email": {
-					"type": "string"
-				}
-			},
-			"required": [
-				"name",
-				"phone",
-				"email"
-			],
-			"type": "object"
-		},
 		"UserRole": {
 			"properties": {
 				"id": {
@@ -1758,7 +1739,7 @@
 			}
 		},
 		"/api/user/v1/user/find-user": {
-			"post": {
+			"get": {
 				"operationId": "FindUser",
 				"produces": [
 					"application/json"
@@ -1784,12 +1765,10 @@
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "mUserFind",
+						"in": "query",
+						"name": "find",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/MUserFind"
-						}
+						"type": "string"
 					}
 				]
 			}

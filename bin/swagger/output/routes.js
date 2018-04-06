@@ -148,13 +148,6 @@ const models = {
             "houseHolder": { "dataType": "any" },
         },
     },
-    "MUserFind": {
-        "properties": {
-            "name": { "dataType": "string", "required": true },
-            "phone": { "dataType": "string", "required": true },
-            "email": { "dataType": "string", "required": true },
-        },
-    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -642,9 +635,9 @@ function RegisterRoutes(app) {
         const promise = controller.getUserByName.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.post('/api/user/v1/user/find-user', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.get('/api/user/v1/user/find-user', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            mUserFind: { "in": "body", "name": "mUserFind", "required": true, "ref": "MUserFind" },
+            find: { "in": "query", "name": "find", "required": true, "dataType": "string" },
         };
         let validatedArgs = [];
         try {

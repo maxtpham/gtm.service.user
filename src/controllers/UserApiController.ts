@@ -57,18 +57,16 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Not found.`);
     }
 
-    @Tags('User') @Security('jwt') @Post('/find-user')
+    @Tags('User') @Security('jwt') @Get('/find-user')
     public async findUser(
-        @Body() mUserFind: MUserFind
+        @Query() find: string
     ): Promise<MUserView[]> {
         let userEntity = [];
-        if (mUserFind.name !== "") {
-            userEntity = await this.UserRepository.find({ name: RegExp(mUserFind.name) });
-        } else if (mUserFind.phone) {
-            userEntity = await this.UserRepository.find({ phone: RegExp(mUserFind.phone) });
-        } else if (mUserFind.email) {
-            userEntity = await this.UserRepository.find({ email: RegExp(mUserFind.email) });
-        }
+        userEntity = await this.UserRepository.find({ $or:[
+            { email: RegExp(find) },
+            { phone: RegExp(find) },
+            { name: RegExp(find) }
+        ]});
         if (userEntity) {
             return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
         }

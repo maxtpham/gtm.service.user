@@ -74,18 +74,14 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
-    findUser(mUserFind) {
+    findUser(find) {
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = [];
-            if (mUserFind.name !== "") {
-                userEntity = yield this.UserRepository.find({ name: RegExp(mUserFind.name) });
-            }
-            else if (mUserFind.phone) {
-                userEntity = yield this.UserRepository.find({ phone: RegExp(mUserFind.phone) });
-            }
-            else if (mUserFind.email) {
-                userEntity = yield this.UserRepository.find({ email: RegExp(mUserFind.email) });
-            }
+            userEntity = yield this.UserRepository.find({ $or: [
+                    { email: RegExp(find) },
+                    { phone: RegExp(find) },
+                    { name: RegExp(find) }
+                ] });
             if (userEntity) {
                 return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
             }
@@ -401,10 +397,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getUserByName", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/find-user'),
-    __param(0, tsoa_1.Body()),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/find-user'),
+    __param(0, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "findUser", null);
 __decorate([
