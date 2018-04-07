@@ -15,8 +15,8 @@
     "auth": {
         "google": {
             "options": {
-                "clientID": "980942693683-uij086c1n3ar0cf8oin40ilunesb52au.apps.googleusercontent.com",
-                "clientSecret": "NzD7eOzkcEh-ortZSXaHm3Kd"
+                "clientID": "914044098001-am1kch82kst7nfmnl45c6s1av8la0gjk.apps.googleusercontent.com",
+                "clientSecret": "lOpDcTXH1XwxPJ9eJtNoBqeL"
             }
         },
         "facebook": {
