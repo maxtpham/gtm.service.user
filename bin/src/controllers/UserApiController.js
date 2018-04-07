@@ -286,7 +286,6 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 }
             }
             catch (error) {
-                console.log("Loi cmr");
                 return Promise.reject(error);
             }
         });
@@ -314,9 +313,9 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     return Promise.resolve(yield this.UserRepository.findOneById(userId));
                 }
             }
-            catch (e) {
-                console.log(e);
-                Promise.reject(`User does not exist`);
+            catch (error) {
+                console.log(error);
+                Promise.reject(error);
             }
         });
     }

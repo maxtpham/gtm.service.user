@@ -304,7 +304,6 @@ export class UserApiController extends ApiController {
             }
 
         } catch (error) {
-            console.log("Loi cmr");
             return Promise.reject(error);
         }
     }
@@ -337,9 +336,9 @@ export class UserApiController extends ApiController {
                 return Promise.resolve(await this.UserRepository.findOneById(userId));
             }
 
-        } catch (e) {
-            console.log(e);
-            Promise.reject(`User does not exist`);
+        } catch (error) {
+            console.log(error);
+            Promise.reject(error);
         }
     }
 

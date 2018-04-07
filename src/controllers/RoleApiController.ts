@@ -57,7 +57,7 @@ export class RoleApiController extends ApiController {
     @Tags('Role') @Security('jwt') @Post()
     public async createEntity(@Body() roleView?: RoleView): Promise<RoleDetailView> {
         try {
-            let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope });
+            let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope, status: roleView.status });
             if (role) {
                 return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
             }
@@ -89,7 +89,7 @@ export class RoleApiController extends ApiController {
     }
 
     /** Delete Role */
-    @Tags('Role') @Security('jwt') @Delete('{id}')
+    @Tags('Role') @Security('jwt') @Post('{id}')
     public async deleteEntity(id: string): Promise<string> {
         try {
             let currentRole = await this.RoleRepository.findOne({ _id: id, deleted: null });
