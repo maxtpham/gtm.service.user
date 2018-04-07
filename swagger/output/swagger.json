@@ -1285,6 +1285,45 @@
 				]
 			},
 			"post": {
+				"operationId": "UpdateEntity",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/RoleDetailView"
+						}
+					}
+				},
+				"description": "Update Role ",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "roleView",
+						"required": false,
+						"schema": {
+							"$ref": "#/definitions/RoleView"
+						}
+					}
+				]
+			},
+			"delete": {
 				"operationId": "DeleteEntity",
 				"produces": [
 					"application/json"

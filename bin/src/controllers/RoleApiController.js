@@ -155,7 +155,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RoleApiController.prototype, "updateEntity", null);
 __decorate([
-    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Post('{id}'),
+    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Delete('{id}'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
