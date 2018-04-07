@@ -449,7 +449,7 @@ function RegisterRoutes(app) {
         const promise = controller.updateEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.delete('/api/user/v1/role/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.post('/api/user/v1/role/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
         };

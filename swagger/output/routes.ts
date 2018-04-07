@@ -490,7 +490,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.updateEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.delete('/api/user/v1/role/:id',
+    app.post('/api/user/v1/role/:id',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
