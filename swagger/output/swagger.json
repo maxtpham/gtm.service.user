@@ -523,7 +523,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
 				},
 				"status": {
 					"$ref": "#/definitions/UserStatus"
@@ -680,7 +680,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
 				},
 				"status": {
 					"$ref": "#/definitions/UserStatus"
@@ -721,11 +721,11 @@
 				},
 				"profiles": {
 					"type": "object",
-					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
+					"description": "With 3 sub-dcouments:\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
 				},
 				"avatar": {
 					"$ref": "#/definitions/AttachmentView",
-					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login  "
+					"description": "The OAuth2 authentication process should auto\nload up the default user avatar at 1st user login  "
 				}
 			},
 			"required": [
@@ -845,7 +845,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
 				},
 				"status": {
 					"$ref": "#/definitions/UserStatus"
@@ -886,11 +886,11 @@
 				},
 				"profiles": {
 					"type": "object",
-					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
+					"description": "With 3 sub-dcouments:\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
 				},
 				"avatar": {
 					"$ref": "#/definitions/AttachmentView",
-					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login  "
+					"description": "The OAuth2 authentication process should auto\nload up the default user avatar at 1st user login  "
 				},
 				"id": {
 					"type": "string"
