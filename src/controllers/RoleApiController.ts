@@ -76,7 +76,7 @@ export class RoleApiController extends ApiController {
             }
 
             if (currentRole.status == RoleStatus.Active) {
-                return Promise.reject(`Could not update role with status ${currentRole.status}`);
+                return Promise.reject(`Could not update role with status ${RoleStatus[currentRole.status]}`);
             }
 
             let roleUpdated = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ code: roleView.code, scope: roleView.scope, status: roleView.status, updated: Date.now() });
@@ -98,7 +98,7 @@ export class RoleApiController extends ApiController {
             }
 
             if (currentRole.status == RoleStatus.Active) {
-                return Promise.reject(`Could not delete role with status ${currentRole.status}`);
+                return Promise.reject(`Could not delete role with status ${RoleStatus[currentRole.status]}`);
             }
             let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
             if (role) {

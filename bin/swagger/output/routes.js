@@ -308,7 +308,7 @@ const models = {
             "phone": { "dataType": "string" },
             "birthday": { "dataType": "double" },
             "email": { "dataType": "string" },
-            "gender": { "dataType": "string", "required": true },
+            "gender": { "dataType": "string" },
             "status": { "ref": "UserStatus", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },

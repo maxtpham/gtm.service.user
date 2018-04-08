@@ -990,7 +990,6 @@
 			},
 			"required": [
 				"name",
-				"gender",
 				"status",
 				"role"
 			],
