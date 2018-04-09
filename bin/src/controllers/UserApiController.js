@@ -240,9 +240,8 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Create or update User Role */
-    createOrUpdateUserRoleMobile(roleType, req) {
+    createOrUpdateUserRoleMobile(roleType, userIdCurrent, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            let userIdCurrent = req.user.user;
             try {
                 let user = yield this.UserRepository.findOneById(userIdCurrent);
                 if (!user) {
@@ -450,9 +449,10 @@ __decorate([
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role-mobile'),
     __param(0, tsoa_1.Query()),
-    __param(1, tsoa_1.Request()),
+    __param(1, tsoa_1.Query()),
+    __param(2, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Number, String, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "createOrUpdateUserRoleMobile", null);
 __decorate([

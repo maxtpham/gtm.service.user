@@ -911,6 +911,7 @@ export function RegisterRoutes(app: any) {
         function(request: any, response: any, next: any) {
             const args = {
                 roleType: { "in": "query", "name": "roleType", "required": true, "dataType": "double" },
+                userIdCurrent: { "in": "query", "name": "userIdCurrent", "required": true, "dataType": "string" },
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             };
 

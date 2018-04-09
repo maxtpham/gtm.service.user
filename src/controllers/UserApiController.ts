@@ -251,9 +251,9 @@ export class UserApiController extends ApiController {
     @Tags('User') @Security('jwt') @Post('/create-or-update-role-mobile')
     public async createOrUpdateUserRoleMobile(
         @Query() roleType: number,
+        @Query() userIdCurrent: string,
         @Request() req: express.Request
     ): Promise<ProfileView> {
-        let userIdCurrent = (<JwtToken>req.user).user;
         try {
             let user = await this.UserRepository.findOneById(userIdCurrent);
             if (!user) {

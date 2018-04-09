@@ -2063,6 +2063,12 @@
 						"required": true,
 						"format": "double",
 						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "userIdCurrent",
+						"required": true,
+						"type": "string"
 					}
 				]
 			}
