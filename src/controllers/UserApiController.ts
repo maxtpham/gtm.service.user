@@ -253,7 +253,6 @@ export class UserApiController extends ApiController {
         @Query() roleType: number,
         @Request() req: express.Request
     ): Promise<ProfileView> {
-        const lenderApi = new coreClient.LendApi(config.services.core, req.cookies.jwt);
         let userIdCurrent = (<JwtToken>req.user).user;
         try {
             let user = await this.UserRepository.findOneById(userIdCurrent);
@@ -284,14 +283,6 @@ export class UserApiController extends ApiController {
                 }
                 user.isFirstLogin = true;
                 userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
-
-                if (roleType === RoleType.Lender) {
-                    let lender = await lenderApi.addLend();
-                    if (!lender) {
-                        Promise.reject("Dont create lender");
-                    }
-                }
-
 
                 if (userUpdated) {
                     return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userIdCurrent)));

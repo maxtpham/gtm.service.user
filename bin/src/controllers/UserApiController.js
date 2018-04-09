@@ -242,7 +242,6 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     /** Create or update User Role */
     createOrUpdateUserRoleMobile(roleType, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            const lenderApi = new coreClient.LendApi(AppConfig_1.default.services.core, req.cookies.jwt);
             let userIdCurrent = req.user.user;
             try {
                 let user = yield this.UserRepository.findOneById(userIdCurrent);
@@ -269,12 +268,6 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     }
                     user.isFirstLogin = true;
                     userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
-                    if (roleType === RoleView_1.RoleType.Lender) {
-                        let lender = yield lenderApi.addLend();
-                        if (!lender) {
-                            Promise.reject("Dont create lender");
-                        }
-                    }
                     if (userUpdated) {
                         return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userIdCurrent)));
                     }
