@@ -267,7 +267,7 @@ export class UserApiController extends ApiController {
 
             try {
 
-                let roleLookup = await this.RoleRepository.getRoleByType(roleType + "");
+                let roleLookup = await this.RoleRepository.getRoleByType(RoleType[roleType]);
 
                 let userUpdated;
                 if (user.roles && user.roles.some(us => us.code == RoleType[roleType])) {

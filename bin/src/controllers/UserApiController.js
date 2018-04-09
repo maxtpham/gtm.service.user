@@ -253,7 +253,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     return Promise.reject(`Role type ${roleType} does not exist`);
                 }
                 try {
-                    let roleLookup = yield this.RoleRepository.getRoleByType(roleType + "");
+                    let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
                     let userUpdated;
                     if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
                         // Update if this role is existed and updated in role entity
