@@ -57,18 +57,16 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Not found.`);
     }
 
-    @Tags('User') @Security('jwt') @Post('/find-user')
+    @Tags('User') @Security('jwt') @Get('/find-user')
     public async findUser(
-        @Body() mUserFind: MUserFind
+        @Query() find: string
     ): Promise<MUserView[]> {
         let userEntity = [];
-        if (mUserFind.name !== "") {
-            userEntity = await this.UserRepository.find({ name: RegExp(mUserFind.name) });
-        } else if (mUserFind.phone) {
-            userEntity = await this.UserRepository.find({ phone: RegExp(mUserFind.phone) });
-        } else if (mUserFind.email) {
-            userEntity = await this.UserRepository.find({ email: RegExp(mUserFind.email) });
-        }
+        userEntity = await this.UserRepository.find({ $or:[
+            { email: RegExp(find) },
+            { phone: RegExp(find) },
+            { name: RegExp(find) }
+        ]});
         if (userEntity) {
             return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
         }
@@ -253,10 +251,9 @@ export class UserApiController extends ApiController {
     @Tags('User') @Security('jwt') @Post('/create-or-update-role-mobile')
     public async createOrUpdateUserRoleMobile(
         @Query() roleType: number,
+        @Query() userIdCurrent: string,
         @Request() req: express.Request
     ): Promise<ProfileView> {
-        const lenderApi = new coreClient.LendApi(config.services.core, req.cookies.jwt);
-        let userIdCurrent = (<JwtToken>req.user).user;
         try {
             let user = await this.UserRepository.findOneById(userIdCurrent);
             if (!user) {
@@ -269,7 +266,7 @@ export class UserApiController extends ApiController {
 
             try {
 
-                let roleLookup = await this.RoleRepository.getRoleByType(roleType + "");
+                let roleLookup = await this.RoleRepository.getRoleByType(RoleType[roleType]);
 
                 let userUpdated;
                 if (user.roles && user.roles.some(us => us.code == RoleType[roleType])) {
@@ -287,14 +284,6 @@ export class UserApiController extends ApiController {
                 user.isFirstLogin = true;
                 userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
 
-                if (roleType === RoleType.Lender) {
-                    let lender = await lenderApi.addLend();
-                    if (!lender) {
-                        Promise.reject("Dont create lender");
-                    }
-                }
-
-
                 if (userUpdated) {
                     return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userIdCurrent)));
                 }
@@ -306,7 +295,6 @@ export class UserApiController extends ApiController {
             }
 
         } catch (error) {
-            console.log("Loi cmr");
             return Promise.reject(error);
         }
     }
@@ -339,9 +327,9 @@ export class UserApiController extends ApiController {
                 return Promise.resolve(await this.UserRepository.findOneById(userId));
             }
 
-        } catch (e) {
-            console.log(e);
-            Promise.reject(`User does not exist`);
+        } catch (error) {
+            console.log(error);
+            Promise.reject(error);
         }
     }
 

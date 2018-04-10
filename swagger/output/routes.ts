@@ -147,13 +147,6 @@ const models: TsoaRoute.Models = {
             "houseHolder": { "dataType": "any" },
         },
     },
-    "MUserFind": {
-        "properties": {
-            "name": { "dataType": "string", "required": true },
-            "phone": { "dataType": "string", "required": true },
-            "email": { "dataType": "string", "required": true },
-        },
-    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -314,7 +307,7 @@ const models: TsoaRoute.Models = {
             "phone": { "dataType": "string" },
             "birthday": { "dataType": "double" },
             "email": { "dataType": "string" },
-            "gender": { "dataType": "string", "required": true },
+            "gender": { "dataType": "string" },
             "status": { "ref": "UserStatus", "required": true },
             "role": { "dataType": "array", "array": { "ref": "UserRole" }, "required": true },
             "address": { "dataType": "string" },
@@ -744,11 +737,11 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getUserByName.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.post('/api/user/v1/user/find-user',
+    app.get('/api/user/v1/user/find-user',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                mUserFind: { "in": "body", "name": "mUserFind", "required": true, "ref": "MUserFind" },
+                find: { "in": "query", "name": "find", "required": true, "dataType": "string" },
             };
 
             let validatedArgs: any[] = [];
@@ -918,6 +911,7 @@ export function RegisterRoutes(app: any) {
         function(request: any, response: any, next: any) {
             const args = {
                 roleType: { "in": "query", "name": "roleType", "required": true, "dataType": "double" },
+                userIdCurrent: { "in": "query", "name": "userIdCurrent", "required": true, "dataType": "string" },
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             };
 

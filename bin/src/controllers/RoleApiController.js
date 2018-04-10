@@ -67,7 +67,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
     createEntity(roleView) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let role = yield this.RoleRepository.save({ code: roleView.code, scope: roleView.scope });
+                let role = yield this.RoleRepository.save({ code: roleView.code, scope: roleView.scope, status: roleView.status });
                 if (role) {
                     return Promise.resolve(this.RoleRepository.buildClientRole(yield this.RoleRepository.findOneById(role._id)));
                 }
@@ -86,7 +86,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
                     return Promise.reject(`Role ${id} not found`);
                 }
                 if (currentRole.status == RoleView_1.RoleStatus.Active) {
-                    return Promise.reject(`Could not update role with status ${currentRole.status}`);
+                    return Promise.reject(`Could not update role with status ${RoleView_1.RoleStatus[currentRole.status]}`);
                 }
                 let roleUpdated = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { code: roleView.code, scope: roleView.scope, status: roleView.status, updated: Date.now() });
                 if (roleUpdated) {
@@ -107,7 +107,7 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
                     return Promise.reject(`Role ${id} not found`);
                 }
                 if (currentRole.status == RoleView_1.RoleStatus.Active) {
-                    return Promise.reject(`Could not delete role with status ${currentRole.status}`);
+                    return Promise.reject(`Could not delete role with status ${RoleView_1.RoleStatus[currentRole.status]}`);
                 }
                 let role = yield this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
                 if (role) {

@@ -57,7 +57,7 @@ export class RoleApiController extends ApiController {
     @Tags('Role') @Security('jwt') @Post()
     public async createEntity(@Body() roleView?: RoleView): Promise<RoleDetailView> {
         try {
-            let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope });
+            let role = await this.RoleRepository.save(<RoleEntity>{ code: roleView.code, scope: roleView.scope, status: roleView.status });
             if (role) {
                 return Promise.resolve(this.RoleRepository.buildClientRole(await this.RoleRepository.findOneById(role._id)));
             }
@@ -76,7 +76,7 @@ export class RoleApiController extends ApiController {
             }
 
             if (currentRole.status == RoleStatus.Active) {
-                return Promise.reject(`Could not update role with status ${currentRole.status}`);
+                return Promise.reject(`Could not update role with status ${RoleStatus[currentRole.status]}`);
             }
 
             let roleUpdated = await this.RoleRepository.findOneAndUpdate({ _id: id }, <RoleEntity>{ code: roleView.code, scope: roleView.scope, status: roleView.status, updated: Date.now() });
@@ -98,7 +98,7 @@ export class RoleApiController extends ApiController {
             }
 
             if (currentRole.status == RoleStatus.Active) {
-                return Promise.reject(`Could not delete role with status ${currentRole.status}`);
+                return Promise.reject(`Could not delete role with status ${RoleStatus[currentRole.status]}`);
             }
             let role = await this.RoleRepository.findOneAndUpdate({ _id: id }, { deleted: Date.now() });
             if (role) {

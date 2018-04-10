@@ -71,7 +71,7 @@ export interface UserUpdateView {
   phone?: string;
   birthday?: number;
   email?: string;
-  gender: string;
+  gender?: string;
   status: UserStatus;
   role: UserRole[];
   address?: string;

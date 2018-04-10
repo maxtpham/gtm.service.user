@@ -26,6 +26,7 @@ const lib_common_1 = require("@gtm/lib.common");
 const lib_service_1 = require("@gtm/lib.service");
 const lib_service_2 = require("@gtm/lib.service");
 const UserEntity_1 = require("../entities/UserEntity");
+const MUserView_1 = require("../views/MUserView");
 const lib_service_auth_1 = require("@gtm/lib.service.auth");
 exports.UserRepositoryTYPE = Symbol("UserRepository");
 let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.RepositoryImpl {
@@ -83,7 +84,9 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
                     address: profileExt.address,
                     timezone: profileExt.timezone,
                     language: profileExt.language,
-                    account: { balance: 0, bonus: 0 }
+                    account: { balance: 0, bonus: 0 },
+                    status: MUserView_1.UserStatus.New,
+                    active: null
                 });
                 console.log(`Created new ${profile.provider} user profile`, user);
             }
@@ -124,11 +127,13 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
     }
     findUser(mUserFind) {
         return __awaiter(this, void 0, void 0, function* () {
-            let users = yield this.find({ $or: [
+            let users = yield this.find({
+                $or: [
                     { name: RegExp(mUserFind.name) },
                     { phone: RegExp(mUserFind.phone) },
                     { email: RegExp(mUserFind.email) },
-                ] });
+                ]
+            });
             return Promise.resolve(users);
         });
     }
