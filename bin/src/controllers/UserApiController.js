@@ -77,11 +77,13 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     findUser(find) {
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = [];
-            userEntity = yield this.UserRepository.find({ $or: [
+            userEntity = yield this.UserRepository.find({
+                $or: [
                     { email: RegExp(find) },
                     { phone: RegExp(find) },
                     { name: RegExp(find) }
-                ] });
+                ]
+            });
             if (userEntity) {
                 return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
             }
@@ -250,34 +252,29 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!(roleType in RoleView_1.RoleType)) {
                     return Promise.reject(`Role type ${roleType} does not exist`);
                 }
-                try {
-                    let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
-                    let userUpdated;
-                    if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
-                        // Update if this role is existed and updated in role entity
-                        user.roles.map(ur => {
-                            if (ur.id == roleLookup.id) {
-                                ur.id = roleLookup.id,
-                                    ur.code = roleLookup.code;
-                            }
-                        });
-                    }
-                    else { // Create new role
-                        user.roles.push({ id: roleLookup.id, code: roleLookup.code });
-                    }
-                    user.isFirstLogin = true;
-                    userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
-                    if (userUpdated) {
-                        return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userIdCurrent)));
-                    }
-                    return Promise.reject('Not found.');
+                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
+                let userUpdated;
+                if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
+                    // Update if this role is existed and updated in role entity
+                    user.roles.map(ur => {
+                        if (ur.id == roleLookup.id) {
+                            ur.id = roleLookup.id,
+                                ur.code = roleLookup.code;
+                        }
+                    });
                 }
-                catch (e) {
-                    console.log("role dont exists");
-                    return Promise.reject(e);
+                else { // Create new role
+                    user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                 }
+                user.isFirstLogin = false;
+                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
+                if (userUpdated) {
+                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userIdCurrent)));
+                }
+                return Promise.reject('Not found.');
             }
             catch (error) {
+                console.log('Create Role Mobile Error', error);
                 return Promise.reject(error);
             }
         });
