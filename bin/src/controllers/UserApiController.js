@@ -287,8 +287,11 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!user) {
                     return Promise.reject('User is not found.');
                 }
-                user.active = userDetails.status === MUserView_1.UserStatus.New ? null : (userDetails.status === MUserView_1.UserStatus.Active ? true : false);
-                user.status = userDetails.status || user.status;
+                if (user.status == MUserView_1.UserStatus.Active && userDetails.status == MUserView_1.UserStatus.New) {
+                    return Promise.reject(`Can not update user status ${MUserView_1.UserStatus[user.status]} to ${MUserView_1.UserStatus[userDetails.status]}`);
+                }
+                user.active = userDetails.status == MUserView_1.UserStatus.New ? null : (userDetails.status == MUserView_1.UserStatus.Active ? true : false);
+                user.status = userDetails.status;
                 user.name = userDetails.name || user.name;
                 user.phone = userDetails.phone || user.phone;
                 user.birthday = userDetails.birthday || user.birthday;

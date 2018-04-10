@@ -308,8 +308,12 @@ export class UserApiController extends ApiController {
                 return Promise.reject('User is not found.');
             }
 
-            user.active = userDetails.status === UserStatus.New ? null : (userDetails.status === UserStatus.Active ? true : false);
-            user.status = userDetails.status || user.status;
+            if (user.status == UserStatus.Active && userDetails.status == UserStatus.New) {
+                return Promise.reject(`Can not update user status ${UserStatus[user.status]} to ${UserStatus[userDetails.status]}`);
+            }
+
+            user.active = userDetails.status == UserStatus.New ? null : (userDetails.status == UserStatus.Active ? true : false);
+            user.status = userDetails.status;
             user.name = userDetails.name || user.name;
             user.phone = userDetails.phone || user.phone;
             user.birthday = userDetails.birthday || user.birthday;
