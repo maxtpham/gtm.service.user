@@ -86,7 +86,8 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
                     language: profileExt.language,
                     account: { balance: 0, bonus: 0 },
                     status: MUserView_1.UserStatus.New,
-                    active: null
+                    active: null,
+                    isFirstLogin: true,
                 });
                 console.log(`Created new ${profile.provider} user profile`, user);
             }

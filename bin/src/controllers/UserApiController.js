@@ -77,11 +77,13 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     findUser(find) {
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = [];
-            userEntity = yield this.UserRepository.find({ $or: [
+            userEntity = yield this.UserRepository.find({
+                $or: [
                     { email: RegExp(find) },
                     { phone: RegExp(find) },
                     { name: RegExp(find) }
-                ] });
+                ]
+            });
             if (userEntity) {
                 return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
             }
@@ -250,34 +252,29 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!(roleType in RoleView_1.RoleType)) {
                     return Promise.reject(`Role type ${roleType} does not exist`);
                 }
-                try {
-                    let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
-                    let userUpdated;
-                    if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
-                        // Update if this role is existed and updated in role entity
-                        user.roles.map(ur => {
-                            if (ur.id == roleLookup.id) {
-                                ur.id = roleLookup.id,
-                                    ur.code = roleLookup.code;
-                            }
-                        });
-                    }
-                    else { // Create new role
-                        user.roles.push({ id: roleLookup.id, code: roleLookup.code });
-                    }
-                    user.isFirstLogin = true;
-                    userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
-                    if (userUpdated) {
-                        return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userIdCurrent)));
-                    }
-                    return Promise.reject('Not found.');
+                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
+                let userUpdated;
+                if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
+                    // Update if this role is existed and updated in role entity
+                    user.roles.map(ur => {
+                        if (ur.id == roleLookup.id) {
+                            ur.id = roleLookup.id,
+                                ur.code = roleLookup.code;
+                        }
+                    });
                 }
-                catch (e) {
-                    console.log("role dont exists");
-                    return Promise.reject(e);
+                else { // Create new role
+                    user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                 }
+                user.isFirstLogin = false;
+                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
+                if (userUpdated) {
+                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userIdCurrent)));
+                }
+                return Promise.reject('Not found.');
             }
             catch (error) {
+                console.log('Create Role Mobile Error', error);
                 return Promise.reject(error);
             }
         });
@@ -290,8 +287,11 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (!user) {
                     return Promise.reject('User is not found.');
                 }
-                user.active = userDetails.status === MUserView_1.UserStatus.New ? null : (userDetails.status === MUserView_1.UserStatus.Active ? true : false);
-                user.status = userDetails.status || user.status;
+                if (user.status == MUserView_1.UserStatus.Active && userDetails.status == MUserView_1.UserStatus.New) {
+                    return Promise.reject(`Can not update user status ${MUserView_1.UserStatus[user.status]} to ${MUserView_1.UserStatus[userDetails.status]}`);
+                }
+                user.active = userDetails.status == MUserView_1.UserStatus.New ? null : (userDetails.status == MUserView_1.UserStatus.Active ? true : false);
+                user.status = userDetails.status;
                 user.name = userDetails.name || user.name;
                 user.phone = userDetails.phone || user.phone;
                 user.birthday = userDetails.birthday || user.birthday;

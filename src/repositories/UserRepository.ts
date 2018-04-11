@@ -76,7 +76,8 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
                 language: profileExt.language,
                 account: <UserAccount>{ balance: 0, bonus: 0 },
                 status: UserStatus.New,
-                active: null
+                active: null,
+                isFirstLogin: true,
             });
             console.log(`Created new ${profile.provider} user profile`, user);
         }
