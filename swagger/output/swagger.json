@@ -1251,6 +1251,35 @@
 				]
 			}
 		},
+		"/api/user/v1/role/get-all": {
+			"get": {
+				"operationId": "GetAllEntities",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/RoleDetailView"
+							}
+						}
+					}
+				},
+				"description": "Get all role entities ",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/api/user/v1/role/{id}": {
 			"get": {
 				"operationId": "GetEntity",

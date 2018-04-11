@@ -268,7 +268,6 @@ export class UserApiController extends ApiController {
 
             let roleLookup = await this.RoleRepository.getRoleByType(RoleType[roleType]);
 
-            let userUpdated;
             if (user.roles && user.roles.some(us => us.code == RoleType[roleType])) {
                 // Update if this role is existed and updated in role entity
                 user.roles.map(ur => {
@@ -282,7 +281,7 @@ export class UserApiController extends ApiController {
                 user.roles.push({ id: roleLookup.id, code: roleLookup.code });
             }
             user.isFirstLogin = false;
-            userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
+            let userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
 
             if (userUpdated) {
                 return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userIdCurrent)));

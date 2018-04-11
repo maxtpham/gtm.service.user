@@ -44,11 +44,21 @@ let RoleApiController = RoleApiController_1 = class RoleApiController extends li
             if (roles) {
                 let roleTotalItems = yield this.RoleRepository.find(queryToEntities);
                 let roleDetailViews = [];
-                roles.map(role => {
-                    roleDetailViews.push(this.RoleRepository.buildClientRole(role));
-                });
+                roleDetailViews = roles.map(role => { return this.RoleRepository.buildClientRole(role); });
                 let roleViews = { roles: roleDetailViews, totalItems: roleTotalItems.length };
                 return Promise.resolve(roleViews);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
+    /** Get all role entities */
+    getAllEntities() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let roles = yield this.RoleRepository.find({});
+            if (roles) {
+                let roleDetailViews = [];
+                roleDetailViews = roles.map(role => { return this.RoleRepository.buildClientRole(role); });
+                return Promise.resolve(roleDetailViews);
             }
             return Promise.reject(`Not found.`);
         });
@@ -134,6 +144,12 @@ __decorate([
     __metadata("design:paramtypes", [String, Number, Number, String, Number]),
     __metadata("design:returntype", Promise)
 ], RoleApiController.prototype, "getEntities", null);
+__decorate([
+    tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-all'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RoleApiController.prototype, "getAllEntities", null);
 __decorate([
     tsoa_2.Tags('Role'), tsoa_2.Security('jwt'), tsoa_1.Get('{id}'),
     __metadata("design:type", Function),

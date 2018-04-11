@@ -403,6 +403,19 @@ function RegisterRoutes(app) {
         const promise = controller.getEntities.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
+    app.get('/api/user/v1/role/get-all', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {};
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(RoleApiController_1.RoleApiController);
+        const promise = controller.getAllEntities.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
     app.get('/api/user/v1/role/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             id: { "in": "path", "name": "id", "required": true, "dataType": "string" },

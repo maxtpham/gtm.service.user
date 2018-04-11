@@ -34,11 +34,21 @@ export class RoleApiController extends ApiController {
         if (roles) {
             let roleTotalItems = await this.RoleRepository.find(queryToEntities);
             let roleDetailViews: RoleDetailView[] = [];
-            roles.map(role => {
-                roleDetailViews.push(this.RoleRepository.buildClientRole(role));
-            })
+            roleDetailViews = roles.map(role => { return this.RoleRepository.buildClientRole(role) });
             let roleViews = <RoleViewWithPagination>{ roles: roleDetailViews, totalItems: roleTotalItems.length };
             return Promise.resolve(roleViews);
+        }
+        return Promise.reject(`Not found.`);
+    }
+
+    /** Get all role entities */
+    @Tags('Role') @Security('jwt') @Get('/get-all')
+    public async getAllEntities(): Promise<RoleDetailView[]> {
+        let roles = await this.RoleRepository.find({});
+        if (roles) {
+            let roleDetailViews: RoleDetailView[] = [];
+            roleDetailViews = roles.map(role => { return this.RoleRepository.buildClientRole(role) });
+            return Promise.resolve(roleDetailViews);
         }
         return Promise.reject(`Not found.`);
     }

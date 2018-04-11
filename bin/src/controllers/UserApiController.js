@@ -253,7 +253,6 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     return Promise.reject(`Role type ${roleType} does not exist`);
                 }
                 let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
-                let userUpdated;
                 if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
                     // Update if this role is existed and updated in role entity
                     user.roles.map(ur => {
@@ -267,7 +266,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                 }
                 user.isFirstLogin = false;
-                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
+                let userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
                 if (userUpdated) {
                     return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userIdCurrent)));
                 }

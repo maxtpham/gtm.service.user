@@ -429,6 +429,25 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getEntities.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.get('/api/user/v1/role/get-all',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<RoleApiController>(RoleApiController);
+
+
+            const promise = controller.getAllEntities.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
     app.get('/api/user/v1/role/:id',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
