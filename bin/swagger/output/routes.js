@@ -761,22 +761,6 @@ function RegisterRoutes(app) {
         const promise = controller.getDetailViewById.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.post('/api/user/v1/user/create-or-update-role', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            userRoleView: { "in": "body", "name": "userRoleView", "required": true, "ref": "UserRoleView" },
-            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.createOrUpdateUserRole.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
     app.post('/api/user/v1/user/create-or-update-role-mobile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             userRoleView: { "in": "body", "name": "userRoleView", "required": true, "ref": "UserRoleView" },

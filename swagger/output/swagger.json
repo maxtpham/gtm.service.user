@@ -2027,41 +2027,6 @@
 				]
 			}
 		},
-		"/api/user/v1/user/create-or-update-role": {
-			"post": {
-				"operationId": "CreateOrUpdateUserRole",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/ProfileView"
-						}
-					}
-				},
-				"description": "Create or update User Role ",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "userRoleView",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/UserRoleView"
-						}
-					}
-				]
-			}
-		},
 		"/api/user/v1/user/create-or-update-role-mobile": {
 			"post": {
 				"operationId": "CreateOrUpdateUserRoleMobile",
