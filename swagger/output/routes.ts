@@ -929,8 +929,7 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                roleType: { "in": "query", "name": "roleType", "required": true, "dataType": "double" },
-                userIdCurrent: { "in": "query", "name": "userIdCurrent", "required": true, "dataType": "string" },
+                userRoleView: { "in": "body", "name": "userRoleView", "required": true, "ref": "UserRoleView" },
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             };
 

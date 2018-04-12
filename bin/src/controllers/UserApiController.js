@@ -34,14 +34,12 @@ const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
 const express = require("express");
 const lib_service_1 = require("@gtm/lib.service");
-const AppConfig_1 = require("./../config/AppConfig");
 const tsoa_2 = require("tsoa");
 const UserRepository_1 = require("../repositories/UserRepository");
 const MUserView_1 = require("../views/MUserView");
 const UserEntity_1 = require("../entities/UserEntity");
 const RoleView_1 = require("../views/RoleView");
 const RoleRepository_1 = require("../repositories/RoleRepository");
-const coreClient = require("@scg/lib.client.core");
 const bson_1 = require("bson");
 var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
@@ -207,7 +205,6 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     /** Create or update User Role */
     createOrUpdateUserRole(userRoleView, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            const coreApi = new coreClient.LendApi(AppConfig_1.default.services.core, req.cookies.jwt);
             try {
                 let user = yield this.UserRepository.findOneById(userRoleView.userId);
                 if (!user) {
@@ -242,18 +239,19 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Create or update User Role */
-    createOrUpdateUserRoleMobile(roleType, userIdCurrent, req) {
+    createOrUpdateUserRoleMobile(userRoleView, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let user = yield this.UserRepository.findOneById(userIdCurrent);
+                let user = yield this.UserRepository.findOneById(userRoleView.userId);
                 if (!user) {
                     return Promise.reject("User does not exist");
                 }
-                if (!(roleType in RoleView_1.RoleType)) {
-                    return Promise.reject(`Role type ${roleType} does not exist`);
+                if (!(userRoleView.roleType in RoleView_1.RoleType)) {
+                    return Promise.reject(`Role type ${userRoleView.roleType} does not exist`);
                 }
-                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[roleType]);
-                if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[roleType])) {
+                let roleLookup = yield this.RoleRepository.getRoleByType(RoleView_1.RoleType[userRoleView.roleType]);
+                let userUpdated;
+                if (user.roles && user.roles.some(us => us.code == RoleView_1.RoleType[userRoleView.roleType])) {
                     // Update if this role is existed and updated in role entity
                     user.roles.map(ur => {
                         if (ur.id == roleLookup.id) {
@@ -266,14 +264,13 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                 }
                 user.isFirstLogin = false;
-                let userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userIdCurrent }, user);
+                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
                 if (userUpdated) {
-                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userIdCurrent)));
+                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userRoleView.userId)));
                 }
                 return Promise.reject('Not found.');
             }
             catch (error) {
-                console.log('Create Role Mobile Error', error);
                 return Promise.reject(error);
             }
         });
@@ -447,11 +444,10 @@ __decorate([
 ], UserApiController.prototype, "createOrUpdateUserRole", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role-mobile'),
-    __param(0, tsoa_1.Query()),
-    __param(1, tsoa_1.Query()),
-    __param(2, tsoa_1.Request()),
+    __param(0, tsoa_1.Body()),
+    __param(1, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, String, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "createOrUpdateUserRoleMobile", null);
 __decorate([

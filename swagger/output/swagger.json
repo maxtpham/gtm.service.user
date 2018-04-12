@@ -2087,17 +2087,12 @@
 				],
 				"parameters": [
 					{
-						"in": "query",
-						"name": "roleType",
+						"in": "body",
+						"name": "userRoleView",
 						"required": true,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "userIdCurrent",
-						"required": true,
-						"type": "string"
+						"schema": {
+							"$ref": "#/definitions/UserRoleView"
+						}
 					}
 				]
 			}
