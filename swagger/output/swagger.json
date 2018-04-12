@@ -2027,9 +2027,9 @@
 				]
 			}
 		},
-		"/api/user/v1/user/create-or-update-role-mobile": {
+		"/api/user/v1/user/create-or-update-role": {
 			"post": {
-				"operationId": "CreateOrUpdateUserRoleMobile",
+				"operationId": "CreateOrUpdateUserRole",
 				"produces": [
 					"application/json"
 				],

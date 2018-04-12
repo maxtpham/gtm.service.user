@@ -203,45 +203,10 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Create or update User Role */
-    // @Tags('User') @Security('jwt') @Post('/create-or-update-role')
-    // public async createOrUpdateUserRole(@Body() userRoleView: UserRoleView, @Request() req: express.Request): Promise<ProfileView> {
-    //     try {
-    //         let user = await this.UserRepository.findOneById(userRoleView.userId);
-    //         if (!user) {
-    //             return Promise.reject("User does not exist");
-    //         }
-    //         if (!(userRoleView.roleType in RoleType)) {
-    //             return Promise.reject(`Role type ${userRoleView.roleType} does not exist`);
-    //         }
-    //         let roleLookup = await this.RoleRepository.getRoleByType(RoleType[userRoleView.roleType]);
-    //         let userUpdated;
-    //         if (user.roles && user.roles.some(us => us.code == RoleType[userRoleView.roleType])) {
-    //             // Update if this role is existed and updated in role entity
-    //             user.roles.map(ur => {
-    //                 if (ur.id == roleLookup.id) {
-    //                     ur.id = roleLookup.id,
-    //                         ur.code = roleLookup.code
-    //                 }
-    //             });
-    //         }
-    //         else { // Create new role
-    //             user.roles.push({ id: roleLookup.id, code: roleLookup.code });
-    //         }
-    //         userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
-    //         if (userUpdated) {
-    //             return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userRoleView.userId)));
-    //         }
-    //         return Promise.reject('Not found.');
-    //     } catch (error) {
-    //         return Promise.reject(error);
-    //     }
-    // }
-    /** Create or update User Role */
-    createOrUpdateUserRoleMobile(userRoleView, req) {
+    createOrUpdateUserRole(userRoleView, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let userId = req.user.user;
-                let user = yield this.UserRepository.findOneById(userId);
+                let user = yield this.UserRepository.findOneById(userRoleView.userId);
                 if (!user) {
                     return Promise.reject("User does not exist");
                 }
@@ -263,9 +228,9 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                 }
                 user.isFirstLogin = false;
-                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userId }, user);
+                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
                 if (userUpdated) {
-                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userId)));
+                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userRoleView.userId)));
                 }
                 return Promise.reject('Not found.');
             }
@@ -435,13 +400,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getDetailViewById", null);
 __decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role-mobile'),
-    __param(0, tsoa_1.Body()),
-    __param(1, tsoa_1.Request()),
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/create-or-update-role'),
+    __param(0, tsoa_1.Body()), __param(1, tsoa_1.Request()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], UserApiController.prototype, "createOrUpdateUserRoleMobile", null);
+], UserApiController.prototype, "createOrUpdateUserRole", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-user-details/{userId}'),
     __param(1, tsoa_1.Body()),

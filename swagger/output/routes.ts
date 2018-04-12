@@ -904,7 +904,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getDetailViewById.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.post('/api/user/v1/user/create-or-update-role-mobile',
+    app.post('/api/user/v1/user/create-or-update-role',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
@@ -922,7 +922,7 @@ export function RegisterRoutes(app: any) {
             const controller = iocContainer.get<UserApiController>(UserApiController);
 
 
-            const promise = controller.createOrUpdateUserRoleMobile.apply(controller, validatedArgs);
+            const promise = controller.createOrUpdateUserRole.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-user-details/:userId',
