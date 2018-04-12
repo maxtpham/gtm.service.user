@@ -242,7 +242,8 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     createOrUpdateUserRoleMobile(userRoleView, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let user = yield this.UserRepository.findOneById(userRoleView.userId);
+                let userId = req.user.user;
+                let user = yield this.UserRepository.findOneById(userId);
                 if (!user) {
                     return Promise.reject("User does not exist");
                 }
@@ -264,9 +265,9 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     user.roles.push({ id: roleLookup.id, code: roleLookup.code });
                 }
                 user.isFirstLogin = false;
-                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
+                userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userId }, user);
                 if (userUpdated) {
-                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userRoleView.userId)));
+                    return Promise.resolve(UserEntity_1.User.toProfileView(yield this.UserRepository.findOneById(userId)));
                 }
                 return Promise.reject('Not found.');
             }

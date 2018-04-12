@@ -254,7 +254,8 @@ export class UserApiController extends ApiController {
         @Request() req: express.Request
     ): Promise<ProfileView> {
         try {
-            let user = await this.UserRepository.findOneById(userRoleView.userId);
+            let userId = (<JwtToken>req.user).user;
+            let user = await this.UserRepository.findOneById(userId);
             if (!user) {
                 return Promise.reject("User does not exist");
             }
@@ -278,9 +279,9 @@ export class UserApiController extends ApiController {
                 user.roles.push({ id: roleLookup.id, code: roleLookup.code });
             }
             user.isFirstLogin = false;
-            userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userRoleView.userId }, user);
+            userUpdated = await this.UserRepository.findOneAndUpdate({ _id: userId }, user);
             if (userUpdated) {
-                return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userRoleView.userId)));
+                return Promise.resolve(User.toProfileView(await this.UserRepository.findOneById(userId)));
             }
             return Promise.reject('Not found.');
         } catch (error) {
