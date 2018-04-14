@@ -46,6 +46,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             if (currentProfile && deepEqual(currentProfile, (<any>profile)._json, { strict: true })) {
                 user = currentUser;
             } else {
+                console.log('profileExt.avatar', profileExt.avatar);
                 if (currentUser.code !== profileExt.id) updatedUser.code = profileExt.id;
                 if (currentUser.name !== profileExt.name && currentUser.name === currentProfile.name) updatedUser.name = profileExt.name;
                 if (currentUser.provider !== profile.provider) updatedUser.provider = profile.provider;
@@ -63,6 +64,8 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
             }
         } else {
             // Create new user
+            console.log('profileExt.avatar', profileExt.avatar);
+            
             user = await (<UserRepository>this).save(<UserEntity>{
                 code: profileExt.id,
                 name: profileExt.name,

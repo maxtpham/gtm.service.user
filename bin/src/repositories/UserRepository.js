@@ -47,6 +47,7 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
                     user = currentUser;
                 }
                 else {
+                    console.log('profileExt.avatar', profileExt.avatar);
                     if (currentUser.code !== profileExt.id)
                         updatedUser.code = profileExt.id;
                     if (currentUser.name !== profileExt.name && currentUser.name === currentProfile.name)
@@ -73,6 +74,7 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
             }
             else {
                 // Create new user
+                console.log('profileExt.avatar', profileExt.avatar);
                 user = yield this.save({
                     code: profileExt.id,
                     name: profileExt.name,

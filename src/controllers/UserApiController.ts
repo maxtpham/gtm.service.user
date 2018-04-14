@@ -328,7 +328,7 @@ export class UserApiController extends ApiController {
 
             if (type === 'WithDraw') {
                 if (userAccountView.balance > userAccount.account.balance) {
-                    return Promise.reject(`Số dư ${userAccount.account.balance} không đủ để thực hiện giao dịch này`);
+                    return Promise.reject(`The account balance ${userAccount.account.balance} is not enough to perform this transaction`);
                 }
                 userAccount.account.balance = userAccount.account.balance - userAccountView.balance;
             }
