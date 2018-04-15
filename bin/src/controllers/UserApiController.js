@@ -97,6 +97,15 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found`);
         });
     }
+    getProfileCurrentForMobile(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userEntity = yield this.UserRepository.findOneById(req.user.user);
+            if (userEntity) {
+                return Promise.resolve(UserEntity_1.User.toProfileViewForMobile(userEntity));
+            }
+            return Promise.reject(`Not found`);
+        });
+    }
     updateProfileCurrent(profileView, req) {
         return __awaiter(this, void 0, void 0, function* () {
             const { roles, code, provider, active } = profileView, updatingProfileView = __rest(profileView, ["roles", "code", "provider", "active"]);
@@ -361,6 +370,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getProfileCurrent", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/profile-for-mobile'),
+    __param(0, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getProfileCurrentForMobile", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/profile'),
     __param(0, tsoa_1.Body()), __param(1, tsoa_1.Request()),

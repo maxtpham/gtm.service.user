@@ -678,6 +678,21 @@ function RegisterRoutes(app) {
         const promise = controller.getProfileCurrent.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
+    app.get('/api/user/v1/user/profile-for-mobile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.getProfileCurrentForMobile.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
     app.post('/api/user/v1/user/profile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             profileView: { "in": "body", "name": "profileView", "required": true, "ref": "ProfileView" },

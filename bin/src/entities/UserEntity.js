@@ -24,6 +24,13 @@ var User;
         return view;
     }
     User.toProfileView = toProfileView;
+    function toProfileViewForMobile(entity) {
+        const _a = !!entity.toObject ? entity.toObject() : entity, { _id, __v, created, deleted, profiles, updated, avatar } = _a, view = __rest(_a, ["_id", "__v", "created", "deleted", "profiles", "updated", "avatar"]);
+        delete profiles.google;
+        delete profiles.facebook;
+        return Object.assign({}, view, profiles);
+    }
+    User.toProfileViewForMobile = toProfileViewForMobile;
     function toProfileViews(entity) {
         let profilesList = [];
         entity.forEach((item) => {

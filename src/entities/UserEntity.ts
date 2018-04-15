@@ -104,6 +104,12 @@ export module User {
         const { _id, __v, created, deleted, updated, profiles, avatar, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
         return view;
     }
+    export function toProfileViewForMobile(entity: UserEntity): ProfileView {
+        const { _id, __v, created, deleted, profiles, updated, avatar, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
+        delete profiles.google;
+        delete profiles.facebook;
+        return {...view, ...profiles };
+    }
     export function toProfileViews(entity: UserEntity[]): ProfileView[] {
         let profilesList: ProfileView[] = [];
         entity.forEach((item) => {

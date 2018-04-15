@@ -84,6 +84,15 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Not found`);
     }
 
+    @Tags('User') @Security('jwt') @Get('/profile-for-mobile')
+    public async getProfileCurrentForMobile(@Request() req: express.Request): Promise<ProfileView> {
+        let userEntity = await this.UserRepository.findOneById((<JwtToken>req.user).user);
+        if (userEntity) {
+            return Promise.resolve(User.toProfileViewForMobile(userEntity));
+        }
+        return Promise.reject(`Not found`);
+    }
+
     @Tags('User') @Security('jwt') @Post('/profile')
     public async updateProfileCurrent(@Body() profileView: ProfileView, @Request() req?: express.Request): Promise<ProfileView> {
         const { roles, code, provider, active, ...updatingProfileView } = profileView;
