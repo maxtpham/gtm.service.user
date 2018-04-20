@@ -249,6 +249,11 @@ const models: TsoaRoute.Models = {
             "houseHolder": { "dataType": "string" },
         },
     },
+    "MFCMView": {
+        "properties": {
+            "fcmToken": { "dataType": "string", "required": true },
+        },
+    },
     "MAvatarView": {
         "properties": {
             "media": { "dataType": "string", "required": true },
@@ -856,6 +861,47 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.updateUserProfiles.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/user/set-fcm-for-mobile',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                fcms: { "in": "body", "name": "fcms", "required": true, "ref": "MFCMView" },
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.setFCMForMobile.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/user/get-fcm-for-mobile',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.getFCMForMobile.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-avatar',
