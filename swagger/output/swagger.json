@@ -561,6 +561,9 @@
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
+				},
+				"test": {
+					"type": "boolean"
 				}
 			},
 			"required": [
@@ -718,6 +721,9 @@
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
+				},
+				"test": {
+					"type": "boolean"
 				},
 				"profiles": {
 					"type": "object",
@@ -894,6 +900,9 @@
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
+				},
+				"test": {
+					"type": "boolean"
 				},
 				"profiles": {
 					"type": "object",

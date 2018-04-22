@@ -186,6 +186,7 @@ const models: TsoaRoute.Models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "isFirstLogin": { "dataType": "boolean" },
+            "test": { "dataType": "boolean" },
         },
     },
     "Binary": {
@@ -229,6 +230,7 @@ const models: TsoaRoute.Models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "isFirstLogin": { "dataType": "boolean" },
+            "test": { "dataType": "boolean" },
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
         },
@@ -284,6 +286,7 @@ const models: TsoaRoute.Models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "isFirstLogin": { "dataType": "boolean" },
+            "test": { "dataType": "boolean" },
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
             "id": { "dataType": "string", "required": true },
