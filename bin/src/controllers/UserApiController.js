@@ -157,49 +157,6 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
         });
     }
     /** Update user with profiles */
-    setFCMForMobile(fcms, req) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let users = yield this.UserRepository.findOne({ _id: req.user.user });
-            if (!users) {
-                return Promise.reject("User not exist");
-            }
-            const { roles, code, provider, active, profiles } = users;
-            const { google, facebook } = profiles;
-            users.profiles = {
-                google: google ? google : "",
-                facebook: facebook ? facebook : "",
-                default: Object.assign({}, profiles.default, { fcmToken: fcms.fcmToken })
-            };
-            users.updated = new Date().getTime();
-            let userSave = yield this.UserRepository.update({ _id: req.user.user }, users);
-            if (userSave) {
-                return Promise.resolve("Tạo FCM thành công");
-            }
-            return Promise.reject(`Tạo FCM không thành công`);
-        });
-    }
-    /** Update user with profiles */
-    getFCMForMobile(userId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let users = yield this.UserRepository.findOne({ _id: userId });
-            if (!users) {
-                return Promise.reject("User not exist");
-            }
-            let defaults = users.profiles.default ? users.profiles.default : null;
-            if (defaults) {
-                let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
-                if (fcm !== "0") {
-                    let res = {
-                        fcmToken: fcm,
-                    };
-                    return Promise.resolve(res);
-                }
-                return Promise.reject(`Nick chưa có FCM`);
-            }
-            return Promise.reject(`Chưa Tạo FCM`);
-        });
-    }
-    /** Update user with profiles */
     updateAvatar(avatar, req) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -435,21 +392,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "updateUserProfiles", null);
-__decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/set-fcm-for-mobile'),
-    __param(0, tsoa_1.Body()),
-    __param(1, tsoa_1.Request()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], UserApiController.prototype, "setFCMForMobile", null);
-__decorate([
-    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-fcm-for-mobile'),
-    __param(0, tsoa_1.Query()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], UserApiController.prototype, "getFCMForMobile", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/update-avatar'),
     __param(0, tsoa_1.Body()),

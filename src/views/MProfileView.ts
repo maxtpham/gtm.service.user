@@ -20,9 +20,3 @@ export interface MProfileView {
   
 }
 
-export interface MFCMView {
-
- fcmToken: string;
-  
-}
-

@@ -250,11 +250,6 @@ const models = {
             "houseHolder": { "dataType": "string" },
         },
     },
-    "MFCMView": {
-        "properties": {
-            "fcmToken": { "dataType": "string", "required": true },
-        },
-    },
     "MAvatarView": {
         "properties": {
             "media": { "dataType": "string", "required": true },
@@ -728,37 +723,6 @@ function RegisterRoutes(app) {
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
         const promise = controller.updateUserProfiles.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.post('/api/user/v1/user/set-fcm-for-mobile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            fcms: { "in": "body", "name": "fcms", "required": true, "ref": "MFCMView" },
-            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.setFCMForMobile.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    app.get('/api/user/v1/user/get-fcm-for-mobile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
-        const args = {
-            userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
-        };
-        let validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request);
-        }
-        catch (err) {
-            return next(err);
-        }
-        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
-        const promise = controller.getFCMForMobile.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.post('/api/user/v1/user/update-avatar', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {

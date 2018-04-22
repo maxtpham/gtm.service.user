@@ -9,7 +9,7 @@ import { JwtToken } from '@gtm/lib.service.auth';
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
 import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView, UserStatus, MUserFind, UserAccountView } from '../views/MUserView';
 import { UserEntity, User, ProfileView, UserRole, UserAccount } from '../entities/UserEntity';
-import { MProfileView, MFCMView } from '../views/MProfileView';
+import { MProfileView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
 import * as coreClient from '@scg/lib.client.core';
@@ -149,66 +149,6 @@ export class UserApiController extends ApiController {
             return Promise.resolve(users);
         }
         return Promise.reject(`Not found.`);
-    }
-
-    /** Update user with profiles */
-    @Tags('User') @Security('jwt') @Post('/set-fcm-for-mobile')
-    public async setFCMForMobile(
-            @Body() fcms: MFCMView,
-            @Request() req: express.Request
-    ): Promise<string> {
-    
-        let users = await this.UserRepository.findOne({ _id: (<JwtToken>req.user).user });
-        if (!users) {
-            return Promise.reject("User not exist");
-        }
-    
-        const { roles, code, provider, active, profiles } = users;
-        const { google, facebook } = profiles;
-    
-        users.profiles = {
-            google: google ? google : "",
-            facebook: facebook ? facebook : "",
-            default: {
-                ...profiles.default,
-                fcmToken: fcms.fcmToken
-            }
-        };
-    
-        users.updated = new Date().getTime();
-    
-        let userSave = await this.UserRepository.update({ _id: (<JwtToken>req.user).user }, users);
-        if (userSave) {
-            return Promise.resolve("Tạo FCM thành công");
-        }
-        return Promise.reject(`Tạo FCM không thành công`);
-    }
-        
-    /** Update user with profiles */
-    @Tags('User') @Security('jwt') @Get('/get-fcm-for-mobile')
-    public async getFCMForMobile(
-            @Query() userId: string,
-    ): Promise<MFCMView> {
-    
-        let users = await this.UserRepository.findOne({ _id: userId });
-        if (!users) {
-            return Promise.reject("User not exist");
-        }
-    
-        let defaults = users.profiles.default ?  users.profiles.default : null;
-        if (defaults) {
-            let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
-            if (fcm !== "0"){
-                let res: MFCMView = {
-                    fcmToken: fcm,
-                };
-                return Promise.resolve(res);
-            }
-            return Promise.reject(`Nick chưa có FCM`);
-
-        }
-    
-        return Promise.reject(`Chưa Tạo FCM`);
     }
 
     /** Update user with profiles */
