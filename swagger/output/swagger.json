@@ -561,9 +561,6 @@
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
-				},
-				"test": {
-					"type": "boolean"
 				}
 			},
 			"required": [
@@ -721,9 +718,6 @@
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
-				},
-				"test": {
-					"type": "boolean"
 				},
 				"profiles": {
 					"type": "object",
@@ -900,9 +894,6 @@
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
-				},
-				"test": {
-					"type": "boolean"
 				},
 				"profiles": {
 					"type": "object",
@@ -2291,74 +2282,6 @@
 						"in": "query",
 						"name": "type",
 						"required": false,
-						"type": "string"
-					}
-				]
-			}
-		},
-		"/api/user/v1/user/set-fcm-for-mobile-app": {
-			"post": {
-				"operationId": "SetFCMForMobileApp",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"type": "string"
-						}
-					}
-				},
-				"description": "setFCMForMobileApp ",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "fcms",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/MFCMView"
-						}
-					}
-				]
-			}
-		},
-		"/api/user/v1/user/get-fcm-for-mobile-app": {
-			"get": {
-				"operationId": "GetFCMForMobileApp",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MFCMView"
-						}
-					}
-				},
-				"description": "getFCMForMobileApp ",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "userId",
-						"required": true,
 						"type": "string"
 					}
 				]

@@ -186,7 +186,6 @@ const models: TsoaRoute.Models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "isFirstLogin": { "dataType": "boolean" },
-            "test": { "dataType": "boolean" },
         },
     },
     "Binary": {
@@ -230,7 +229,6 @@ const models: TsoaRoute.Models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "isFirstLogin": { "dataType": "boolean" },
-            "test": { "dataType": "boolean" },
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
         },
@@ -286,7 +284,6 @@ const models: TsoaRoute.Models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "isFirstLogin": { "dataType": "boolean" },
-            "test": { "dataType": "boolean" },
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
             "id": { "dataType": "string", "required": true },
@@ -1058,47 +1055,6 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.updateUserAccount.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.post('/api/user/v1/user/set-fcm-for-mobile-app',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                fcms: { "in": "body", "name": "fcms", "required": true, "ref": "MFCMView" },
-                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<UserApiController>(UserApiController);
-
-
-            const promise = controller.setFCMForMobileApp.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/user/get-fcm-for-mobile-app',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<UserApiController>(UserApiController);
-
-
-            const promise = controller.getFCMForMobileApp.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
 
