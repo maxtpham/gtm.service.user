@@ -371,6 +371,49 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
         });
     }
+    /** setFCMForMobileApp */
+    setFCMForMobileApp(fcms, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield this.UserRepository.findOne({ _id: req.user.user });
+            if (!users) {
+                return Promise.reject("User not exist");
+            }
+            const { roles, code, provider, active, profiles } = users;
+            const { google, facebook } = profiles;
+            users.profiles = {
+                google: google ? google : "",
+                facebook: facebook ? facebook : "",
+                default: Object.assign({}, profiles.default, { fcmToken: fcms.fcmToken })
+            };
+            users.updated = new Date().getTime();
+            let userSave = yield this.UserRepository.update({ _id: req.user.user }, users);
+            if (userSave) {
+                return Promise.resolve("Tạo FCM thành công");
+            }
+            return Promise.reject(`Tạo FCM không thành công`);
+        });
+    }
+    /** getFCMForMobileApp */
+    getFCMForMobileApp(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield this.UserRepository.findOne({ _id: userId });
+            if (!users) {
+                return Promise.reject("User not exist");
+            }
+            let defaults = users.profiles.default ? users.profiles.default : null;
+            if (defaults) {
+                let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
+                if (fcm !== "0") {
+                    let res = {
+                        fcmToken: fcm,
+                    };
+                    return Promise.resolve(res);
+                }
+                return Promise.reject(`Nick chưa có FCM`);
+            }
+            return Promise.reject(`Chưa Tạo FCM`);
+        });
+    }
 };
 __decorate([
     inversify_1.inject(UserRepository_1.UserRepositoryTYPE),
@@ -504,6 +547,21 @@ __decorate([
     __metadata("design:paramtypes", [Object, String, Object, String]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "updateUserAccount", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Post('/set-fcm-for-mobile-app'),
+    __param(0, tsoa_1.Body()),
+    __param(1, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "setFCMForMobileApp", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-fcm-for-mobile-app'),
+    __param(0, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getFCMForMobileApp", null);
 UserApiController = UserApiController_1 = __decorate([
     lib_common_1.injectableSingleton(UserApiController_1),
     tsoa_1.Route('api/user/v1/user')

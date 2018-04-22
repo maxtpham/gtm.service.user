@@ -879,6 +879,37 @@ function RegisterRoutes(app) {
         const promise = controller.updateUserAccount.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
+    app.post('/api/user/v1/user/set-fcm-for-mobile-app', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            fcms: { "in": "body", "name": "fcms", "required": true, "ref": "MFCMView" },
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.setFCMForMobileApp.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/user/get-fcm-for-mobile-app', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.getFCMForMobileApp.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
     function authenticateMiddleware(security = []) {
         return (request, response, next) => {
             let responded = 0;
