@@ -156,7 +156,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
-    /** Update user with profiles */
+    /** setFCMForMobile */
     setFCMForMobile(fcms, req) {
         return __awaiter(this, void 0, void 0, function* () {
             let users = yield this.UserRepository.findOne({ _id: req.user.user });
@@ -178,7 +178,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Tạo FCM không thành công`);
         });
     }
-    /** Update user with profiles */
+    /** getFCMForMobile */
     getFCMForMobile(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             let users = yield this.UserRepository.findOne({ _id: userId });

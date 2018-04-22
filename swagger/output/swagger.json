@@ -1943,7 +1943,7 @@
 						}
 					}
 				},
-				"description": "Update user with profiles ",
+				"description": "setFCMForMobile ",
 				"tags": [
 					"User"
 				],
@@ -1978,7 +1978,7 @@
 						}
 					}
 				},
-				"description": "Update user with profiles ",
+				"description": "getFCMForMobile ",
 				"tags": [
 					"User"
 				],

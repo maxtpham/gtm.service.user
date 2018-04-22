@@ -151,7 +151,7 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Not found.`);
     }
 
-    /** Update user with profiles */
+    /** setFCMForMobile */
     @Tags('User') @Security('jwt') @Post('/set-fcm-for-mobile')
     public async setFCMForMobile(
             @Body() fcms: MFCMView,
@@ -184,7 +184,7 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Tạo FCM không thành công`);
     }
         
-    /** Update user with profiles */
+    /** getFCMForMobile */
     @Tags('User') @Security('jwt') @Get('/get-fcm-for-mobile')
     public async getFCMForMobile(
             @Query() userId: string,
