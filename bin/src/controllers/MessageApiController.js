@@ -28,6 +28,7 @@ const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const MessageRepository_1 = require("../repositories/MessageRepository");
 const UserRepository_1 = require("../repositories/UserRepository");
+const firebase_1 = require("../firebase/firebase");
 let MessageApiController = MessageApiController_1 = class MessageApiController extends lib_service_1.ApiController {
     /** Get Messages */
     getEntities(from, to, pageNumber, itemCount, sortName, sortType) {
@@ -247,8 +248,31 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
     /** Create New Message */
     createEntity(messageView, req) {
         return __awaiter(this, void 0, void 0, function* () {
+            var registrationToken = 'dtvzBkS4RXY:APA91bH1jB7IkbTMTnURoKnmelRqwOHUTpEyI3kW5BljsUkISH-1UFsYPmG4eYttRcI0410ez0jWtAnsyETO9g5pb66SWvQqBaSxeQIjtGjoyAJqcCcek1_b0lfBfChUo1fqjmRoJe3d';
             let userId = req.user.user;
             let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
+            let userInfo = yield this.UserRepository.findOneById(userId);
+            let userInfoSendNoti = yield this.UserRepository.findOne({ _id: messageView.toUserId });
+            let defaults = userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
+            if (defaults) {
+                let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
+                if (fcm !== "0") {
+                    var messageNoti = {
+                        data: {
+                            title: "Tin nhắn: " + userInfo.name,
+                            message: messageView.content
+                        },
+                        token: fcm
+                    };
+                    firebase_1.firebaseAdmin.messaging().send(messageNoti)
+                        .then((response) => {
+                        console.log('Successfully sent message:', response);
+                    })
+                        .catch((error) => {
+                        console.log('Error sending message:', error);
+                    });
+                }
+            }
             if (message) {
                 return Promise.resolve(yield this.MessageRepository.findOneById(message._id));
             }

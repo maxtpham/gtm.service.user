@@ -10,6 +10,8 @@ import { MessageRepository, MessageRepositoryTYPE } from '../repositories/Messag
 import { MessageView, MessageViewWithPagination, MessageDetailView, MessageViewWithPaginationApp, MessageDetailViewApp, MessageViewWithPaginationAnUserApp } from '../views/MessageView';
 import { MessageEntity } from '../entities/MessageEntity';
 import { UserRepositoryTYPE, UserRepository } from '../repositories/UserRepository';
+import { firebaseAdmin } from "../firebase/firebase";
+import { MFCMView } from '../views/MProfileView';
 
 @injectableSingleton(MessageApiController)
 @Route('api/user/v1/Message')
@@ -19,7 +21,7 @@ export class MessageApiController extends ApiController {
 
     /** Get Messages */
     @Tags('Message') @Security('jwt') @Get()
-    public async getEntities(@Query() from?: string, @Query() to?: string,
+    public async getEntities( @Query() from?: string, @Query() to?: string,
         @Query() pageNumber?: number, @Query() itemCount?: number,
         @Query() sortName?: string, @Query() sortType?: number,
     )
@@ -260,8 +262,39 @@ export class MessageApiController extends ApiController {
         @Body() messageView: MessageView,
         @Request() req: express.Request,
     ): Promise<MessageEntity> {
+
+        var registrationToken = 'dtvzBkS4RXY:APA91bH1jB7IkbTMTnURoKnmelRqwOHUTpEyI3kW5BljsUkISH-1UFsYPmG4eYttRcI0410ez0jWtAnsyETO9g5pb66SWvQqBaSxeQIjtGjoyAJqcCcek1_b0lfBfChUo1fqjmRoJe3d';
+
         let userId = (<JwtToken>req.user).user;
         let message = await this.MessageRepository.save(<MessageEntity>{ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
+
+        let userInfo = await this.UserRepository.findOneById(userId);
+
+        let userInfoSendNoti = await this.UserRepository.findOne({ _id: messageView.toUserId });
+
+        let defaults = userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
+
+        if (defaults) {
+            let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
+            if (fcm !== "0") {
+                var messageNoti = {
+                    data: {
+                        title: "Tin nhắn: " + userInfo.name,
+                        message: messageView.content
+                    },
+                    token: fcm
+                };
+
+                firebaseAdmin.messaging().send(messageNoti)
+                    .then((response) => {
+                        console.log('Successfully sent message:', response);
+                    })
+                    .catch((error) => {
+                        console.log('Error sending message:', error);
+                    });
+            }
+        }
+
         if (message) {
             return Promise.resolve(await this.MessageRepository.findOneById(message._id));
         }
