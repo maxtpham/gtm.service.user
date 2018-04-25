@@ -248,7 +248,6 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
     /** Create New Message */
     createEntity(messageView, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            var registrationToken = 'dtvzBkS4RXY:APA91bH1jB7IkbTMTnURoKnmelRqwOHUTpEyI3kW5BljsUkISH-1UFsYPmG4eYttRcI0410ez0jWtAnsyETO9g5pb66SWvQqBaSxeQIjtGjoyAJqcCcek1_b0lfBfChUo1fqjmRoJe3d';
             let userId = req.user.user;
             let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
             let userInfo = yield this.UserRepository.findOneById(userId);

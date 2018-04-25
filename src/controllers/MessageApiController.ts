@@ -263,8 +263,6 @@ export class MessageApiController extends ApiController {
         @Request() req: express.Request,
     ): Promise<MessageEntity> {
 
-        var registrationToken = 'dtvzBkS4RXY:APA91bH1jB7IkbTMTnURoKnmelRqwOHUTpEyI3kW5BljsUkISH-1UFsYPmG4eYttRcI0410ez0jWtAnsyETO9g5pb66SWvQqBaSxeQIjtGjoyAJqcCcek1_b0lfBfChUo1fqjmRoJe3d';
-
         let userId = (<JwtToken>req.user).user;
         let message = await this.MessageRepository.save(<MessageEntity>{ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
 
