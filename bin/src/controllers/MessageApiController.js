@@ -262,7 +262,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                     return Promise.reject(`Could not found receiver id ${messageView.toUserId}`);
                 }
                 let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
-                if (!message) {
+                if (message) {
                     let defaults = userInfoSendNoti.profiles && userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
                     if (defaults) {
                         let fcm = defaults.fcmToken ? defaults.fcmToken : "0";

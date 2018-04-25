@@ -282,7 +282,7 @@ export class MessageApiController extends ApiController {
 
             let message = await this.MessageRepository.save(<MessageEntity>{ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
 
-            if (!message) {
+            if (message) {
                 let defaults = userInfoSendNoti.profiles && userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
 
                 if (defaults) {
