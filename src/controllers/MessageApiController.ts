@@ -21,7 +21,7 @@ export class MessageApiController extends ApiController {
 
     /** Get Messages */
     @Tags('Message') @Security('jwt') @Get()
-    public async getEntities( @Query() from?: string, @Query() to?: string,
+    public async getEntities(@Query() from?: string, @Query() to?: string,
         @Query() pageNumber?: number, @Query() itemCount?: number,
         @Query() sortName?: string, @Query() sortType?: number,
     )
@@ -262,42 +262,47 @@ export class MessageApiController extends ApiController {
         @Body() messageView: MessageView,
         @Request() req: express.Request,
     ): Promise<MessageEntity> {
-
-        let userId = (<JwtToken>req.user).user;
-        let message = await this.MessageRepository.save(<MessageEntity>{ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
-
-        let userInfo = await this.UserRepository.findOneById(userId);
-
-        let userInfoSendNoti = await this.UserRepository.findOne({ _id: messageView.toUserId });
-
-        let defaults = userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
-
-        if (defaults) {
-            let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
-            if (fcm !== "0") {
-                var messageNoti = {
-                    data: {
-                        title: "Tin nhắn: " + userInfo.name,
-                        message: messageView.content
-                    },
-                    token: fcm
-                };
-
-                firebaseAdmin.messaging().send(messageNoti)
-                    .then((response) => {
-                        console.log('Successfully sent message:', response);
-                    })
-                    .catch((error) => {
-                        console.log('Error sending message:', error);
-                    });
+        try {
+            let userId = (<JwtToken>req.user).user;
+            if (messageView && !messageView.content) {
+                return Promise.reject('Can not send an empty message.');
             }
-        }
 
-        if (message) {
-            return Promise.resolve(await this.MessageRepository.findOneById(message._id));
-        }
-        if (message instanceof Error) {
-            return Promise.reject('Error');
+            let userInfo = await this.UserRepository.findOneById(userId);
+
+            if (!userInfo) {
+                return Promise.reject(`Could not found sender id ${userId}`);
+            }
+
+            let userInfoSendNoti = await this.UserRepository.findOneById(messageView.toUserId);
+
+            if (!userInfoSendNoti) {
+                return Promise.reject(`Could not found receiver id ${messageView.toUserId}`);
+            }
+
+            let message = await this.MessageRepository.save(<MessageEntity>{ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
+
+            if (!message) {
+                let defaults = userInfoSendNoti.profiles && userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
+
+                if (defaults) {
+                    let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
+                    if (fcm !== "0") {
+                        var messageNoti = {
+                            data: {
+                                title: "Tin nhắn: " + userInfo.name,
+                                message: messageView.content
+                            },
+                            token: fcm
+                        };
+                        await firebaseAdmin.messaging().send(messageNoti);
+                    }
+                }
+                return Promise.resolve(await this.MessageRepository.findOneById(message._id));
+            }
+        } catch (error) {
+            console.log(error);
+            return Promise.reject(error);
         }
     }
 

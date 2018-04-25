@@ -248,35 +248,41 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
     /** Create New Message */
     createEntity(messageView, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            let userId = req.user.user;
-            let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
-            let userInfo = yield this.UserRepository.findOneById(userId);
-            let userInfoSendNoti = yield this.UserRepository.findOne({ _id: messageView.toUserId });
-            let defaults = userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
-            if (defaults) {
-                let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
-                if (fcm !== "0") {
-                    var messageNoti = {
-                        data: {
-                            title: "Tin nhắn: " + userInfo.name,
-                            message: messageView.content
-                        },
-                        token: fcm
-                    };
-                    firebase_1.firebaseAdmin.messaging().send(messageNoti)
-                        .then((response) => {
-                        console.log('Successfully sent message:', response);
-                    })
-                        .catch((error) => {
-                        console.log('Error sending message:', error);
-                    });
+            try {
+                let userId = req.user.user;
+                if (messageView && !messageView.content) {
+                    return Promise.reject('Can not send an empty message.');
+                }
+                let userInfo = yield this.UserRepository.findOneById(userId);
+                if (!userInfo) {
+                    return Promise.reject(`Could not found sender id ${userId}`);
+                }
+                let userInfoSendNoti = yield this.UserRepository.findOneById(messageView.toUserId);
+                if (!userInfoSendNoti) {
+                    return Promise.reject(`Could not found receiver id ${messageView.toUserId}`);
+                }
+                let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
+                if (!message) {
+                    let defaults = userInfoSendNoti.profiles && userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
+                    if (defaults) {
+                        let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
+                        if (fcm !== "0") {
+                            var messageNoti = {
+                                data: {
+                                    title: "Tin nhắn: " + userInfo.name,
+                                    message: messageView.content
+                                },
+                                token: fcm
+                            };
+                            yield firebase_1.firebaseAdmin.messaging().send(messageNoti);
+                        }
+                    }
+                    return Promise.resolve(yield this.MessageRepository.findOneById(message._id));
                 }
             }
-            if (message) {
-                return Promise.resolve(yield this.MessageRepository.findOneById(message._id));
-            }
-            if (message instanceof Error) {
-                return Promise.reject('Error');
+            catch (error) {
+                console.log(error);
+                return Promise.reject(error);
             }
         });
     }
