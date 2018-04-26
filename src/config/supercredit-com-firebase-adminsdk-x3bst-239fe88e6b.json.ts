@@ -1,4 +1,4 @@
-{
+export default {
   "type": "service_account",
   "project_id": "supercredit-com",
   "private_key_id": "239fe88e6bc96f3c26b8ea8ec923b5fa930178a2",
