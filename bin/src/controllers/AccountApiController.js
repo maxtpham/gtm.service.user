@@ -104,6 +104,7 @@ let AccountApiController = AccountApiController_1 = class AccountApiController e
                 let accountToSave = accountView;
                 accountToSave.updated = Date.now();
                 accountToSave.balance = account.balance + accountView.balance;
+                accountToSave.balanceGold = account.balanceGold + accountView.balanceGold;
                 let accountSave = yield this.AccountRepository.findOneAndUpdate({ _id: account._id }, accountToSave);
                 if (accountSave) {
                     return Promise.resolve(accountSave);
@@ -125,13 +126,14 @@ let AccountApiController = AccountApiController_1 = class AccountApiController e
                     return Promise.reject("Account not exist");
                 }
                 let accountToSave = accountView;
-                if (account.balance <= 0) {
+                if (account.balance <= 0 && account.balanceGold <= 0) {
                     return Promise.reject("Account empty balance");
                 }
-                if (account.balance < accountView.balance) {
+                if (account.balance < accountView.balance && account.balanceGold < accountView.balanceGold) {
                     return Promise.reject("please check balance again");
                 }
                 accountToSave.balance = account.balance - accountView.balance;
+                accountToSave.balanceGold = account.balanceGold - accountView.balanceGold;
                 accountToSave.updated = new Date().getTime();
                 let accountSave = yield this.AccountRepository.findOneAndUpdate({ _id: account._id }, accountToSave);
                 if (accountSave) {

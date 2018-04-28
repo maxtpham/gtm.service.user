@@ -35,11 +35,13 @@ export interface UserViewLite {
 
 export interface UserAccountView {
   balance: number;
+  balanceGold: number;
   bonus?: number;
 }; 
 
 export interface ScProfileView {
   balance: number;
+  balanceGold: number;
   bonus: number;
 
   laiXuatMacDinh?: number;

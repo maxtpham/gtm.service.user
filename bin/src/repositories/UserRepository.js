@@ -86,7 +86,7 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
                     address: profileExt.address,
                     timezone: profileExt.timezone,
                     language: profileExt.language,
-                    account: { balance: 0, bonus: 0 },
+                    account: { balance: 0, balanceGold: 0, bonus: 0 },
                     status: MUserView_1.UserStatus.New,
                     active: null,
                     isFirstLogin: true,

@@ -157,6 +157,7 @@ const models = {
     "UserAccount": {
         "properties": {
             "balance": { "dataType": "double", "required": true },
+            "balanceGold": { "dataType": "double", "required": true },
             "bonus": { "dataType": "double" },
         },
     },
@@ -264,6 +265,7 @@ const models = {
     "AccountView": {
         "properties": {
             "balance": { "dataType": "double", "required": true },
+            "balanceGold": { "dataType": "double", "required": true },
             "bonus": { "dataType": "double" },
         },
     },
@@ -322,6 +324,7 @@ const models = {
     "UserAccountView": {
         "properties": {
             "balance": { "dataType": "double", "required": true },
+            "balanceGold": { "dataType": "double", "required": true },
             "bonus": { "dataType": "double" },
         },
     },

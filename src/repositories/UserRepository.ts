@@ -77,7 +77,7 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
                 address: profileExt.address,
                 timezone: profileExt.timezone,
                 language: profileExt.language,
-                account: <UserAccount>{ balance: 0, bonus: 0 },
+                account: <UserAccount>{ balance: 0, balanceGold: 0 ,bonus: 0 },
                 status: UserStatus.New,
                 active: null,
                 isFirstLogin: true,

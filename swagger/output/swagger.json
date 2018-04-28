@@ -459,13 +459,18 @@
 					"type": "number",
 					"format": "double"
 				},
+				"balanceGold": {
+					"type": "number",
+					"format": "double"
+				},
 				"bonus": {
 					"type": "number",
 					"format": "double"
 				}
 			},
 			"required": [
-				"balance"
+				"balance",
+				"balanceGold"
 			],
 			"type": "object"
 		},
@@ -820,13 +825,18 @@
 					"type": "number",
 					"format": "double"
 				},
+				"balanceGold": {
+					"type": "number",
+					"format": "double"
+				},
 				"bonus": {
 					"type": "number",
 					"format": "double"
 				}
 			},
 			"required": [
-				"balance"
+				"balance",
+				"balanceGold"
 			],
 			"type": "object"
 		},
@@ -1012,13 +1022,18 @@
 					"type": "number",
 					"format": "double"
 				},
+				"balanceGold": {
+					"type": "number",
+					"format": "double"
+				},
 				"bonus": {
 					"type": "number",
 					"format": "double"
 				}
 			},
 			"required": [
-				"balance"
+				"balance",
+				"balanceGold"
 			],
 			"type": "object"
 		}

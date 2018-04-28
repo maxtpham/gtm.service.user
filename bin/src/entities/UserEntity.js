@@ -84,6 +84,7 @@ var User;
     function toUserAccountView(entity) {
         return {
             balance: entity.account.balance,
+            balanceGold: entity.account.balanceGold,
             bonus: entity.account.bonus
         };
     }

@@ -65,6 +65,7 @@ export interface UserRole {
 
 export interface UserAccount {
     balance: number;
+    balanceGold: number;
     bonus?: number;
 }
 
@@ -163,6 +164,7 @@ export module User {
     export function toUserAccountView(entity: UserEntity): UserAccountView {
         return <UserAccountView>{
             balance: entity.account.balance,
+            balanceGold: entity.account.balanceGold,
             bonus: entity.account.bonus
         }
     }
