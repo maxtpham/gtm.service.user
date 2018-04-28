@@ -1777,6 +1777,42 @@
 				]
 			}
 		},
+		"/api/user/v1/user/get-lender-for-app": {
+			"get": {
+				"operationId": "GetLenderUserForApp",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MUserView"
+							}
+						}
+					}
+				},
+				"description": "Get lend user for app ",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "find",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/api/user/v1/user/find-user": {
 			"get": {
 				"operationId": "FindUser",

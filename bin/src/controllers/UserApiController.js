@@ -72,6 +72,30 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
+    /**Get lend user for app */
+    getLenderUserForApp(find) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let queries = {
+                $and: [
+                    {
+                        roles: { $elemMatch: { code: RoleView_1.RoleType[RoleView_1.RoleType.Lender] } }
+                    },
+                    {
+                        $or: [
+                            { email: RegExp(find) },
+                            { phone: RegExp(find) },
+                            { name: RegExp(find) }
+                        ],
+                    }
+                ]
+            };
+            let userEntity = yield this.UserRepository.find(queries);
+            if (userEntity) {
+                return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
     findUser(find) {
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = [];
@@ -399,6 +423,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "getUserByName", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-lender-for-app'),
+    __param(0, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "getLenderUserForApp", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/find-user'),
     __param(0, tsoa_1.Query()),

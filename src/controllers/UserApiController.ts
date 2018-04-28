@@ -57,6 +57,33 @@ export class UserApiController extends ApiController {
         return Promise.reject(`Not found.`);
     }
 
+    /**Get lend user for app */
+    @Tags('User') @Security('jwt') @Get('/get-lender-for-app')
+    public async getLenderUserForApp(
+        @Query() find: string,
+    ): Promise<MUserView[]> {
+
+        let queries = {
+            $and: [
+                {
+                    roles: { $elemMatch: { code: RoleType[RoleType.Lender] } }
+                },
+                {
+                    $or: [
+                        { email: RegExp(find) },
+                        { phone: RegExp(find) },
+                        { name: RegExp(find) }
+                    ],
+                }
+            ]
+        };
+        let userEntity = await this.UserRepository.find(queries);
+        if (userEntity) {
+            return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
+        }
+        return Promise.reject(`Not found.`);
+    }
+
     @Tags('User') @Security('jwt') @Get('/find-user')
     public async findUser(
         @Query() find: string
@@ -154,18 +181,18 @@ export class UserApiController extends ApiController {
     /** setFCMForMobile */
     @Tags('User') @Security('jwt') @Post('/set-fcm-for-mobile')
     public async setFCMForMobile(
-            @Body() fcms: MFCMView,
-            @Request() req: express.Request
+        @Body() fcms: MFCMView,
+        @Request() req: express.Request
     ): Promise<string> {
-    
+
         let users = await this.UserRepository.findOne({ _id: (<JwtToken>req.user).user });
         if (!users) {
             return Promise.reject("User not exist");
         }
-    
+
         const { roles, code, provider, active, profiles } = users;
         const { google, facebook } = profiles;
-    
+
         users.profiles = {
             google: google ? google : "",
             facebook: facebook ? facebook : "",
@@ -174,31 +201,31 @@ export class UserApiController extends ApiController {
                 fcmToken: fcms.fcmToken
             }
         };
-    
+
         users.updated = new Date().getTime();
-    
+
         let userSave = await this.UserRepository.update({ _id: (<JwtToken>req.user).user }, users);
         if (userSave) {
             return Promise.resolve("Tạo FCM thành công");
         }
         return Promise.reject(`Tạo FCM không thành công`);
     }
-        
+
     /** getFCMForMobile */
     @Tags('User') @Security('jwt') @Get('/get-fcm-for-mobile')
     public async getFCMForMobile(
-            @Query() userId: string,
+        @Query() userId: string,
     ): Promise<MFCMView> {
-    
+
         let users = await this.UserRepository.findOne({ _id: userId });
         if (!users) {
             return Promise.reject("User not exist");
         }
-    
-        let defaults = users.profiles.default ?  users.profiles.default : null;
+
+        let defaults = users.profiles.default ? users.profiles.default : null;
         if (defaults) {
             let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
-            if (fcm !== "0"){
+            if (fcm !== "0") {
                 let res: MFCMView = {
                     fcmToken: fcm,
                 };
@@ -207,7 +234,7 @@ export class UserApiController extends ApiController {
             return Promise.reject(`Nick chưa có FCM`);
 
         }
-    
+
         return Promise.reject(`Chưa Tạo FCM`);
     }
 
