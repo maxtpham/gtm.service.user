@@ -374,16 +374,18 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 if (userAccountView.bonus && userAccount.account.bonus != userAccountView.bonus) {
                     userAccount.account.bonus = userAccountView.bonus;
                 }
-                if (type === 'Deposit') {
+                if (type == 'Deposit') {
                     userAccount.account.balance = userAccountView && userAccountView.balance ? (userAccount.account.balance + userAccountView.balance) : userAccount.account.balance;
                     userAccount.account.balanceGold = userAccount.account.balanceGold + userAccountView.balanceGold;
+                    console.log('Deposit', userAccount);
                 }
-                if (type === 'WithDraw') {
+                if (type == 'WithDraw') {
                     if (userAccountView.balance > userAccount.account.balance && userAccountView.balanceGold > userAccount.account.balanceGold) {
                         return Promise.reject(`The account balance ${userAccount.account.balance} is not enough to perform this transaction`);
                     }
                     userAccount.account.balance = userAccountView && userAccountView.balance ? (userAccount.account.balance - userAccountView.balance) : userAccount.account.balance;
                     userAccount.account.balanceGold = userAccount.account.balanceGold - userAccountView.balanceGold;
+                    console.log('WithDraw', userAccount);
                 }
                 userAccount.updated = Date.now();
                 let userUpdated = yield this.UserRepository.findOneAndUpdate({ _id: userId }, userAccount);
