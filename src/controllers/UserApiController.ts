@@ -420,9 +420,7 @@ export class UserApiController extends ApiController {
 
             if (type == 'Deposit') {
                 userAccount.account.balance = userAccountView && userAccountView.balance ? (userAccount.account.balance + userAccountView.balance) : userAccount.account.balance;
-                userAccount.account.balanceGold = userAccount.account.balanceGold + userAccountView.balanceGold;
-                console.log('Deposit', userAccount)
-
+                userAccount.account.balanceGold = userAccount.account.balanceGold ? (userAccount.account.balanceGold + userAccountView.balanceGold) : userAccountView.balanceGold;
             }
 
             if (type == 'WithDraw') {
@@ -430,9 +428,7 @@ export class UserApiController extends ApiController {
                     return Promise.reject(`The account balance ${userAccount.account.balance} is not enough to perform this transaction`);
                 }
                 userAccount.account.balance = userAccountView && userAccountView.balance ? (userAccount.account.balance - userAccountView.balance) : userAccount.account.balance;
-                userAccount.account.balanceGold = userAccount.account.balanceGold - userAccountView.balanceGold;
-                console.log('WithDraw', userAccount)
-
+                userAccount.account.balanceGold = userAccount.account.balanceGold ? (userAccount.account.balanceGold - userAccountView.balanceGold) : userAccountView.balanceGold;
             }
 
             userAccount.updated = Date.now();
