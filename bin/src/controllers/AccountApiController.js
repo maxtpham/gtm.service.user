@@ -126,10 +126,10 @@ let AccountApiController = AccountApiController_1 = class AccountApiController e
                     return Promise.reject("Account not exist");
                 }
                 let accountToSave = accountView;
-                if (account.balance <= 0 && account.balanceGold <= 0) {
+                if (account.balance <= 0 || account.balanceGold <= 0) {
                     return Promise.reject("Account empty balance");
                 }
-                if (account.balance < accountView.balance && account.balanceGold < accountView.balanceGold) {
+                if (account.balance < accountView.balance || account.balanceGold < accountView.balanceGold) {
                     return Promise.reject("please check balance again");
                 }
                 accountToSave.balance = account.balance - accountView.balance;

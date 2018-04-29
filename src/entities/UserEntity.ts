@@ -64,7 +64,7 @@ export interface UserRole {
 }
 
 export interface UserAccount {
-    balance: number;
+    balance?: number;
     balanceGold: number;
     bonus?: number;
 }

@@ -469,7 +469,6 @@
 				}
 			},
 			"required": [
-				"balance",
 				"balanceGold"
 			],
 			"type": "object"
@@ -835,7 +834,6 @@
 				}
 			},
 			"required": [
-				"balance",
 				"balanceGold"
 			],
 			"type": "object"
@@ -1032,7 +1030,6 @@
 				}
 			},
 			"required": [
-				"balance",
 				"balanceGold"
 			],
 			"type": "object"

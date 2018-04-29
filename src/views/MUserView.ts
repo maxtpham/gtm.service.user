@@ -34,7 +34,7 @@ export interface UserViewLite {
 }
 
 export interface UserAccountView {
-  balance: number;
+  balance?: number;
   balanceGold: number;
   bonus?: number;
 }; 

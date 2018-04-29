@@ -375,14 +375,14 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     userAccount.account.bonus = userAccountView.bonus;
                 }
                 if (type === 'Deposit') {
-                    userAccount.account.balance = userAccount.account.balance + userAccountView.balance;
+                    userAccount.account.balance = userAccountView && userAccountView.balance ? (userAccount.account.balance + userAccountView.balance) : userAccount.account.balance;
                     userAccount.account.balanceGold = userAccount.account.balanceGold + userAccountView.balanceGold;
                 }
                 if (type === 'WithDraw') {
                     if (userAccountView.balance > userAccount.account.balance && userAccountView.balanceGold > userAccount.account.balanceGold) {
                         return Promise.reject(`The account balance ${userAccount.account.balance} is not enough to perform this transaction`);
                     }
-                    userAccount.account.balance = userAccount.account.balance - userAccountView.balance;
+                    userAccount.account.balance = userAccountView && userAccountView.balance ? (userAccount.account.balance - userAccountView.balance) : userAccount.account.balance;
                     userAccount.account.balanceGold = userAccount.account.balanceGold - userAccountView.balanceGold;
                 }
                 userAccount.updated = Date.now();

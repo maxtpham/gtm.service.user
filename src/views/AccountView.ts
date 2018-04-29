@@ -1,5 +1,5 @@
 export interface AccountView {
-  balance: number;
+  balance?: number;
   balanceGold: number;
   bonus?: number;
 }; 

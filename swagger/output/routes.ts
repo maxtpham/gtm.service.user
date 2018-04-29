@@ -155,7 +155,7 @@ const models: TsoaRoute.Models = {
     },
     "UserAccount": {
         "properties": {
-            "balance": { "dataType": "double", "required": true },
+            "balance": { "dataType": "double" },
             "balanceGold": { "dataType": "double", "required": true },
             "bonus": { "dataType": "double" },
         },
@@ -263,7 +263,7 @@ const models: TsoaRoute.Models = {
     },
     "AccountView": {
         "properties": {
-            "balance": { "dataType": "double", "required": true },
+            "balance": { "dataType": "double" },
             "balanceGold": { "dataType": "double", "required": true },
             "bonus": { "dataType": "double" },
         },
@@ -322,7 +322,7 @@ const models: TsoaRoute.Models = {
     },
     "UserAccountView": {
         "properties": {
-            "balance": { "dataType": "double", "required": true },
+            "balance": { "dataType": "double" },
             "balanceGold": { "dataType": "double", "required": true },
             "bonus": { "dataType": "double" },
         },
