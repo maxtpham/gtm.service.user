@@ -1623,6 +1623,32 @@
 				"parameters": []
 			}
 		},
+		"/api/user/v1/Message/get-message-to-notification-update": {
+			"get": {
+				"operationId": "GetMessageToNotificationUpdate",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MessageViewWithPagination"
+						}
+					}
+				},
+				"description": "Get Messages to notification update",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/api/user/v1/Message/{id}": {
 			"put": {
 				"operationId": "UpdateEntity",

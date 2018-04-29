@@ -239,14 +239,6 @@ export class MessageApiController extends ApiController {
                             created: mes.created,
                             updated: mes.updated
                         });
-                        messsageUpdate = {
-                            userId: mes.userId,
-                            toUserId: mes.toUserId,
-                            content: mes.content,
-                            delivered: mes.delivered,
-                            announced: true,
-                        }
-                        this.updateEntity(mes._id, messsageUpdate);
                     }
                 }
             })
@@ -255,6 +247,51 @@ export class MessageApiController extends ApiController {
         }
         return Promise.reject(`Not found.`);
     }
+
+        /** Get Messages to notification update*/
+        @Tags('Message') @Security('jwt') @Get("get-message-to-notification-update")
+        public async getMessageToNotificationUpdate(
+            @Request() req?: express.Request,
+        ): Promise<MessageViewWithPagination> {
+            let userId = (<JwtToken>req.user).user;
+            let messages = await this.MessageRepository.find({});
+            if (messages) {
+                let users = await this.UserRepository.find({ deleted: null });
+                let messageDetailView: MessageDetailView[] = [];
+                let messsageUpdate: MessageView;
+                messages.map(mes => {
+                    let user = users.find(u => u._id == mes.userId);
+                    let toUser = users.find(u => u._id == mes.toUserId);
+    
+                    if (mes.toUserId === userId) {
+                        if (mes.announced === false) {
+                            messageDetailView.push({
+                                id: mes._id,
+                                userId: mes.userId,
+                                userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                                toUserId: mes.toUserId,
+                                toUserName: toUser ? (toUser.phone ? toUser.name + ' - ' + toUser.phone : toUser.name) : '',
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                created: mes.created,
+                                updated: mes.updated
+                            });
+                            messsageUpdate = {
+                                userId: mes.userId,
+                                toUserId: mes.toUserId,
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                announced: true,
+                            }
+                            this.updateEntity(mes._id, messsageUpdate);
+                        }
+                    }
+                })
+                let messageDetailViews = <MessageViewWithPagination>{ messages: messageDetailView, totalItems: messageDetailView.length };
+                return Promise.resolve(messageDetailViews);
+            }
+            return Promise.reject(`Not found.`);
+        }
 
     /** Create New Message */
     @Tags('Message') @Security('jwt') @Post()

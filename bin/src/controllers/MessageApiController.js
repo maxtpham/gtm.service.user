@@ -228,6 +228,40 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                                 created: mes.created,
                                 updated: mes.updated
                             });
+                        }
+                    }
+                });
+                let messageDetailViews = { messages: messageDetailView, totalItems: messageDetailView.length };
+                return Promise.resolve(messageDetailViews);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
+    /** Get Messages to notification update*/
+    getMessageToNotificationUpdate(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userId = req.user.user;
+            let messages = yield this.MessageRepository.find({});
+            if (messages) {
+                let users = yield this.UserRepository.find({ deleted: null });
+                let messageDetailView = [];
+                let messsageUpdate;
+                messages.map(mes => {
+                    let user = users.find(u => u._id == mes.userId);
+                    let toUser = users.find(u => u._id == mes.toUserId);
+                    if (mes.toUserId === userId) {
+                        if (mes.announced === false) {
+                            messageDetailView.push({
+                                id: mes._id,
+                                userId: mes.userId,
+                                userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                                toUserId: mes.toUserId,
+                                toUserName: toUser ? (toUser.phone ? toUser.name + ' - ' + toUser.phone : toUser.name) : '',
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                created: mes.created,
+                                updated: mes.updated
+                            });
                             messsageUpdate = {
                                 userId: mes.userId,
                                 toUserId: mes.toUserId,
@@ -354,6 +388,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getMessageToNotification", null);
+__decorate([
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get("get-message-to-notification-update"),
+    __param(0, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MessageApiController.prototype, "getMessageToNotificationUpdate", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Post(),
     __param(0, tsoa_1.Body()),
