@@ -21,7 +21,8 @@ export class MessageApiController extends ApiController {
 
     /** Get Messages */
     @Tags('Message') @Security('jwt') @Get()
-    public async getEntities(@Query() from?: string, @Query() to?: string,
+    public async getEntities(
+        @Query() from?: string, @Query() to?: string,
         @Query() pageNumber?: number, @Query() itemCount?: number,
         @Query() sortName?: string, @Query() sortType?: number,
     )
@@ -69,11 +70,18 @@ export class MessageApiController extends ApiController {
     /** Get List Messages For App*/
     @Tags('Message') @Security('jwt') @Get('/getforapp')
     public async getListMessageForApp(
+        @Query() from?: string, @Query() to?: string,
         @Request() req?: express.Request,
+        @Query() pageNumber?: number, @Query() itemCount?: number,
+        @Query() sortName?: string, @Query() sortType?: number,
+        
     )
         : Promise<MessageViewWithPaginationApp> {
         let userId = (<JwtToken>req.user).user;
-        let messages = await this.MessageRepository.find({});
+        let queryToEntities = this.MessageRepository.buildQuery(from, to);
+        let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
+        let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
+        // let messages = await this.MessageRepository.find({});
 
         if (messages) {
             let users = await this.UserRepository.find({ deleted: null });
@@ -163,11 +171,17 @@ export class MessageApiController extends ApiController {
     @Tags('Message') @Security('jwt') @Get('/getforanuserapp')
     public async getListMessageOfUser(
         @Query() userIdToGetMessage: string,
+        @Query() from?: string, @Query() to?: string,
+        @Query() pageNumber?: number, @Query() itemCount?: number,
         @Request() req?: express.Request,
+        @Query() sortName?: string, @Query() sortType?: number,
+
     )
         : Promise<MessageViewWithPaginationAnUserApp> {
         let userId = (<JwtToken>req.user).user;
-        let messages = await this.MessageRepository.find({});
+        let queryToEntities = this.MessageRepository.buildQuery(from, to);
+        let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
+        let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 100000, sort);
         let users = await this.UserRepository.find({ deleted: null });
         let user = users.find(u => u._id == userId);
         let userHaveMessage = users.find(u => u._id == userIdToGetMessage);

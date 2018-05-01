@@ -522,7 +522,13 @@ function RegisterRoutes(app) {
     });
     app.get('/api/user/v1/Message/getforapp', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
+            from: { "in": "query", "name": "from", "dataType": "string" },
+            to: { "in": "query", "name": "to", "dataType": "string" },
             req: { "in": "request", "name": "req", "dataType": "object" },
+            pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+            itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
+            sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+            sortType: { "in": "query", "name": "sortType", "dataType": "double" },
         };
         let validatedArgs = [];
         try {
@@ -538,7 +544,13 @@ function RegisterRoutes(app) {
     app.get('/api/user/v1/Message/getforanuserapp', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             userIdToGetMessage: { "in": "query", "name": "userIdToGetMessage", "required": true, "dataType": "string" },
+            from: { "in": "query", "name": "from", "dataType": "string" },
+            to: { "in": "query", "name": "to", "dataType": "string" },
+            pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
+            itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
             req: { "in": "request", "name": "req", "dataType": "object" },
+            sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+            sortType: { "in": "query", "name": "sortType", "dataType": "double" },
         };
         let validatedArgs = [];
         try {

@@ -72,10 +72,13 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         });
     }
     /** Get List Messages For App*/
-    getListMessageForApp(req) {
+    getListMessageForApp(from, to, req, pageNumber, itemCount, sortName, sortType) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let messages = yield this.MessageRepository.find({});
+            let queryToEntities = this.MessageRepository.buildQuery(from, to);
+            let sort = { name: sortName, type: sortType || -1 };
+            let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
+            // let messages = await this.MessageRepository.find({});
             if (messages) {
                 let users = yield this.UserRepository.find({ deleted: null });
                 let messageWithUser = [];
@@ -157,10 +160,12 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         });
     }
     /** Get List Messages with an user for App*/
-    getListMessageOfUser(userIdToGetMessage, req) {
+    getListMessageOfUser(userIdToGetMessage, from, to, pageNumber, itemCount, req, sortName, sortType) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let messages = yield this.MessageRepository.find({});
+            let queryToEntities = this.MessageRepository.buildQuery(from, to);
+            let sort = { name: sortName, type: sortType || -1 };
+            let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 100000, sort);
             let users = yield this.UserRepository.find({ deleted: null });
             let user = users.find(u => u._id == userId);
             let userHaveMessage = users.find(u => u._id == userIdToGetMessage);
@@ -368,17 +373,23 @@ __decorate([
 ], MessageApiController.prototype, "getEntity", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforapp'),
-    __param(0, tsoa_1.Request()),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()),
+    __param(2, tsoa_1.Request()),
+    __param(3, tsoa_1.Query()), __param(4, tsoa_1.Query()),
+    __param(5, tsoa_1.Query()), __param(6, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [String, String, Object, Number, Number, String, Number]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageForApp", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforanuserapp'),
     __param(0, tsoa_1.Query()),
-    __param(1, tsoa_1.Request()),
+    __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __param(3, tsoa_1.Query()), __param(4, tsoa_1.Query()),
+    __param(5, tsoa_1.Request()),
+    __param(6, tsoa_1.Query()), __param(7, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, String, String, Number, Number, Object, String, Number]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageOfUser", null);
 __decorate([
