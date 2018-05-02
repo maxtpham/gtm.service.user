@@ -234,16 +234,15 @@ export class MessageApiController extends ApiController {
     )
         : Promise<MessageDetailView[]> {
         let userId = (<JwtToken>req.user).user;
-        let sort: Sort = { name: sortName, type: <SortType>sortType || 1 };
+        let sort: Sort = { name: sortName || 'created', type: <SortType>sortType || 1 };
         let queryToEntities = {
-            $and: {
-                deleted: null,
-                userId: { $in: [userId, userIdToGetMessage] }
-            },
-            $sort: sort
+            $and: [
+                { deleted: null },
+                { userId: { $in: [userId, userIdToGetMessage] } },
+            ],
         };
 
-        let messages = await this.MessageRepository.find(queryToEntities);
+        let messages = await this.MessageRepository.find(queryToEntities, sort);
         let user = await this.UserRepository.findOne({ _id: userId, deleted: null });
         let userHaveMessage = await this.UserRepository.findOne({ _id: userIdToGetMessage, deleted: null });
         if (messages) {

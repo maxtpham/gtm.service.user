@@ -212,15 +212,14 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
     getListMessageForCurrentUser(userIdToGetMessage, sortName, sortType, req) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let sort = { name: sortName, type: sortType || 1 };
+            let sort = { name: sortName || 'created', type: sortType || 1 };
             let queryToEntities = {
-                $and: {
-                    deleted: null,
-                    userId: { $in: [userId, userIdToGetMessage] }
-                },
-                $sort: sort
+                $and: [
+                    { deleted: null },
+                    { userId: { $in: [userId, userIdToGetMessage] } },
+                ],
             };
-            let messages = yield this.MessageRepository.find(queryToEntities);
+            let messages = yield this.MessageRepository.find(queryToEntities, sort);
             let user = yield this.UserRepository.findOne({ _id: userId, deleted: null });
             let userHaveMessage = yield this.UserRepository.findOne({ _id: userIdToGetMessage, deleted: null });
             if (messages) {
