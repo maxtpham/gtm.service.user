@@ -1676,6 +1676,55 @@
 				]
 			}
 		},
+		"/api/user/v1/Message/get-messages-for-current-user": {
+			"get": {
+				"operationId": "GetListMessageForCurrentUser",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/MessageDetailView"
+							}
+						}
+					}
+				},
+				"description": "Get List Messages for current user",
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userIdToGetMessage",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "sortName",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "sortType",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					}
+				]
+			}
+		},
 		"/api/user/v1/Message/get-message-to-notification": {
 			"get": {
 				"operationId": "GetMessageToNotification",

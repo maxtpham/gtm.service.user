@@ -208,6 +208,55 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
             return Promise.reject(`Not found.`);
         });
     }
+    /** Get List Messages for current user*/
+    getListMessageForCurrentUser(userIdToGetMessage, sortName, sortType, req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userId = req.user.user;
+            let sort = { name: sortName, type: sortType || 1 };
+            let queryToEntities = {
+                $and: {
+                    deleted: null,
+                    userId: { $in: [userId, userIdToGetMessage] }
+                },
+                $sort: sort
+            };
+            let messages = yield this.MessageRepository.find(queryToEntities);
+            let user = yield this.UserRepository.findOne({ _id: userId, deleted: null });
+            let userHaveMessage = yield this.UserRepository.findOne({ _id: userIdToGetMessage, deleted: null });
+            if (messages) {
+                let messageDetailViews = messages.map(mes => {
+                    if (mes.userId == userIdToGetMessage) {
+                        return {
+                            id: mes._id,
+                            userId: userIdToGetMessage,
+                            userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : user.name) : '',
+                            toUserId: mes.toUserId,
+                            toUserName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                            content: mes.content,
+                            delivered: mes.delivered,
+                            created: mes.created,
+                            updated: mes.updated
+                        };
+                    }
+                    else {
+                        return {
+                            id: mes._id,
+                            userId: userId,
+                            userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
+                            toUserId: userIdToGetMessage,
+                            toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                            content: mes.content,
+                            delivered: mes.delivered,
+                            created: mes.created,
+                            updated: mes.updated
+                        };
+                    }
+                });
+                return Promise.resolve(messageDetailViews);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
     /** Get Messages to notification*/
     getMessageToNotification(req) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -392,6 +441,15 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String, Number, Number, Object, String, Number]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageOfUser", null);
+__decorate([
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-messages-for-current-user'),
+    __param(0, tsoa_1.Query()),
+    __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
+    __param(3, tsoa_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Number, Object]),
+    __metadata("design:returntype", Promise)
+], MessageApiController.prototype, "getListMessageForCurrentUser", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get("get-message-to-notification"),
     __param(0, tsoa_1.Request()),

@@ -563,6 +563,24 @@ function RegisterRoutes(app) {
         const promise = controller.getListMessageOfUser.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
+    app.get('/api/user/v1/Message/get-messages-for-current-user', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            userIdToGetMessage: { "in": "query", "name": "userIdToGetMessage", "required": true, "dataType": "string" },
+            sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+            sortType: { "in": "query", "name": "sortType", "dataType": "double" },
+            req: { "in": "request", "name": "req", "dataType": "object" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(MessageApiController_1.MessageApiController);
+        const promise = controller.getListMessageForCurrentUser.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
     app.get('/api/user/v1/Message/get-message-to-notification', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             req: { "in": "request", "name": "req", "dataType": "object" },
