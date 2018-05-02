@@ -388,16 +388,11 @@ export class UserApiController extends ApiController {
         @Request() req: express.Request,
         userId: string,
     ): Promise<UserAccount> {
-        try {
-            let userAccount = await this.UserRepository.findAndGetOneById(userId, 'account');
-            if (!userAccount.account) {
-                return Promise.reject('User account not found');
-            }
-            return Promise.resolve(User.toUserAccountView(userAccount));
-        } catch (e) {
-            console.log(e);
-            Promise.reject(e);
+        let userAccount = await this.UserRepository.findAndGetOneById(userId, 'account');
+        if (!userAccount.account) {
+            return Promise.reject('User account not found');
         }
+        return Promise.resolve(User.toUserAccountView(userAccount));
     }
 
     /** Update user account */
@@ -417,7 +412,6 @@ export class UserApiController extends ApiController {
             if (userAccountView.bonus && userAccount.account.bonus != userAccountView.bonus) {
                 userAccount.account.bonus = userAccountView.bonus;
             }
-
             if (type == 'Deposit') {
                 userAccount.account.balance = userAccountView && userAccountView.balance ? (userAccount.account.balance + userAccountView.balance) : userAccount.account.balance;
                 userAccount.account.balanceGold = userAccount.account.balanceGold ? (userAccount.account.balanceGold + userAccountView.balanceGold) : userAccountView.balanceGold;

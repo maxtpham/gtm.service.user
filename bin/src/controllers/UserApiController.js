@@ -350,17 +350,11 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
     /** Get user account */
     getUserAccount(req, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                let userAccount = yield this.UserRepository.findAndGetOneById(userId, 'account');
-                if (!userAccount.account) {
-                    return Promise.reject('User account not found');
-                }
-                return Promise.resolve(UserEntity_1.User.toUserAccountView(userAccount));
+            let userAccount = yield this.UserRepository.findAndGetOneById(userId, 'account');
+            if (!userAccount.account) {
+                return Promise.reject('User account not found');
             }
-            catch (e) {
-                console.log(e);
-                Promise.reject(e);
-            }
+            return Promise.resolve(UserEntity_1.User.toUserAccountView(userAccount));
         });
     }
     /** Update user account */
