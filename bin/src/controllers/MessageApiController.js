@@ -72,13 +72,10 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         });
     }
     /** Get List Messages For App*/
-    getListMessageForApp(from, to, req, pageNumber, itemCount, sortName, sortType) {
+    getListMessageForApp(req) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let queryToEntities = this.MessageRepository.buildQuery(from, to);
-            let sort = { name: sortName, type: sortType || -1 };
-            let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
-            // let messages = await this.MessageRepository.find({});
+            let messages = yield this.MessageRepository.find({});
             if (messages) {
                 let users = yield this.UserRepository.find({ deleted: null });
                 let messageWithUser = [];
@@ -421,12 +418,9 @@ __decorate([
 ], MessageApiController.prototype, "getEntity", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforapp'),
-    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()),
-    __param(2, tsoa_1.Request()),
-    __param(3, tsoa_1.Query()), __param(4, tsoa_1.Query()),
-    __param(5, tsoa_1.Query()), __param(6, tsoa_1.Query()),
+    __param(0, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Object, Number, Number, String, Number]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageForApp", null);
 __decorate([
