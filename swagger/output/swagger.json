@@ -1561,7 +1561,21 @@
 						"jwt": []
 					}
 				],
-				"parameters": []
+				"parameters": [
+					{
+						"in": "query",
+						"name": "sortName",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "sortType",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					}
+				]
 			}
 		},
 		"/api/user/v1/Message/getforanuserapp": {

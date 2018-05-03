@@ -586,6 +586,8 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
+                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
                 req: { "in": "request", "name": "req", "dataType": "object" },
             };
 

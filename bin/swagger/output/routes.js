@@ -522,6 +522,8 @@ function RegisterRoutes(app) {
     });
     app.get('/api/user/v1/Message/getforapp', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
+            sortName: { "in": "query", "name": "sortName", "dataType": "string" },
+            sortType: { "in": "query", "name": "sortType", "dataType": "double" },
             req: { "in": "request", "name": "req", "dataType": "object" },
         };
         let validatedArgs = [];

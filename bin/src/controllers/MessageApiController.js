@@ -72,10 +72,11 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         });
     }
     /** Get List Messages For App*/
-    getListMessageForApp(req) {
+    getListMessageForApp(sortName, sortType, req) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let messages = yield this.MessageRepository.find({});
+            let sort = { name: sortName || 'created', type: sortType || 1 };
+            let messages = yield this.MessageRepository.find({}, sort);
             if (messages) {
                 let users = yield this.UserRepository.find({ deleted: null });
                 let messageWithUser = [];
@@ -438,9 +439,10 @@ __decorate([
 ], MessageApiController.prototype, "getEntity", null);
 __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforapp'),
-    __param(0, tsoa_1.Request()),
+    __param(0, tsoa_1.Query()), __param(1, tsoa_1.Query()),
+    __param(2, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [String, Number, Object]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageForApp", null);
 __decorate([
