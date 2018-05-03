@@ -154,6 +154,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone, houseHolder } = profile;
             const { roles, code, provider, active, profiles } = users;
             const { google, facebook } = profiles;
+            console.log('profiles', profiles);
             users.profiles = {
                 google: google ? google : "",
                 facebook: facebook ? facebook : "",
@@ -166,6 +167,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                     houseHolder: houseHolder
                 }
             };
+            console.log('users.profiles', users.profiles);
             name ? (users.name = name) : "";
             birthday ? (users.birthday = birthday) : 0;
             address ? (users.address = address) : "";
@@ -189,11 +191,13 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
             const { roles, code, provider, active, profiles } = users;
             const { google, facebook } = profiles;
+            console.log('profiles-set-fcm', profiles);
             users.profiles = {
                 google: google ? google : "",
                 facebook: facebook ? facebook : "",
                 default: Object.assign({}, profiles.default, { fcmToken: fcms.fcmToken })
             };
+            console.log('users.profiles-fcm', users.profiles);
             users.updated = new Date().getTime();
             let userSave = yield this.UserRepository.update({ _id: req.user.user }, users);
             if (userSave) {
