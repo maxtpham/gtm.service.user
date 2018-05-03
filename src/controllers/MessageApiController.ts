@@ -70,18 +70,11 @@ export class MessageApiController extends ApiController {
     /** Get List Messages For App*/
     @Tags('Message') @Security('jwt') @Get('/getforapp')
     public async getListMessageForApp(
-        @Query() from?: string, @Query() to?: string,
         @Request() req?: express.Request,
-        @Query() pageNumber?: number, @Query() itemCount?: number,
-        @Query() sortName?: string, @Query() sortType?: number,
-
     )
         : Promise<MessageViewWithPaginationApp> {
         let userId = (<JwtToken>req.user).user;
-        let queryToEntities = this.MessageRepository.buildQuery(from, to);
-        let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
-        let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 5, sort);
-        // let messages = await this.MessageRepository.find({});
+        let messages = await this.MessageRepository.find({});
 
         if (messages) {
             let users = await this.UserRepository.find({ deleted: null });
