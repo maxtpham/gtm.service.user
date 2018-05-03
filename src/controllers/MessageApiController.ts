@@ -169,7 +169,7 @@ export class MessageApiController extends ApiController {
     ): Promise<MessageViewWithPaginationAnUserApp> {
         let userId = (<JwtToken>req.user).user;
         // let users = await this.UserRepository.find({ deleted: null });
-        let currentUserDetails = await this.UserRepository.findOne({ _id: userId, deleted: null });
+        let currentUserDetails = await this.UserRepository.findOne({ _id: userId.toString(), deleted: null });
         if (!currentUserDetails) {
             return Promise.reject(`User ${userId} not found.`);
         }
@@ -193,68 +193,33 @@ export class MessageApiController extends ApiController {
         let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
         let messages = await this.MessageRepository.find(queryToEntities, sort);
         if (messages) {
-            let messageDetailView: MessageDetailView[] = messages.map(mes => {
-                if (mes != null) {
-                    if (mes.userId == toUserId) {
-                        return <MessageDetailView>{
-                            id: mes._id,
-                            userId: toUserId,
-                            userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
-                            toUserId: mes.toUserId,
-                            toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
-                            content: mes.content,
-                            delivered: mes.delivered,
-                            created: mes.created,
-                            updated: mes.updated
-                        };
-                    } else if (mes.toUserId == toUserId) {
-                        return <MessageDetailView>{
-                            id: mes._id,
-                            userId: userId,
-                            userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
-                            toUserId: toUserId,
-                            toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
-                            content: mes.content,
-                            delivered: mes.delivered,
-                            created: mes.created,
-                            updated: mes.updated
-                        };
-                    }
+            let messageDetailView: MessageDetailView[] = messages.map((mes) => {
+                if (mes.userId == toUserId) {
+                    return <MessageDetailView>{
+                        id: mes._id,
+                        userId: toUserId,
+                        userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
+                        toUserId: mes.toUserId,
+                        toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                        content: mes.content,
+                        delivered: mes.delivered,
+                        created: mes.created,
+                        updated: mes.updated
+                    };
+                } else {
+                    return <MessageDetailView>{
+                        id: mes._id,
+                        userId: userId,
+                        userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                        toUserId: toUserId,
+                        toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                        content: mes.content,
+                        delivered: mes.delivered,
+                        created: mes.created,
+                        updated: mes.updated
+                    };
                 }
-            });
-
-            // TUAN ANH: review this code???
-            // let messageDetailView: MessageDetailView[] = [];
-
-            // messages.map(mes => {
-            //     if (mes.userId === userId || mes.toUserId === userId) {
-            //         if (mes.userId === toUserId) {
-            //             messageDetailView.push({
-            //                 id: mes._id,
-            //                 userId: toUserId,
-            //                 userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
-            //                 toUserId: mes.toUserId,
-            //                 toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
-            //                 content: mes.content,
-            //                 delivered: mes.delivered,
-            //                 created: mes.created,
-            //                 updated: mes.updated
-            //             })
-            //         } else if (mes.toUserId === toUserId) {
-            //             messageDetailView.push({
-            //                 id: mes._id,
-            //                 userId: userId,
-            //                 userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
-            //                 toUserId: toUserId,
-            //                 toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
-            //                 content: mes.content,
-            //                 delivered: mes.delivered,
-            //                 created: mes.created,
-            //                 updated: mes.updated
-            //             })
-            //         }
-            //     }
-            // })
+            })
 
             let messageDetailViewsApp = <MessageViewWithPaginationAnUserApp>{ userId: toUserId, userName: userHaveMessage.name, messages: messageDetailView };
             return Promise.resolve(messageDetailViewsApp);
