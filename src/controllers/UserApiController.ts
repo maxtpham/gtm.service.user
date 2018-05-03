@@ -149,6 +149,7 @@ export class UserApiController extends ApiController {
         const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone, houseHolder } = profile;
         const { roles, code, provider, active, profiles } = users;
         const { google, facebook } = profiles;
+        console.log('profiles', profiles);
 
         users.profiles = {
             google: google ? google : "",
@@ -162,6 +163,9 @@ export class UserApiController extends ApiController {
                 houseHolder: houseHolder
             }
         };
+
+        console.log('users.profiles', users.profiles);
+        
 
         name ? (users.name = name) : "";
         birthday ? (users.birthday = birthday) : 0;
@@ -192,7 +196,7 @@ export class UserApiController extends ApiController {
 
         const { roles, code, provider, active, profiles } = users;
         const { google, facebook } = profiles;
-
+        console.log('profiles-set-fcm', profiles);
         users.profiles = {
             google: google ? google : "",
             facebook: facebook ? facebook : "",
@@ -201,6 +205,7 @@ export class UserApiController extends ApiController {
                 fcmToken: fcms.fcmToken
             }
         };
+        console.log('users.profiles-fcm', users.profiles);
 
         users.updated = new Date().getTime();
 
