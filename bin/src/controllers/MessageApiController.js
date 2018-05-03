@@ -186,31 +186,33 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
             let messages = yield this.MessageRepository.find(queryToEntities, sort);
             if (messages) {
                 let messageDetailView = messages.map(mes => {
-                    if (mes.userId == toUserId) {
-                        return {
-                            id: mes._id,
-                            userId: toUserId,
-                            userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
-                            toUserId: mes.toUserId,
-                            toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
-                            content: mes.content,
-                            delivered: mes.delivered,
-                            created: mes.created,
-                            updated: mes.updated
-                        };
-                    }
-                    else if (mes.toUserId == toUserId) {
-                        return {
-                            id: mes._id,
-                            userId: userId,
-                            userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
-                            toUserId: toUserId,
-                            toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
-                            content: mes.content,
-                            delivered: mes.delivered,
-                            created: mes.created,
-                            updated: mes.updated
-                        };
+                    if (mes != null) {
+                        if (mes.userId == toUserId) {
+                            return {
+                                id: mes._id,
+                                userId: toUserId,
+                                userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
+                                toUserId: mes.toUserId,
+                                toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                created: mes.created,
+                                updated: mes.updated
+                            };
+                        }
+                        else if (mes.toUserId == toUserId) {
+                            return {
+                                id: mes._id,
+                                userId: userId,
+                                userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                                toUserId: toUserId,
+                                toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                                content: mes.content,
+                                delivered: mes.delivered,
+                                created: mes.created,
+                                updated: mes.updated
+                            };
+                        }
                     }
                 });
                 // TUAN ANH: review this code???

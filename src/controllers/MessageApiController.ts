@@ -192,33 +192,34 @@ export class MessageApiController extends ApiController {
         };
         let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
         let messages = await this.MessageRepository.find(queryToEntities, sort);
-
         if (messages) {
             let messageDetailView: MessageDetailView[] = messages.map(mes => {
-                if (mes.userId == toUserId) {
-                    return <MessageDetailView>{
-                        id: mes._id,
-                        userId: toUserId,
-                        userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
-                        toUserId: mes.toUserId,
-                        toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
-                        content: mes.content,
-                        delivered: mes.delivered,
-                        created: mes.created,
-                        updated: mes.updated
-                    };
-                } else if (mes.toUserId == toUserId) {
-                    return <MessageDetailView>{
-                        id: mes._id,
-                        userId: userId,
-                        userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
-                        toUserId: toUserId,
-                        toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
-                        content: mes.content,
-                        delivered: mes.delivered,
-                        created: mes.created,
-                        updated: mes.updated
-                    };
+                if (mes != null) {
+                    if (mes.userId == toUserId) {
+                        return <MessageDetailView>{
+                            id: mes._id,
+                            userId: toUserId,
+                            userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
+                            toUserId: mes.toUserId,
+                            toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                            content: mes.content,
+                            delivered: mes.delivered,
+                            created: mes.created,
+                            updated: mes.updated
+                        };
+                    } else if (mes.toUserId == toUserId) {
+                        return <MessageDetailView>{
+                            id: mes._id,
+                            userId: userId,
+                            userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                            toUserId: toUserId,
+                            toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                            content: mes.content,
+                            delivered: mes.delivered,
+                            created: mes.created,
+                            updated: mes.updated
+                        };
+                    }
                 }
             });
 
