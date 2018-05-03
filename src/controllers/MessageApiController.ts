@@ -179,8 +179,17 @@ export class MessageApiController extends ApiController {
             return Promise.reject(`User ${toUserId} not found.`);
         }
         // let userHaveMessage = users.find(u => u._id == toUserId);
-
-        let queryToEntities = this.MessageRepository.buildQuery(userId, toUserId);
+        let queryToEntities = {
+            $and: [
+                { deleted: null },
+                {
+                    $or: [
+                        { userId: userId },
+                        { toUserId: userId }
+                    ]
+                },
+            ],
+        };
         let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
         let messages = await this.MessageRepository.find(queryToEntities, sort);
 

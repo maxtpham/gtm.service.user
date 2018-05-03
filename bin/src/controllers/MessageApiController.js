@@ -171,7 +171,17 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                 return Promise.reject(`User ${toUserId} not found.`);
             }
             // let userHaveMessage = users.find(u => u._id == toUserId);
-            let queryToEntities = this.MessageRepository.buildQuery(userId, toUserId);
+            let queryToEntities = {
+                $and: [
+                    { deleted: null },
+                    {
+                        $or: [
+                            { userId: userId },
+                            { toUserId: userId }
+                        ]
+                    },
+                ],
+            };
             let sort = { name: sortName, type: sortType || -1 };
             let messages = yield this.MessageRepository.find(queryToEntities, sort);
             if (messages) {
