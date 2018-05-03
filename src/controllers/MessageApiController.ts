@@ -221,7 +221,6 @@ export class MessageApiController extends ApiController {
     /** Get List Messages for current user*/
     @Tags('Message') @Security('jwt') @Get('/get-messages-for-current-user')
     public async getListMessageForCurrentUser(
-        @Query() userIdToGetMessage: string,
         @Query() sortName?: string, @Query() sortType?: number,
         @Request() req?: express.Request,
     )
@@ -231,41 +230,46 @@ export class MessageApiController extends ApiController {
         let queryToEntities = {
             $and: [
                 { deleted: null },
-                { userId: { $in: [userId, userIdToGetMessage] } },
+                {
+                    $or: [
+                        { userId: userId },
+                        { toUserId: userId }
+                    ]
+                },
             ],
         };
 
         let messages = await this.MessageRepository.find(queryToEntities, sort);
         let user = await this.UserRepository.findOne({ _id: userId, deleted: null });
-        let userHaveMessage = await this.UserRepository.findOne({ _id: userIdToGetMessage, deleted: null });
         if (messages) {
-            let messageDetailViews: MessageDetailView[] = messages.map(mes => {
-                if (mes.userId == userIdToGetMessage) {
+            let messageDetailViews: MessageDetailView[] = await Promise.all(messages.map(async mes => {
+                let peerUserDetails = await this.UserRepository.findOne({ _id: mes.toUserId, deleted: null });
+                if (mes.userId == userId) {
                     return <MessageDetailView>{
                         id: mes._id,
-                        userId: userIdToGetMessage,
-                        userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : user.name) : '',
+                        userId: userId,
+                        userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
                         toUserId: mes.toUserId,
+                        toUserName: peerUserDetails ? (peerUserDetails.phone ? peerUserDetails.name + ' - ' + peerUserDetails.phone : peerUserDetails.name) : '',
+                        content: mes.content,
+                        delivered: mes.delivered,
+                        created: mes.created,
+                        updated: mes.updated
+                    };
+                } else if (mes.toUserId == userId) {
+                    return <MessageDetailView>{
+                        id: mes._id,
+                        userId: mes.toUserId,
+                        userName: peerUserDetails ? (peerUserDetails.phone ? peerUserDetails.name + ' - ' + peerUserDetails.phone : peerUserDetails.name) : '',
+                        toUserId: userId,
                         toUserName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
                         content: mes.content,
                         delivered: mes.delivered,
                         created: mes.created,
                         updated: mes.updated
                     };
-                } else {
-                    return <MessageDetailView>{
-                        id: mes._id,
-                        userId: userId,
-                        userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
-                        toUserId: userIdToGetMessage,
-                        toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
-                        content: mes.content,
-                        delivered: mes.delivered,
-                        created: mes.created,
-                        updated: mes.updated
-                    };
                 }
-            });
+            }));
             return Promise.resolve(messageDetailViews);
         }
         return Promise.reject(`Not found.`);

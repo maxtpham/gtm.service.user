@@ -1665,12 +1665,6 @@
 				"parameters": [
 					{
 						"in": "query",
-						"name": "userIdToGetMessage",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
 						"name": "sortName",
 						"required": false,
 						"type": "string"
