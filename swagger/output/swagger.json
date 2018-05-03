@@ -1590,35 +1590,9 @@
 				"parameters": [
 					{
 						"in": "query",
-						"name": "userIdToGetMessage",
+						"name": "toUserId",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "from",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "to",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "pageNumber",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "itemCount",
-						"required": false,
-						"format": "double",
-						"type": "number"
 					},
 					{
 						"in": "query",

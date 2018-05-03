@@ -163,56 +163,90 @@ export class MessageApiController extends ApiController {
     /** Get List Messages with an user for App*/
     @Tags('Message') @Security('jwt') @Get('/getforanuserapp')
     public async getListMessageOfUser(
-        @Query() userIdToGetMessage: string,
-        @Query() from?: string, @Query() to?: string,
-        @Query() pageNumber?: number, @Query() itemCount?: number,
-        @Request() req?: express.Request,
+        @Query() toUserId: string,
         @Query() sortName?: string, @Query() sortType?: number,
-
-    )
-        : Promise<MessageViewWithPaginationAnUserApp> {
+        @Request() req?: express.Request,
+    ): Promise<MessageViewWithPaginationAnUserApp> {
         let userId = (<JwtToken>req.user).user;
-        let queryToEntities = this.MessageRepository.buildQuery(from, to);
+        // let users = await this.UserRepository.find({ deleted: null });
+        let currentUserDetails = await this.UserRepository.findOne({ _id: userId, deleted: null });
+        if (!currentUserDetails) {
+            return Promise.reject(`User ${userId} not found.`);
+        }
+        // let user = users.find(u => u._id == userId);
+        let userHaveMessage = await this.UserRepository.findOne({ _id: toUserId, deleted: null });
+        if (!userHaveMessage) {
+            return Promise.reject(`User ${toUserId} not found.`);
+        }
+        // let userHaveMessage = users.find(u => u._id == toUserId);
+
+        let queryToEntities = this.MessageRepository.buildQuery(userId, toUserId);
         let sort: Sort = { name: sortName, type: <SortType>sortType || -1 };
-        let messages = await this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 100000, sort);
-        let users = await this.UserRepository.find({ deleted: null });
-        let user = users.find(u => u._id == userId);
-        let userHaveMessage = users.find(u => u._id == userIdToGetMessage);
-        console.log(userHaveMessage);
+        let messages = await this.MessageRepository.find(queryToEntities, sort);
+
         if (messages) {
-            let messageDetailView: MessageDetailView[] = [];
-
-            messages.map(mes => {
-                if (mes.userId === userId || mes.toUserId === userId) {
-                    if (mes.userId === userIdToGetMessage) {
-                        messageDetailView.push({
-                            id: mes._id,
-                            userId: userIdToGetMessage,
-                            userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : user.name) : '',
-                            toUserId: mes.toUserId,
-                            toUserName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
-                            content: mes.content,
-                            delivered: mes.delivered,
-                            created: mes.created,
-                            updated: mes.updated
-                        })
-                    } else if (mes.toUserId === userIdToGetMessage) {
-                        messageDetailView.push({
-                            id: mes._id,
-                            userId: userId,
-                            userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
-                            toUserId: userIdToGetMessage,
-                            toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
-                            content: mes.content,
-                            delivered: mes.delivered,
-                            created: mes.created,
-                            updated: mes.updated
-                        })
-                    }
+            let messageDetailView: MessageDetailView[] = messages.map(mes => {
+                if (mes.userId == toUserId) {
+                    return <MessageDetailView>{
+                        id: mes._id,
+                        userId: toUserId,
+                        userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
+                        toUserId: mes.toUserId,
+                        toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                        content: mes.content,
+                        delivered: mes.delivered,
+                        created: mes.created,
+                        updated: mes.updated
+                    };
+                } else if (mes.toUserId == toUserId) {
+                    return <MessageDetailView>{
+                        id: mes._id,
+                        userId: userId,
+                        userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                        toUserId: toUserId,
+                        toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                        content: mes.content,
+                        delivered: mes.delivered,
+                        created: mes.created,
+                        updated: mes.updated
+                    };
                 }
-            })
+            });
 
-            let messageDetailViewsApp = <MessageViewWithPaginationAnUserApp>{ userId: userIdToGetMessage, userName: userHaveMessage.name, messages: messageDetailView };
+            // TUAN ANH: review this code???
+            // let messageDetailView: MessageDetailView[] = [];
+
+            // messages.map(mes => {
+            //     if (mes.userId === userId || mes.toUserId === userId) {
+            //         if (mes.userId === toUserId) {
+            //             messageDetailView.push({
+            //                 id: mes._id,
+            //                 userId: toUserId,
+            //                 userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
+            //                 toUserId: mes.toUserId,
+            //                 toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+            //                 content: mes.content,
+            //                 delivered: mes.delivered,
+            //                 created: mes.created,
+            //                 updated: mes.updated
+            //             })
+            //         } else if (mes.toUserId === toUserId) {
+            //             messageDetailView.push({
+            //                 id: mes._id,
+            //                 userId: userId,
+            //                 userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+            //                 toUserId: toUserId,
+            //                 toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+            //                 content: mes.content,
+            //                 delivered: mes.delivered,
+            //                 created: mes.created,
+            //                 updated: mes.updated
+            //             })
+            //         }
+            //     }
+            // })
+
+            let messageDetailViewsApp = <MessageViewWithPaginationAnUserApp>{ userId: toUserId, userName: userHaveMessage.name, messages: messageDetailView };
             return Promise.resolve(messageDetailViewsApp);
         }
         return Promise.reject(`Not found.`);
@@ -227,6 +261,7 @@ export class MessageApiController extends ApiController {
         : Promise<MessageDetailView[]> {
         let userId = (<JwtToken>req.user).user;
         let sort: Sort = { name: sortName || 'created', type: <SortType>sortType || 1 };
+        console.log('sort', sort)
         let queryToEntities = {
             $and: [
                 { deleted: null },

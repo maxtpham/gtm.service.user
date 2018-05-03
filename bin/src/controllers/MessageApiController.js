@@ -157,49 +157,84 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         });
     }
     /** Get List Messages with an user for App*/
-    getListMessageOfUser(userIdToGetMessage, from, to, pageNumber, itemCount, req, sortName, sortType) {
+    getListMessageOfUser(toUserId, sortName, sortType, req) {
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
-            let queryToEntities = this.MessageRepository.buildQuery(from, to);
+            // let users = await this.UserRepository.find({ deleted: null });
+            let currentUserDetails = yield this.UserRepository.findOne({ _id: userId, deleted: null });
+            if (!currentUserDetails) {
+                return Promise.reject(`User ${userId} not found.`);
+            }
+            // let user = users.find(u => u._id == userId);
+            let userHaveMessage = yield this.UserRepository.findOne({ _id: toUserId, deleted: null });
+            if (!userHaveMessage) {
+                return Promise.reject(`User ${toUserId} not found.`);
+            }
+            // let userHaveMessage = users.find(u => u._id == toUserId);
+            let queryToEntities = this.MessageRepository.buildQuery(userId, toUserId);
             let sort = { name: sortName, type: sortType || -1 };
-            let messages = yield this.MessageRepository.findPagination(queryToEntities, pageNumber || 1, itemCount || 100000, sort);
-            let users = yield this.UserRepository.find({ deleted: null });
-            let user = users.find(u => u._id == userId);
-            let userHaveMessage = users.find(u => u._id == userIdToGetMessage);
-            console.log(userHaveMessage);
+            let messages = yield this.MessageRepository.find(queryToEntities, sort);
             if (messages) {
-                let messageDetailView = [];
-                messages.map(mes => {
-                    if (mes.userId === userId || mes.toUserId === userId) {
-                        if (mes.userId === userIdToGetMessage) {
-                            messageDetailView.push({
-                                id: mes._id,
-                                userId: userIdToGetMessage,
-                                userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : user.name) : '',
-                                toUserId: mes.toUserId,
-                                toUserName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
-                                content: mes.content,
-                                delivered: mes.delivered,
-                                created: mes.created,
-                                updated: mes.updated
-                            });
-                        }
-                        else if (mes.toUserId === userIdToGetMessage) {
-                            messageDetailView.push({
-                                id: mes._id,
-                                userId: userId,
-                                userName: user ? (user.phone ? user.name + ' - ' + user.phone : user.name) : '',
-                                toUserId: userIdToGetMessage,
-                                toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
-                                content: mes.content,
-                                delivered: mes.delivered,
-                                created: mes.created,
-                                updated: mes.updated
-                            });
-                        }
+                let messageDetailView = messages.map(mes => {
+                    if (mes.userId == toUserId) {
+                        return {
+                            id: mes._id,
+                            userId: toUserId,
+                            userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
+                            toUserId: mes.toUserId,
+                            toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                            content: mes.content,
+                            delivered: mes.delivered,
+                            created: mes.created,
+                            updated: mes.updated
+                        };
+                    }
+                    else if (mes.toUserId == toUserId) {
+                        return {
+                            id: mes._id,
+                            userId: userId,
+                            userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                            toUserId: toUserId,
+                            toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                            content: mes.content,
+                            delivered: mes.delivered,
+                            created: mes.created,
+                            updated: mes.updated
+                        };
                     }
                 });
-                let messageDetailViewsApp = { userId: userIdToGetMessage, userName: userHaveMessage.name, messages: messageDetailView };
+                // TUAN ANH: review this code???
+                // let messageDetailView: MessageDetailView[] = [];
+                // messages.map(mes => {
+                //     if (mes.userId === userId || mes.toUserId === userId) {
+                //         if (mes.userId === toUserId) {
+                //             messageDetailView.push({
+                //                 id: mes._id,
+                //                 userId: toUserId,
+                //                 userName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : currentUserDetails.name) : '',
+                //                 toUserId: mes.toUserId,
+                //                 toUserName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                //                 content: mes.content,
+                //                 delivered: mes.delivered,
+                //                 created: mes.created,
+                //                 updated: mes.updated
+                //             })
+                //         } else if (mes.toUserId === toUserId) {
+                //             messageDetailView.push({
+                //                 id: mes._id,
+                //                 userId: userId,
+                //                 userName: currentUserDetails ? (currentUserDetails.phone ? currentUserDetails.name + ' - ' + currentUserDetails.phone : currentUserDetails.name) : '',
+                //                 toUserId: toUserId,
+                //                 toUserName: userHaveMessage ? (userHaveMessage.phone ? userHaveMessage.name + ' - ' + userHaveMessage.phone : userHaveMessage.name) : '',
+                //                 content: mes.content,
+                //                 delivered: mes.delivered,
+                //                 created: mes.created,
+                //                 updated: mes.updated
+                //             })
+                //         }
+                //     }
+                // })
+                let messageDetailViewsApp = { userId: toUserId, userName: userHaveMessage.name, messages: messageDetailView };
                 return Promise.resolve(messageDetailViewsApp);
             }
             return Promise.reject(`Not found.`);
@@ -210,6 +245,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
         return __awaiter(this, void 0, void 0, function* () {
             let userId = req.user.user;
             let sort = { name: sortName || 'created', type: sortType || 1 };
+            console.log('sort', sort);
             let queryToEntities = {
                 $and: [
                     { deleted: null },
@@ -432,11 +468,9 @@ __decorate([
     tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('/getforanuserapp'),
     __param(0, tsoa_1.Query()),
     __param(1, tsoa_1.Query()), __param(2, tsoa_1.Query()),
-    __param(3, tsoa_1.Query()), __param(4, tsoa_1.Query()),
-    __param(5, tsoa_1.Request()),
-    __param(6, tsoa_1.Query()), __param(7, tsoa_1.Query()),
+    __param(3, tsoa_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, Number, Number, Object, String, Number]),
+    __metadata("design:paramtypes", [String, String, Number, Object]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "getListMessageOfUser", null);
 __decorate([

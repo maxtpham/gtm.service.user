@@ -606,14 +606,10 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                userIdToGetMessage: { "in": "query", "name": "userIdToGetMessage", "required": true, "dataType": "string" },
-                from: { "in": "query", "name": "from", "dataType": "string" },
-                to: { "in": "query", "name": "to", "dataType": "string" },
-                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
-                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
-                req: { "in": "request", "name": "req", "dataType": "object" },
+                toUserId: { "in": "query", "name": "toUserId", "required": true, "dataType": "string" },
                 sortName: { "in": "query", "name": "sortName", "dataType": "string" },
                 sortType: { "in": "query", "name": "sortType", "dataType": "double" },
+                req: { "in": "request", "name": "req", "dataType": "object" },
             };
 
             let validatedArgs: any[] = [];
