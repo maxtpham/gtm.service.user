@@ -153,19 +153,19 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             }
             const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone, houseHolder } = profile;
             userProfile.profileDefault = {
-                bankRate: bankRate || userProfile.profileDefault.bankRate,
-                job: job || userProfile.profileDefault.job,
-                infos: infos || userProfile.profileDefault.infos,
-                note: note || userProfile.profileDefault.note,
-                identityCard: identityCard || userProfile.profileDefault.identityCard,
-                houseHolder: houseHolder || userProfile.profileDefault.houseHolder,
+                bankRate: bankRate || (userProfile.profileDefault ? userProfile.profileDefault.bankRate : 0),
+                job: job || (userProfile.profileDefault ? userProfile.profileDefault.job : ''),
+                infos: infos || (userProfile.profileDefault ? userProfile.profileDefault.infos : ''),
+                note: note || (userProfile.profileDefault ? userProfile.profileDefault.note : ''),
+                identityCard: identityCard || (userProfile.profileDefault ? userProfile.profileDefault.identityCard : ''),
+                houseHolder: houseHolder || (userProfile.profileDefault ? userProfile.profileDefault.houseHolder : ''),
             };
-            name ? (userProfile.name = name) : "";
-            birthday ? (userProfile.birthday = birthday) : 0;
-            address ? (userProfile.address = address) : "";
-            gender ? (userProfile.gender = gender) : "";
-            localtion ? (userProfile.location = localtion) : { x: 0, y: 0 };
-            phone ? (userProfile.phone = phone) : "";
+            userProfile.name = name || userProfile.name;
+            userProfile.birthday = birthday || userProfile.birthday;
+            userProfile.address = address || userProfile.address;
+            userProfile.gender = gender || userProfile.gender;
+            userProfile.location = localtion || (userProfile.location || { x: 0, y: 0 });
+            userProfile.phone = phone || userProfile.phone;
             userProfile.updated = new Date().getTime();
             let userSave = yield this.UserRepository.update({ _id: req.user.user }, userProfile);
             if (userSave) {
