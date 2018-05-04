@@ -152,22 +152,14 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
                 return Promise.reject("User not exist");
             }
             const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone, houseHolder } = profile;
-            const { roles, code, provider, active, profiles } = users;
-            const { google, facebook } = profiles;
-            console.log('profiles', profiles);
-            users.profiles = {
-                google: google ? google : "",
-                facebook: facebook ? facebook : "",
-                default: {
-                    bankRate: bankRate ? bankRate : "",
-                    job: job ? job : "",
-                    infos: infos ? infos : "",
-                    note: note ? note : "",
-                    identityCard: identityCard ? identityCard : "",
-                    houseHolder: houseHolder
-                }
+            users.profileDefault = {
+                bankRate: bankRate ? bankRate : 0,
+                job: job ? job : "",
+                infos: infos ? infos : "",
+                note: note ? note : "",
+                identityCard: identityCard ? identityCard : "",
+                houseHolder: houseHolder ? houseHolder : "",
             };
-            console.log('users.profiles', users.profiles);
             name ? (users.name = name) : "";
             birthday ? (users.birthday = birthday) : 0;
             address ? (users.address = address) : "";
@@ -177,7 +169,7 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             users.updated = new Date().getTime();
             let userSave = yield this.UserRepository.update({ _id: req.user.user }, users);
             if (userSave) {
-                return Promise.resolve(users);
+                return Promise.resolve(UserEntity_1.User.toProfileViewForMobile(users));
             }
             return Promise.reject(`Not found.`);
         });

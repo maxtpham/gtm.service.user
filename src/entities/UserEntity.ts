@@ -42,6 +42,9 @@ export interface ProfileView {
     /** token FCM */
     fcmToken?: string;
 
+    /** profile.default */
+    profileDefault?: ProfileDefault; 
+
     /** First Login */
     isFirstLogin?: boolean;
 
@@ -70,6 +73,15 @@ export interface UserAccount {
     balance?: number;
     balanceGold: number;
     bonus?: number;
+}
+
+export interface ProfileDefault {
+    bankRate: number,
+    job: string,
+    infos: string,
+    note: string,
+    identityCard: string,
+    houseHolder: string
 }
 
 export interface UserEntity extends DbEntity, UserView {
@@ -101,7 +113,8 @@ export const UserSchema = {
     timezone: { type: mongoose.Schema.Types.Number, required: false },
     avatar: { type: AttachmentSchema, required: false },
     isFirstLogin: { type: mongoose.Schema.Types.Boolean, required: false },
-    fcmToken: { type: mongoose.Schema.Types.String, required: false }
+    fcmToken: { type: mongoose.Schema.Types.String, required: false },
+    profileDefault: { type: mongoose.Schema.Types.Mixed, required: false }
 };
 
 export module User {

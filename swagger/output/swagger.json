@@ -500,6 +500,38 @@
 			],
 			"type": "object"
 		},
+		"ProfileDefault": {
+			"properties": {
+				"bankRate": {
+					"type": "number",
+					"format": "double"
+				},
+				"job": {
+					"type": "string"
+				},
+				"infos": {
+					"type": "string"
+				},
+				"note": {
+					"type": "string"
+				},
+				"identityCard": {
+					"type": "string"
+				},
+				"houseHolder": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"bankRate",
+				"job",
+				"infos",
+				"note",
+				"identityCard",
+				"houseHolder"
+			],
+			"type": "object"
+		},
 		"ProfileView": {
 			"properties": {
 				"code": {
@@ -566,6 +598,10 @@
 					"type": "string",
 					"description": "token FCM "
 				},
+				"profileDefault": {
+					"$ref": "#/definitions/ProfileDefault",
+					"description": "profile.default "
+				},
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
@@ -575,6 +611,68 @@
 				"code",
 				"name",
 				"provider"
+			],
+			"type": "object"
+		},
+		"MProfileView": {
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"gender": {
+					"type": "string"
+				},
+				"birthday": {
+					"type": "number",
+					"format": "double"
+				},
+				"address": {
+					"type": "string"
+				},
+				"localtion": {
+					"$ref": "#/definitions/LocationView"
+				},
+				"identityCard": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"job": {
+					"type": "string"
+				},
+				"bankRate": {
+					"type": "number",
+					"format": "double"
+				},
+				"note": {
+					"type": "string"
+				},
+				"infos": {
+					"type": "string"
+				},
+				"houseHolder": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"name",
+				"gender",
+				"birthday",
+				"address",
+				"identityCard",
+				"phone"
+			],
+			"type": "object"
+		},
+		"MFCMView": {
+			"properties": {
+				"fcmToken": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"fcmToken"
 			],
 			"type": "object"
 		},
@@ -727,6 +825,10 @@
 					"type": "string",
 					"description": "token FCM "
 				},
+				"profileDefault": {
+					"$ref": "#/definitions/ProfileDefault",
+					"description": "profile.default "
+				},
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
@@ -746,68 +848,6 @@
 				"name",
 				"provider",
 				"profiles"
-			],
-			"type": "object"
-		},
-		"MProfileView": {
-			"properties": {
-				"name": {
-					"type": "string"
-				},
-				"gender": {
-					"type": "string"
-				},
-				"birthday": {
-					"type": "number",
-					"format": "double"
-				},
-				"address": {
-					"type": "string"
-				},
-				"localtion": {
-					"$ref": "#/definitions/LocationView"
-				},
-				"identityCard": {
-					"type": "string"
-				},
-				"phone": {
-					"type": "string"
-				},
-				"job": {
-					"type": "string"
-				},
-				"bankRate": {
-					"type": "number",
-					"format": "double"
-				},
-				"note": {
-					"type": "string"
-				},
-				"infos": {
-					"type": "string"
-				},
-				"houseHolder": {
-					"type": "string"
-				}
-			},
-			"required": [
-				"name",
-				"gender",
-				"birthday",
-				"address",
-				"identityCard",
-				"phone"
-			],
-			"type": "object"
-		},
-		"MFCMView": {
-			"properties": {
-				"fcmToken": {
-					"type": "string"
-				}
-			},
-			"required": [
-				"fcmToken"
 			],
 			"type": "object"
 		},
@@ -910,6 +950,10 @@
 				"fcmToken": {
 					"type": "string",
 					"description": "token FCM "
+				},
+				"profileDefault": {
+					"$ref": "#/definitions/ProfileDefault",
+					"description": "profile.default "
 				},
 				"isFirstLogin": {
 					"type": "boolean",
@@ -2060,7 +2104,7 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/UserEntity"
+							"$ref": "#/definitions/ProfileView"
 						}
 					}
 				},

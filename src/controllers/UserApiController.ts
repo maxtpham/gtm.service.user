@@ -139,7 +139,7 @@ export class UserApiController extends ApiController {
     public async updateUserProfiles(
         @Body() profile: MProfileView,
         @Request() req: express.Request
-    ): Promise<UserEntity> {
+    ): Promise<ProfileView> {
 
         let users = await this.UserRepository.findOne({ _id: (<JwtToken>req.user).user });
         if (!users) {
@@ -147,25 +147,15 @@ export class UserApiController extends ApiController {
         }
 
         const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone, houseHolder } = profile;
-        const { roles, code, provider, active, profiles } = users;
-        const { google, facebook } = profiles;
-        console.log('profiles', profiles);
-
-        users.profiles = {
-            google: google ? google : "",
-            facebook: facebook ? facebook : "",
-            default: {
-                bankRate: bankRate ? bankRate : "",
-                job: job ? job : "",
-                infos: infos ? infos : "",
-                note: note ? note : "",
-                identityCard: identityCard ? identityCard : "",
-                houseHolder: houseHolder
-            }
-        };
-
-        console.log('users.profiles', users.profiles);
         
+        users.profileDefault = {
+            bankRate    : bankRate ? bankRate : 0,
+            job         : job ? job : "",
+            infos       : infos ? infos : "",
+            note        : note ? note : "",
+            identityCard : identityCard ? identityCard : "",
+            houseHolder : houseHolder ? houseHolder : "",
+        }
 
         name ? (users.name = name) : "";
         birthday ? (users.birthday = birthday) : 0;
@@ -177,7 +167,7 @@ export class UserApiController extends ApiController {
 
         let userSave = await this.UserRepository.update({ _id: (<JwtToken>req.user).user }, users);
         if (userSave) {
-            return Promise.resolve(users);
+            return Promise.resolve(User.toProfileViewForMobile(users));
         }
         return Promise.reject(`Not found.`);
     }

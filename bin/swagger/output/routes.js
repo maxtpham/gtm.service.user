@@ -170,6 +170,16 @@ const models = {
             "y": { "dataType": "double", "required": true },
         },
     },
+    "ProfileDefault": {
+        "properties": {
+            "bankRate": { "dataType": "double", "required": true },
+            "job": { "dataType": "string", "required": true },
+            "infos": { "dataType": "string", "required": true },
+            "note": { "dataType": "string", "required": true },
+            "identityCard": { "dataType": "string", "required": true },
+            "houseHolder": { "dataType": "string", "required": true },
+        },
+    },
     "ProfileView": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -188,7 +198,29 @@ const models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "fcmToken": { "dataType": "string" },
+            "profileDefault": { "ref": "ProfileDefault" },
             "isFirstLogin": { "dataType": "boolean" },
+        },
+    },
+    "MProfileView": {
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "gender": { "dataType": "string", "required": true },
+            "birthday": { "dataType": "double", "required": true },
+            "address": { "dataType": "string", "required": true },
+            "localtion": { "ref": "LocationView" },
+            "identityCard": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string", "required": true },
+            "job": { "dataType": "string" },
+            "bankRate": { "dataType": "double" },
+            "note": { "dataType": "string" },
+            "infos": { "dataType": "string" },
+            "houseHolder": { "dataType": "string" },
+        },
+    },
+    "MFCMView": {
+        "properties": {
+            "fcmToken": { "dataType": "string", "required": true },
         },
     },
     "Binary": {
@@ -232,30 +264,10 @@ const models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "fcmToken": { "dataType": "string" },
+            "profileDefault": { "ref": "ProfileDefault" },
             "isFirstLogin": { "dataType": "boolean" },
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
-        },
-    },
-    "MProfileView": {
-        "properties": {
-            "name": { "dataType": "string", "required": true },
-            "gender": { "dataType": "string", "required": true },
-            "birthday": { "dataType": "double", "required": true },
-            "address": { "dataType": "string", "required": true },
-            "localtion": { "ref": "LocationView" },
-            "identityCard": { "dataType": "string", "required": true },
-            "phone": { "dataType": "string", "required": true },
-            "job": { "dataType": "string" },
-            "bankRate": { "dataType": "double" },
-            "note": { "dataType": "string" },
-            "infos": { "dataType": "string" },
-            "houseHolder": { "dataType": "string" },
-        },
-    },
-    "MFCMView": {
-        "properties": {
-            "fcmToken": { "dataType": "string", "required": true },
         },
     },
     "MAvatarView": {
@@ -289,6 +301,7 @@ const models = {
             "gender": { "dataType": "string" },
             "timezone": { "dataType": "double" },
             "fcmToken": { "dataType": "string" },
+            "profileDefault": { "ref": "ProfileDefault" },
             "isFirstLogin": { "dataType": "boolean" },
             "profiles": { "dataType": "any", "required": true },
             "avatar": { "ref": "AttachmentView" },
