@@ -77,6 +77,7 @@ export class MessageApiController extends ApiController {
         let userId = (<JwtToken>req.user).user;
         let sort: Sort = { name: sortName || 'created', type: <SortType>sortType || 1 };
         let messages = await this.MessageRepository.find({}, sort);
+        
         if (messages) {
             let users = await this.UserRepository.find({ deleted: null });
 
