@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@gtm/lib.common": "^1.0.10",
-    "@gtm/lib.service": "^1.0.29",
+    "@gtm/lib.service": "^1.0.30",
     "@gtm/lib.service.auth": "^1.0.28",
     "@scg/lib.client.core": "^1.0.147",
     "config": "^1.30.0",
