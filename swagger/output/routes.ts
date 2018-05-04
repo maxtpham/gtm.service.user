@@ -624,10 +624,10 @@ export function RegisterRoutes(app: any) {
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
             const args = {
-                toUserId: { "in": "query", "name": "toUserId", "required": true, "dataType": "string" },
+                userIdToGetMessage: { "in": "query", "name": "userIdToGetMessage", "required": true, "dataType": "string" },
+                req: { "in": "request", "name": "req", "dataType": "object" },
                 sortName: { "in": "query", "name": "sortName", "dataType": "string" },
                 sortType: { "in": "query", "name": "sortType", "dataType": "double" },
-                req: { "in": "request", "name": "req", "dataType": "object" },
             };
 
             let validatedArgs: any[] = [];

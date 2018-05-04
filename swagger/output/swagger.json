@@ -1660,7 +1660,7 @@
 				"parameters": [
 					{
 						"in": "query",
-						"name": "toUserId",
+						"name": "userIdToGetMessage",
 						"required": true,
 						"type": "string"
 					},
