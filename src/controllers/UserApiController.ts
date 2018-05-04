@@ -194,19 +194,7 @@ export class UserApiController extends ApiController {
             return Promise.reject("User not exist");
         }
 
-        const { roles, code, provider, active, profiles } = users;
-        const { google, facebook } = profiles;
-        console.log('profiles-set-fcm', profiles);
-        users.profiles = {
-            google: google ? google : "",
-            facebook: facebook ? facebook : "",
-            default: {
-                ...profiles.default,
-                fcmToken: fcms.fcmToken
-            }
-        };
-        console.log('users.profiles-fcm', users.profiles);
-
+        users.fcmToken = fcms.fcmToken;
         users.updated = new Date().getTime();
 
         let userSave = await this.UserRepository.update({ _id: (<JwtToken>req.user).user }, users);
@@ -226,20 +214,13 @@ export class UserApiController extends ApiController {
         if (!users) {
             return Promise.reject("User not exist");
         }
-
-        let defaults = users.profiles.default ? users.profiles.default : null;
-        if (defaults) {
-            let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
-            if (fcm !== "0") {
-                let res: MFCMView = {
-                    fcmToken: fcm,
-                };
-                return Promise.resolve(res);
-            }
-            return Promise.reject(`Nick chưa có FCM`);
-
+        
+        if (users.fcmToken) {
+            let fcmView: MFCMView = {
+                fcmToken: users.fcmToken,
+            };
+            return Promise.resolve(fcmView);
         }
-
         return Promise.reject(`Chưa Tạo FCM`);
     }
 

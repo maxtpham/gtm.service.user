@@ -562,6 +562,10 @@
 					"format": "double",
 					"description": "+/- UTC time "
 				},
+				"fcmToken": {
+					"type": "string",
+					"description": "token FCM "
+				},
 				"isFirstLogin": {
 					"type": "boolean",
 					"description": "First Login "
@@ -718,6 +722,10 @@
 					"type": "number",
 					"format": "double",
 					"description": "+/- UTC time "
+				},
+				"fcmToken": {
+					"type": "string",
+					"description": "token FCM "
 				},
 				"isFirstLogin": {
 					"type": "boolean",
@@ -898,6 +906,10 @@
 					"type": "number",
 					"format": "double",
 					"description": "+/- UTC time "
+				},
+				"fcmToken": {
+					"type": "string",
+					"description": "token FCM "
 				},
 				"isFirstLogin": {
 					"type": "boolean",

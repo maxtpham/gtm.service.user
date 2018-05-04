@@ -39,6 +39,9 @@ export interface ProfileView {
     /** +/- UTC time */
     timezone?: number;
 
+    /** token FCM */
+    fcmToken?: string;
+
     /** First Login */
     isFirstLogin?: boolean;
 
@@ -98,6 +101,7 @@ export const UserSchema = {
     timezone: { type: mongoose.Schema.Types.Number, required: false },
     avatar: { type: AttachmentSchema, required: false },
     isFirstLogin: { type: mongoose.Schema.Types.Boolean, required: false },
+    fcmToken: { type: mongoose.Schema.Types.String, required: false }
 };
 
 export module User {
