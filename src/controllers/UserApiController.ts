@@ -141,33 +141,33 @@ export class UserApiController extends ApiController {
         @Request() req: express.Request
     ): Promise<ProfileView> {
 
-        let users = await this.UserRepository.findOne({ _id: (<JwtToken>req.user).user });
-        if (!users) {
+        let userProfile = await this.UserRepository.findOne({ _id: (<JwtToken>req.user).user });
+        if (!userProfile) {
             return Promise.reject("User not exist");
         }
 
         const { job, bankRate, note, infos, name, identityCard, address, birthday, gender, localtion, phone, houseHolder } = profile;
-        
-        users.profileDefault = {
-            bankRate    : bankRate ? bankRate : 0,
-            job         : job ? job : "",
-            infos       : infos ? infos : "",
-            note        : note ? note : "",
-            identityCard : identityCard ? identityCard : "",
-            houseHolder : houseHolder ? houseHolder : "",
+
+        userProfile.profileDefault = {
+            bankRate: bankRate || userProfile.profileDefault.bankRate,
+            job: job || userProfile.profileDefault.job,
+            infos: infos || userProfile.profileDefault.infos,
+            note: note || userProfile.profileDefault.note,
+            identityCard: identityCard || userProfile.profileDefault.identityCard,
+            houseHolder: houseHolder || userProfile.profileDefault.houseHolder,
         }
 
-        name ? (users.name = name) : "";
-        birthday ? (users.birthday = birthday) : 0;
-        address ? (users.address = address) : "";
-        gender ? (users.gender = gender) : "";
-        localtion ? (users.location = localtion) : { x: 0, y: 0 };
-        phone ? (users.phone = phone) : "";
-        users.updated = new Date().getTime();
+        name ? (userProfile.name = name) : "";
+        birthday ? (userProfile.birthday = birthday) : 0;
+        address ? (userProfile.address = address) : "";
+        gender ? (userProfile.gender = gender) : "";
+        localtion ? (userProfile.location = localtion) : { x: 0, y: 0 };
+        phone ? (userProfile.phone = phone) : "";
+        userProfile.updated = new Date().getTime();
 
-        let userSave = await this.UserRepository.update({ _id: (<JwtToken>req.user).user }, users);
+        let userSave = await this.UserRepository.update({ _id: (<JwtToken>req.user).user }, userProfile);
         if (userSave) {
-            return Promise.resolve(User.toProfileViewForMobile(users));
+            return Promise.resolve(User.toProfileViewForMobile(await this.UserRepository.findOneById(userProfile._id)));
         }
         return Promise.reject(`Not found.`);
     }
@@ -204,7 +204,7 @@ export class UserApiController extends ApiController {
         if (!users) {
             return Promise.reject("User not exist");
         }
-        
+
         if (users.fcmToken) {
             let fcmView: MFCMView = {
                 fcmToken: users.fcmToken,
