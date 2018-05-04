@@ -555,10 +555,10 @@ function RegisterRoutes(app) {
     });
     app.get('/api/user/v1/Message/getforanuserapp', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
-            toUserId: { "in": "query", "name": "toUserId", "required": true, "dataType": "string" },
+            userIdToGetMessage: { "in": "query", "name": "userIdToGetMessage", "required": true, "dataType": "string" },
+            req: { "in": "request", "name": "req", "dataType": "object" },
             sortName: { "in": "query", "name": "sortName", "dataType": "string" },
             sortType: { "in": "query", "name": "sortType", "dataType": "double" },
-            req: { "in": "request", "name": "req", "dataType": "object" },
         };
         let validatedArgs = [];
         try {
