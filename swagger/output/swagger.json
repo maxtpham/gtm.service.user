@@ -1842,7 +1842,9 @@
 						"type": "string"
 					}
 				]
-			},
+			}
+		},
+		"/api/user/v1/Message/test-notifi-message": {
 			"get": {
 				"operationId": "TestNotifiForMessage",
 				"produces": [

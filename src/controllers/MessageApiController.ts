@@ -496,7 +496,7 @@ export class MessageApiController extends ApiController {
         return Promise.reject(`Not found.`);
     }
 
-    @Tags('Message') @Security('jwt') @Get('{id}')
+    @Tags('Message') @Security('jwt') @Get('test-notifi-message')
     public async testNotifiForMessage(
         @Query() title: string, 
         @Query() message: string, 
@@ -508,12 +508,12 @@ export class MessageApiController extends ApiController {
                let notis = await FireBaseNotifi.sendForMessage(title, message, fcm, userId, screenID);
                if (notis) {
                    return Promise.resolve("notis complete to " + userId);
-               }
+               } 
+               return Promise.reject("Send Notifi reject");
+
             } catch (ex){
                 console.log(ex);
                 return Promise.reject("error: " + ex);
             }
-
-        return Promise.reject(`Not found.`);
     }
 }

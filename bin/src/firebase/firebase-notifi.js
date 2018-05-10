@@ -5,12 +5,9 @@ class FireBaseNotifi {
 }
 FireBaseNotifi.sendForTopPic = (topic, title, message, fcm, screenID) => {
     var payload = {
-        "notification": {
+        notification: {
             title: title,
             body: message,
-            icon: "new",
-            sound: "default",
-            clickAction: "fcm.ACTION.HELLO",
         },
         data: {
             screenID: screenID,
@@ -24,12 +21,9 @@ FireBaseNotifi.sendForTopPic = (topic, title, message, fcm, screenID) => {
 };
 FireBaseNotifi.sendForScreen = (title, message, fcm, screenID) => {
     var payload = {
-        "notification": {
+        notification: {
             title: title,
             body: message,
-            icon: "new",
-            sound: "default",
-            clickAction: "fcm.ACTION.HELLO",
         },
         data: {
             screenID: screenID,
@@ -44,23 +38,22 @@ FireBaseNotifi.sendForScreen = (title, message, fcm, screenID) => {
 };
 FireBaseNotifi.sendForMessage = (title, message, fcm, userId, screenID) => {
     var payload = {
-        "notification": {
+        notification: {
             title: title,
             body: message,
-            icon: "new",
-            sound: "default",
-            clickAction: "fcm.ACTION.HELLO",
         },
         data: {
+            title: "Tin nhắn: " + title,
+            message: message,
             screenID: screenID,
             userId: userId,
         },
         token: fcm
     };
-    firebase_1.firebaseAdmin.messaging().send(payload).then((response) => {
+    return firebase_1.firebaseAdmin.messaging().send(payload).then((response) => {
         // console.log(response);
     }).catch((error) => {
-        console.log(error);
+        console.log("Error: " + error);
     });
 };
 exports.default = FireBaseNotifi;

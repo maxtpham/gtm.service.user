@@ -665,7 +665,7 @@ function RegisterRoutes(app) {
         const promise = controller.deleteEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/user/v1/Message/:id', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+    app.get('/api/user/v1/Message/test-notifi-message', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
         const args = {
             title: { "in": "query", "name": "title", "required": true, "dataType": "string" },
             message: { "in": "query", "name": "message", "required": true, "dataType": "string" },

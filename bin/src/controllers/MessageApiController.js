@@ -471,12 +471,12 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                 if (notis) {
                     return Promise.resolve("notis complete to " + userId);
                 }
+                return Promise.reject("Send Notifi reject");
             }
             catch (ex) {
                 console.log(ex);
                 return Promise.reject("error: " + ex);
             }
-            return Promise.reject(`Not found.`);
         });
     }
 };
@@ -564,7 +564,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "deleteEntity", null);
 __decorate([
-    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('{id}'),
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('test-notifi-message'),
     __param(0, tsoa_1.Query()),
     __param(1, tsoa_1.Query()),
     __param(2, tsoa_1.Query()),
