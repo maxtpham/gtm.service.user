@@ -12,6 +12,7 @@ import { MessageEntity } from '../entities/MessageEntity';
 import { UserRepositoryTYPE, UserRepository } from '../repositories/UserRepository';
 import { firebaseAdmin } from "../firebase/firebase";
 import { MFCMView } from '../views/MProfileView';
+import FireBaseNotifi from '../firebase/firebase-notifi';
 
 @injectableSingleton(MessageApiController)
 @Route('api/user/v1/Message')
@@ -492,6 +493,27 @@ export class MessageApiController extends ApiController {
         if (message) {
             return Promise.resolve();
         }
+        return Promise.reject(`Not found.`);
+    }
+
+    @Tags('Message') @Security('jwt') @Get('{id}')
+    public async testNotifiForMessage(
+        @Query() title: string, 
+        @Query() message: string, 
+        @Query() fcm: string, 
+        @Query() userId: string, 
+        @Query() screenID: string): Promise<string> {
+            
+            try {
+               let notis = await FireBaseNotifi.sendForMessage(title, message, fcm, userId, screenID);
+               if (notis) {
+                   return Promise.resolve("notis complete to " + userId);
+               }
+            } catch (ex){
+                console.log(ex);
+                return Promise.reject("error: " + ex);
+            }
+
         return Promise.reject(`Not found.`);
     }
 }

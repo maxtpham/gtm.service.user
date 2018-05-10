@@ -29,6 +29,7 @@ const tsoa_2 = require("tsoa");
 const MessageRepository_1 = require("../repositories/MessageRepository");
 const UserRepository_1 = require("../repositories/UserRepository");
 const firebase_1 = require("../firebase/firebase");
+const firebase_notifi_1 = require("../firebase/firebase-notifi");
 let MessageApiController = MessageApiController_1 = class MessageApiController extends lib_service_1.ApiController {
     /** Get Messages */
     getEntities(from, to, pageNumber, itemCount, sortName, sortType) {
@@ -463,6 +464,21 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
             return Promise.reject(`Not found.`);
         });
     }
+    testNotifiForMessage(title, message, fcm, userId, screenID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let notis = yield firebase_notifi_1.default.sendForMessage(title, message, fcm, userId, screenID);
+                if (notis) {
+                    return Promise.resolve("notis complete to " + userId);
+                }
+            }
+            catch (ex) {
+                console.log(ex);
+                return Promise.reject("error: " + ex);
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
 };
 __decorate([
     inversify_1.inject(MessageRepository_1.MessageRepositoryTYPE),
@@ -547,6 +563,17 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "deleteEntity", null);
+__decorate([
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('{id}'),
+    __param(0, tsoa_1.Query()),
+    __param(1, tsoa_1.Query()),
+    __param(2, tsoa_1.Query()),
+    __param(3, tsoa_1.Query()),
+    __param(4, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String, String, String]),
+    __metadata("design:returntype", Promise)
+], MessageApiController.prototype, "testNotifiForMessage", null);
 MessageApiController = MessageApiController_1 = __decorate([
     lib_common_1.injectableSingleton(MessageApiController_1),
     tsoa_1.Route('api/user/v1/Message')

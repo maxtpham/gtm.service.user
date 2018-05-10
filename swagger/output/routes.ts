@@ -767,6 +767,30 @@ export function RegisterRoutes(app: any) {
             const promise = controller.deleteEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.get('/api/user/v1/Message/:id',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                title: { "in": "query", "name": "title", "required": true, "dataType": "string" },
+                message: { "in": "query", "name": "message", "required": true, "dataType": "string" },
+                fcm: { "in": "query", "name": "fcm", "required": true, "dataType": "string" },
+                userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
+                screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<MessageApiController>(MessageApiController);
+
+
+            const promise = controller.testNotifiForMessage.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
     app.get('/api/user/v1/user/get-user-lite',
         authenticateMiddleware([{ "name": "jwt" }]),
         function(request: any, response: any, next: any) {
