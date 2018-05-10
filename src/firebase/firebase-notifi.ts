@@ -2,7 +2,7 @@ import { firebaseAdmin } from "./firebase";
 
 export default class FireBaseNotifi {
 
-  static sendForTopPic = (topic: string, title: string, message: string, fcm: string, screenID: number) => {
+  public static async sendForTopPic(topic: string, title: string, message: string, fcm: string, screenID: number) : Promise<string> {
     var payload = {
       notification: {
           title: title,
@@ -16,14 +16,17 @@ export default class FireBaseNotifi {
         screenID: screenID,
       }
     };
-    return  firebaseAdmin.messaging().send(topic, payload).then((response) => {
+    firebaseAdmin.messaging().send(topic, payload).then((response) => {
       // console.log(response);
+      return Promise.resolve("Gửi tin thành công");
     }).catch((error) => {
       console.log(error);
+      return Promise.reject("Lỗi: " +error);
     });
+    return Promise.reject("Không gửi được tin");
   } 
 
-  static sendForScreen = (title: string, message: string, fcm: string, screenID: number) => {
+  public static  async sendForScreen(title: string, message: string, fcm: string, screenID: number): Promise<string> {
 
     var payload = {
       notification: {
@@ -42,13 +45,15 @@ export default class FireBaseNotifi {
 
     firebaseAdmin.messaging().send(payload).then((response) => {
       // console.log(response);
+      return Promise.resolve("Gửi tin thành công");
     }).catch((error) => {
-      console.log(error);
+      return Promise.reject("Lỗi: " +error);
     });
+    return Promise.reject("Không gửi được tin");
 
   } 
 
-  static sendForMessage = (title: string, message: string, fcm: string, userId: string, screenID: string) => {
+  public static async sendForMessage(title: string, message: string, fcm: string, userId: string, screenID: string): Promise<string> {
     var payload = {
       notification: {
           title: title,
@@ -59,18 +64,19 @@ export default class FireBaseNotifi {
           // badge: '1'
       },
       data: {
-        title: "Tin nhắn: " + title,
+        title: title,
         message: message,
         screenID: screenID,
         userId: userId,
       },
       token: fcm
     };
-    return firebaseAdmin.messaging().send(payload).then((response) => {
-      // console.log(response);
+    firebaseAdmin.messaging().send(payload).then((response) => {
+      return Promise.resolve("Gửi tin thành công");
     }).catch((error) => {
-      console.log("Error: " + error);
+      return Promise.reject("Lỗi: " +error);
     });
+    return Promise.reject("Không gửi được tin");
   } 
 
 }

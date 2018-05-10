@@ -469,13 +469,13 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
             try {
                 let notis = yield firebase_notifi_1.default.sendForMessage(title, message, fcm, userId, screenID);
                 if (notis) {
-                    return Promise.resolve("notis complete to " + userId);
+                    return Promise.resolve("Gửi tin thành công: " + userId);
                 }
-                return Promise.reject("Send Notifi reject");
+                return Promise.reject("Gửi tin không thành công");
             }
             catch (ex) {
                 console.log(ex);
-                return Promise.reject("error: " + ex);
+                return Promise.reject("Lỗi: " + ex);
             }
         });
     }
