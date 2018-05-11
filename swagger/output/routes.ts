@@ -775,7 +775,7 @@ export function RegisterRoutes(app: any) {
                 message: { "in": "query", "name": "message", "required": true, "dataType": "string" },
                 fcm: { "in": "query", "name": "fcm", "required": true, "dataType": "string" },
                 userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
-                screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "string" },
+                screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "double" },
             };
 
             let validatedArgs: any[] = [];
@@ -789,6 +789,31 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.testNotifiForMessage.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/Message/test-notifi-screen',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                title: { "in": "query", "name": "title", "required": true, "dataType": "string" },
+                message: { "in": "query", "name": "message", "required": true, "dataType": "string" },
+                fcm: { "in": "query", "name": "fcm", "required": true, "dataType": "string" },
+                matchId: { "in": "query", "name": "matchId", "required": true, "dataType": "string" },
+                borrowId: { "in": "query", "name": "borrowId", "required": true, "dataType": "string" },
+                screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "double" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<MessageApiController>(MessageApiController);
+
+
+            const promise = controller.testNotifiForOpenScreen.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-user-lite',

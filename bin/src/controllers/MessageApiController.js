@@ -479,6 +479,21 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
             }
         });
     }
+    testNotifiForOpenScreen(title, message, fcm, matchId, borrowId, screenID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let notis = yield firebase_notifi_1.default.sendForScreen(title, message, fcm, screenID, matchId, borrowId);
+                if (notis) {
+                    return Promise.resolve("Gửi tin thành công");
+                }
+                return Promise.reject("Gửi tin không thành công");
+            }
+            catch (ex) {
+                console.log(ex);
+                return Promise.reject("Lỗi: " + ex);
+            }
+        });
+    }
 };
 __decorate([
     inversify_1.inject(MessageRepository_1.MessageRepositoryTYPE),
@@ -571,9 +586,21 @@ __decorate([
     __param(3, tsoa_1.Query()),
     __param(4, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String, Number]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "testNotifiForMessage", null);
+__decorate([
+    tsoa_2.Tags('Message'), tsoa_2.Security('jwt'), tsoa_1.Get('test-notifi-screen'),
+    __param(0, tsoa_1.Query()),
+    __param(1, tsoa_1.Query()),
+    __param(2, tsoa_1.Query()),
+    __param(3, tsoa_1.Query()),
+    __param(4, tsoa_1.Query()),
+    __param(5, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String, String, String, Number]),
+    __metadata("design:returntype", Promise)
+], MessageApiController.prototype, "testNotifiForOpenScreen", null);
 MessageApiController = MessageApiController_1 = __decorate([
     lib_common_1.injectableSingleton(MessageApiController_1),
     tsoa_1.Route('api/user/v1/Message')

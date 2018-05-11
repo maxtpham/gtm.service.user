@@ -502,12 +502,34 @@ export class MessageApiController extends ApiController {
         @Query() message: string, 
         @Query() fcm: string, 
         @Query() userId: string, 
-        @Query() screenID: string): Promise<string> {
+        @Query() screenID: number): Promise<string> {
             
             try {
                let notis = await FireBaseNotifi.sendForMessage(title, message, fcm, userId, screenID);
                if (notis) {
                    return Promise.resolve("Gửi tin thành công: " + userId);
+               } 
+               return Promise.reject("Gửi tin không thành công");
+
+            } catch (ex){
+                console.log(ex);
+                return Promise.reject("Lỗi: " + ex);
+            }
+    }
+
+    @Tags('Message') @Security('jwt') @Get('test-notifi-screen')
+    public async testNotifiForOpenScreen(
+        @Query() title: string, 
+        @Query() message: string, 
+        @Query() fcm: string, 
+        @Query() matchId: string, 
+        @Query() borrowId: string, 
+        @Query() screenID: number): Promise<string> {
+            
+            try {
+               let notis = await FireBaseNotifi.sendForScreen(title, message, fcm, screenID, matchId, borrowId);
+               if (notis) {
+                   return Promise.resolve("Gửi tin thành công");
                } 
                return Promise.reject("Gửi tin không thành công");
 

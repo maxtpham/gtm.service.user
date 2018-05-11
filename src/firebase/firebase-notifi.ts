@@ -26,19 +26,21 @@ export default class FireBaseNotifi {
     return Promise.reject("Không gửi được tin");
   } 
 
-  public static  async sendForScreen(title: string, message: string, fcm: string, screenID: number): Promise<string> {
+  public static  async sendForScreen(title: string, message: string, fcm: string, screenID: number, matchId: string, borrowId: string): Promise<string> {
 
     var payload = {
       notification: {
           title: title,
           body: message,
           // icon: "new",
-          // sound: "default",
+          // sound: "default",s
           // clickAction: "fcm.ACTION.HELLO",
           // badge: '1'
       },
       data: {
         screenID: screenID,
+        matchId: matchId,
+        borrowId: borrowId
       },
       token: fcm
     };
@@ -53,7 +55,7 @@ export default class FireBaseNotifi {
 
   } 
 
-  public static async sendForMessage(title: string, message: string, fcm: string, userId: string, screenID: string): Promise<string> {
+  public static async sendForMessage(title: string, message: string, fcm: string, userId: string, screenID: number): Promise<string> {
     var payload = {
       notification: {
           title: title,

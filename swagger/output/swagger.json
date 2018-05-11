@@ -1895,7 +1895,71 @@
 						"in": "query",
 						"name": "screenID",
 						"required": true,
+						"format": "double",
+						"type": "number"
+					}
+				]
+			}
+		},
+		"/api/user/v1/Message/test-notifi-screen": {
+			"get": {
+				"operationId": "TestNotifiForOpenScreen",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "string"
+						}
+					}
+				},
+				"tags": [
+					"Message"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "title",
+						"required": true,
 						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "message",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "fcm",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "matchId",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "borrowId",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "screenID",
+						"required": true,
+						"format": "double",
+						"type": "number"
 					}
 				]
 			}

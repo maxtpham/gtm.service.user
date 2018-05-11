@@ -31,7 +31,7 @@ class FireBaseNotifi {
             return Promise.reject("Không gửi được tin");
         });
     }
-    static sendForScreen(title, message, fcm, screenID) {
+    static sendForScreen(title, message, fcm, screenID, matchId, borrowId) {
         return __awaiter(this, void 0, void 0, function* () {
             var payload = {
                 notification: {
@@ -40,6 +40,8 @@ class FireBaseNotifi {
                 },
                 data: {
                     screenID: screenID,
+                    matchId: matchId,
+                    borrowId: borrowId
                 },
                 token: fcm
             };
