@@ -436,7 +436,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                                 title: "Bạn có tin nhắn mới !",
                                 message: "Tin nhắn mới đến từ: " + userInfo.name,
                                 screenID: "1",
-                                userId: messageView.userId
+                                userId: userId
                             },
                             token: fcm
                         };
