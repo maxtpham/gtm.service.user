@@ -586,7 +586,7 @@ __decorate([
     __param(3, tsoa_1.Query()),
     __param(4, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String, Number]),
+    __metadata("design:paramtypes", [String, String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "testNotifiForMessage", null);
 __decorate([
@@ -598,7 +598,7 @@ __decorate([
     __param(4, tsoa_1.Query()),
     __param(5, tsoa_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String, String, Number]),
+    __metadata("design:paramtypes", [String, String, String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], MessageApiController.prototype, "testNotifiForOpenScreen", null);
 MessageApiController = MessageApiController_1 = __decorate([

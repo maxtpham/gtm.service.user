@@ -671,7 +671,7 @@ function RegisterRoutes(app) {
             message: { "in": "query", "name": "message", "required": true, "dataType": "string" },
             fcm: { "in": "query", "name": "fcm", "required": true, "dataType": "string" },
             userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
-            screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "double" },
+            screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "string" },
         };
         let validatedArgs = [];
         try {
@@ -691,7 +691,7 @@ function RegisterRoutes(app) {
             fcm: { "in": "query", "name": "fcm", "required": true, "dataType": "string" },
             matchId: { "in": "query", "name": "matchId", "required": true, "dataType": "string" },
             borrowId: { "in": "query", "name": "borrowId", "required": true, "dataType": "string" },
-            screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "double" },
+            screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "string" },
         };
         let validatedArgs = [];
         try {

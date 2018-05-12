@@ -1,5 +1,5 @@
 export default class DefineScreen {
-  static MessageScreen: number = 1;
-  static MatchDetailScreen: number = 2;
-  static BorrowDetailScreen: number = 3;
+  static MessageScreen: string = "1";
+  static MatchDetailScreen: string = "2";
+  static BorrowDetailScreen: string = "3";
 }

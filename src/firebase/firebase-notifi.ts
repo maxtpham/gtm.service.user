@@ -2,7 +2,7 @@ import { firebaseAdmin } from "./firebase";
 
 export default class FireBaseNotifi {
 
-  public static async sendForTopPic(topic: string, title: string, message: string, fcm: string, screenID: number) : Promise<string> {
+  public static async sendForTopPic(topic: string, title: string, message: string, fcm: string, screenID: string) : Promise<string> {
     var payload = {
       notification: {
           title: title,
@@ -26,7 +26,7 @@ export default class FireBaseNotifi {
     return Promise.reject("Không gửi được tin");
   } 
 
-  public static  async sendForScreen(title: string, message: string, fcm: string, screenID: number, matchId: string, borrowId: string): Promise<string> {
+  public static  async sendForScreen(title: string, message: string, fcm: string, screenID: string, matchId: string, borrowId: string): Promise<string> {
 
     var payload = {
       notification: {
@@ -55,7 +55,7 @@ export default class FireBaseNotifi {
 
   } 
 
-  public static async sendForMessage(title: string, message: string, fcm: string, userId: string, screenID: number): Promise<string> {
+  public static async sendForMessage(title: string, message: string, fcm: string, userId: string, screenID: string): Promise<string> {
     var payload = {
       notification: {
           title: title,

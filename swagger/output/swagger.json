@@ -1895,8 +1895,7 @@
 						"in": "query",
 						"name": "screenID",
 						"required": true,
-						"format": "double",
-						"type": "number"
+						"type": "string"
 					}
 				]
 			}
@@ -1958,8 +1957,7 @@
 						"in": "query",
 						"name": "screenID",
 						"required": true,
-						"format": "double",
-						"type": "number"
+						"type": "string"
 					}
 				]
 			}

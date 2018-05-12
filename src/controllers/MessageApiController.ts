@@ -502,7 +502,7 @@ export class MessageApiController extends ApiController {
         @Query() message: string, 
         @Query() fcm: string, 
         @Query() userId: string, 
-        @Query() screenID: number): Promise<string> {
+        @Query() screenID: string): Promise<string> {
             
             try {
                let notis = await FireBaseNotifi.sendForMessage(title, message, fcm, userId, screenID);
@@ -524,7 +524,7 @@ export class MessageApiController extends ApiController {
         @Query() fcm: string, 
         @Query() matchId: string, 
         @Query() borrowId: string, 
-        @Query() screenID: number): Promise<string> {
+        @Query() screenID: string): Promise<string> {
             
             try {
                let notis = await FireBaseNotifi.sendForScreen(title, message, fcm, screenID, matchId, borrowId);
