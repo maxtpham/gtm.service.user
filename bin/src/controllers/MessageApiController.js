@@ -28,7 +28,6 @@ const lib_service_1 = require("@gtm/lib.service");
 const tsoa_2 = require("tsoa");
 const MessageRepository_1 = require("../repositories/MessageRepository");
 const UserRepository_1 = require("../repositories/UserRepository");
-const firebase_1 = require("../firebase/firebase");
 const firebase_notifi_1 = require("../firebase/firebase-notifi");
 let MessageApiController = MessageApiController_1 = class MessageApiController extends lib_service_1.ApiController {
     /** Get Messages */
@@ -423,14 +422,15 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                     if (defaults) {
                         let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
                         if (fcm !== "0") {
-                            var messageNoti = {
-                                data: {
-                                    title: "Tin nhắn: " + userInfo.name,
-                                    message: messageView.content
-                                },
-                                token: fcm
-                            };
-                            yield firebase_1.firebaseAdmin.messaging().send(messageNoti);
+                            // var messageNoti = {
+                            //     data: {
+                            //         title: "Tin nhắn: " + userInfo.name,
+                            //         message: messageView.content
+                            //     },
+                            //     token: fcm
+                            // };
+                            // await firebaseAdmin.messaging().send(messageNoti);
+                            let notis = yield firebase_notifi_1.default.sendForMessage("Tin nhắn: " + userInfo.name, messageView.content, fcm, messageView.userId, "1");
                         }
                     }
                     return Promise.resolve(yield this.MessageRepository.findOneById(message._id));

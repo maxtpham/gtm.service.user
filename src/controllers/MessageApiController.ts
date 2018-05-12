@@ -456,14 +456,22 @@ export class MessageApiController extends ApiController {
                 if (defaults) {
                     let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
                     if (fcm !== "0") {
-                        var messageNoti = {
-                            data: {
-                                title: "Tin nhắn: " + userInfo.name,
-                                message: messageView.content
-                            },
-                            token: fcm
-                        };
-                        await firebaseAdmin.messaging().send(messageNoti);
+                        // var messageNoti = {
+                        //     data: {
+                        //         title: "Tin nhắn: " + userInfo.name,
+                        //         message: messageView.content
+                        //     },
+                        //     token: fcm
+                        // };
+                        // await firebaseAdmin.messaging().send(messageNoti);
+
+                        let notis = await FireBaseNotifi.sendForMessage(
+                            "Tin nhắn: " + userInfo.name
+                            , messageView.content
+                            , fcm
+                            , messageView.userId
+                            , "1");
+
                     }
                 }
                 return Promise.resolve(await this.MessageRepository.findOneById(message._id));
