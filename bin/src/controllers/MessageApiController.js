@@ -419,35 +419,33 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                 }
                 let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
                 if (message) {
-                    let defaults = userInfoSendNoti.profiles && userInfoSendNoti.profiles.default ? userInfoSendNoti.profiles.default : null;
-                    if (defaults) {
-                        let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
-                        if (fcm !== "0") {
-                            // var messageNoti = {
-                            //     data: {
-                            //         title: "Tin nhắn: " + userInfo.name,
-                            //         message: messageView.content,
-                            //         screenID: "1",
-                            //         userId: messageView.userId
-                            //     },
-                            //     token: fcm
-                            // };
-                            // await firebaseAdmin.messaging().send(messageNoti);
-                            var messageNotification = {
-                                data: {
-                                    title: "Bạn có tin nhắn mới !",
-                                    message: "Tin nhắn mới đến từ: " + userInfo.name,
-                                    screenID: "1",
-                                    userId: messageView.userId
-                                },
-                                token: fcm
-                            };
-                            firebase_1.firebaseAdmin.messaging().send(messageNotification).then(res => {
-                                console.log('Successfully sent message:', res);
-                            }).catch((error) => {
-                                console.log('Error sending message:', error);
-                            });
-                        }
+                    let fcm = userInfoSendNoti.profileDefault ? userInfoSendNoti.profileDefault : "0";
+                    if (fcm !== "0") {
+                        // var messageNoti = {
+                        //     data: {
+                        //         title: "Tin nhắn: " + userInfo.name,
+                        //         message: messageView.content,
+                        //         screenID: "1",
+                        //         userId: messageView.userId
+                        //     },
+                        //     token: fcm
+                        // };
+                        // await firebaseAdmin.messaging().send(messageNoti);
+                        var messageNotification = {
+                            data: {
+                                title: "Bạn có tin nhắn mới !",
+                                message: "Tin nhắn mới đến từ: " + userInfo.name,
+                                screenID: "1",
+                                userId: messageView.userId
+                            },
+                            token: fcm
+                        };
+                        firebase_1.firebaseAdmin.messaging().send(messageNotification).then(res => {
+                            // console.log('Successfully sent message:', res);
+                        }).catch((error) => {
+                            console.log('Error sending message:', error);
+                            return Promise.reject("Error notifi message");
+                        });
                     }
                     return Promise.resolve(yield this.MessageRepository.findOneById(message._id));
                 }
