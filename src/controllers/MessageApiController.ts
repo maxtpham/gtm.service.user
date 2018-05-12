@@ -451,7 +451,7 @@ export class MessageApiController extends ApiController {
             let message = await this.MessageRepository.save(<MessageEntity>{ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
 
             if (message) {
-                let fcm = userInfoSendNoti.profileDefault ? userInfoSendNoti.profileDefault : "0";
+                let fcm = userInfoSendNoti.fcmToken ? userInfoSendNoti.fcmToken : "0";
                 if (fcm !== "0") {
                         // var messageNoti = {
                         //     data: {
@@ -481,6 +481,7 @@ export class MessageApiController extends ApiController {
                         return Promise.reject("Error notifi message");
                             
                     });
+
 
                 }
                 return Promise.resolve(await this.MessageRepository.findOneById(message._id));

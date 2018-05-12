@@ -419,7 +419,7 @@ let MessageApiController = MessageApiController_1 = class MessageApiController e
                 }
                 let message = yield this.MessageRepository.save({ userId: userId, toUserId: messageView.toUserId, content: messageView.content, delivered: messageView.delivered, announced: messageView.announced });
                 if (message) {
-                    let fcm = userInfoSendNoti.profileDefault ? userInfoSendNoti.profileDefault : "0";
+                    let fcm = userInfoSendNoti.fcmToken ? userInfoSendNoti.fcmToken : "0";
                     if (fcm !== "0") {
                         // var messageNoti = {
                         //     data: {
