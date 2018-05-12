@@ -456,23 +456,32 @@ export class MessageApiController extends ApiController {
                 if (defaults) {
                     let fcm = defaults.fcmToken ? defaults.fcmToken : "0";
                     if (fcm !== "0") {
-                        var messageNoti = {
+                        // var messageNoti = {
+                        //     data: {
+                        //         title: "Tin nhắn: " + userInfo.name,
+                        //         message: messageView.content,
+                        //         screenID: "1",
+                        //         userId: messageView.userId
+                        //     },
+                        //     token: fcm
+                        // };
+                        // await firebaseAdmin.messaging().send(messageNoti);
+
+                        var messageNotification = {
                             data: {
-                                title: "Tin nhắn: " + userInfo.name,
-                                message: messageView.content,
+                                title: "Bạn có tin nhắn mới !",
+                                message: "Tin nhắn mới đến từ: " + userInfo.name,
                                 screenID: "1",
                                 userId: messageView.userId
                             },
                             token: fcm
                         };
-                        await firebaseAdmin.messaging().send(messageNoti);
-
-                        // let notis = await FireBaseNotifi.sendForMessage(
-                        //     "Tin nhắn: " + userInfo.name
-                        //     , messageView.content
-                        //     , fcm
-                        //     , messageView.userId
-                        //     , "1");
+        
+                        firebaseAdmin.messaging().send(messageNotification).then(res => {
+                            console.log('Successfully sent message:', res);
+                        }).catch((error) => {
+                            console.log('Error sending message:', error);
+                        });
 
                     }
                 }
