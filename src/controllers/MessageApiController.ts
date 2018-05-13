@@ -120,7 +120,7 @@ export class MessageApiController extends ApiController {
                         if (findUser == undefined) {
                             messageWithUser.push({
                                 userId: userOther,
-                                userName: toUser ? (toUser.phone ? toUser.name + ' - ' + toUser.phone : toUser.name) : '',
+                                userName: infoUserOther ? (infoUserOther.phone ? infoUserOther.name + ' - ' + infoUserOther.phone : infoUserOther.name) : '',
                                 messageDetailView: [{
                                     id: mes._id,
                                     userId: mes.userId,
