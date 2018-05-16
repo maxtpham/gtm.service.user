@@ -438,6 +438,56 @@
 			],
 			"type": "object"
 		},
+		"MUserFindByPhone": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"birthday": {
+					"type": "number",
+					"format": "double"
+				},
+				"email": {
+					"type": "string"
+				},
+				"gender": {
+					"type": "string"
+				},
+				"houseHolder": {
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"StatusFindByPhone": {
+			"enum": [
+				"1",
+				"0",
+				"2"
+			],
+			"type": "string"
+		},
+		"MFindUserByPhone": {
+			"properties": {
+				"user": {
+					"$ref": "#/definitions/MUserFindByPhone"
+				},
+				"status": {
+					"$ref": "#/definitions/StatusFindByPhone"
+				}
+			},
+			"required": [
+				"user",
+				"status"
+			],
+			"type": "object"
+		},
 		"UserRole": {
 			"properties": {
 				"id": {
@@ -2109,6 +2159,38 @@
 							"items": {
 								"$ref": "#/definitions/MUserView"
 							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "find",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/user/find-user-by-phone": {
+			"get": {
+				"operationId": "FindUserByPhone",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/MFindUserByPhone"
 						}
 					}
 				},

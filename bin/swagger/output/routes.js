@@ -148,6 +148,26 @@ const models = {
             "houseHolder": { "dataType": "any" },
         },
     },
+    "MUserFindByPhone": {
+        "properties": {
+            "id": { "dataType": "string" },
+            "name": { "dataType": "string" },
+            "phone": { "dataType": "string" },
+            "birthday": { "dataType": "double" },
+            "email": { "dataType": "string" },
+            "gender": { "dataType": "string" },
+            "houseHolder": { "dataType": "any" },
+        },
+    },
+    "StatusFindByPhone": {
+        "enums": ["1", "0", "2"],
+    },
+    "MFindUserByPhone": {
+        "properties": {
+            "user": { "ref": "MUserFindByPhone", "required": true },
+            "status": { "ref": "StatusFindByPhone", "required": true },
+        },
+    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -775,6 +795,21 @@ function RegisterRoutes(app) {
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
         const promise = controller.findUser.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/user/find-user-by-phone', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {
+        const args = {
+            find: { "in": "query", "name": "find", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        const promise = controller.findUserByPhone.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.get('/api/user/v1/user/profile', authenticateMiddleware([{ "name": "jwt" }]), function (request, response, next) {

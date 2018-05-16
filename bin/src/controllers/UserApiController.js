@@ -112,6 +112,41 @@ let UserApiController = UserApiController_1 = class UserApiController extends li
             return Promise.reject(`Not found.`);
         });
     }
+    findUserByPhone(find) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userEntity = yield this.UserRepository.find({ phone: RegExp(find) });
+            if (userEntity.length > 1) {
+                let userFind = {
+                    status: MUserView_1.StatusFindByPhone.Exception,
+                    user: null,
+                };
+                return userFind;
+            }
+            if (userEntity.length <= 0) {
+                let userFind = {
+                    status: MUserView_1.StatusFindByPhone.Fail,
+                    user: null,
+                };
+                return userFind;
+            }
+            if (userEntity.length === 1) {
+                let userFind = {
+                    status: MUserView_1.StatusFindByPhone.Success,
+                    user: {
+                        id: userEntity[0]._id,
+                        birthday: userEntity[0].birthday,
+                        email: userEntity[0].email,
+                        gender: userEntity[0].gender,
+                        houseHolder: userEntity[0].profileDefault.houseHolder,
+                        name: userEntity[0].name,
+                        phone: userEntity[0].phone
+                    },
+                };
+                return userFind;
+            }
+            return Promise.reject(`Not found.`);
+        });
+    }
     getProfileCurrent(req) {
         return __awaiter(this, void 0, void 0, function* () {
             let userEntity = yield this.UserRepository.findOneById(req.user.user);
@@ -416,6 +451,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserApiController.prototype, "findUser", null);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/find-user-by-phone'),
+    __param(0, tsoa_1.Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "findUserByPhone", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/profile'),
     __param(0, tsoa_1.Request()),

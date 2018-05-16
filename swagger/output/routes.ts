@@ -147,6 +147,26 @@ const models: TsoaRoute.Models = {
             "houseHolder": { "dataType": "any" },
         },
     },
+    "MUserFindByPhone": {
+        "properties": {
+            "id": { "dataType": "string" },
+            "name": { "dataType": "string" },
+            "phone": { "dataType": "string" },
+            "birthday": { "dataType": "double" },
+            "email": { "dataType": "string" },
+            "gender": { "dataType": "string" },
+            "houseHolder": { "dataType": "any" },
+        },
+    },
+    "StatusFindByPhone": {
+        "enums": ["1", "0", "2"],
+    },
+    "MFindUserByPhone": {
+        "properties": {
+            "user": { "ref": "MUserFindByPhone", "required": true },
+            "status": { "ref": "StatusFindByPhone", "required": true },
+        },
+    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -913,6 +933,26 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.findUser.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/user/find-user-by-phone',
+        authenticateMiddleware([{ "name": "jwt" }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                find: { "in": "query", "name": "find", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<UserApiController>(UserApiController);
+
+
+            const promise = controller.findUserByPhone.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/profile',

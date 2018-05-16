@@ -17,6 +17,27 @@ export interface MUserFind {
   email: string;
 }
 
+export interface MFindUserByPhone {
+  user: MUserFindByPhone;
+  status: StatusFindByPhone;
+}
+
+export interface MUserFindByPhone {
+  id?: string;
+  name?: string;
+  phone?: string;
+  birthday?: number;
+  email?: string;
+  gender?: string;
+  houseHolder?: any;
+}
+
+export enum StatusFindByPhone {
+  Success = 1,
+  Fail = 0,
+  Exception = 2
+}
+
 
 export interface UserViewFull {
   code: string;

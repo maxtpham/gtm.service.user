@@ -7,7 +7,7 @@ import config from './../config/AppConfig';
 import { Security, Tags } from "tsoa";
 import { JwtToken } from '@gtm/lib.service.auth';
 import { UserRepository, UserRepositoryTYPE } from '../repositories/UserRepository';
-import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView, UserStatus, MUserFind, UserAccountView } from '../views/MUserView';
+import { MUserView, UserViewLite, UserViewFull, UserViewWithPagination, UserViewDetails, UserRoleView, UserUpdateView, UserStatus, MUserFind, UserAccountView, MFindUserByPhone, StatusFindByPhone } from '../views/MUserView';
 import { UserEntity, User, ProfileView, UserRole, UserAccount } from '../entities/UserEntity';
 import { MProfileView, MFCMView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
@@ -98,6 +98,43 @@ export class UserApiController extends ApiController {
         });
         if (userEntity) {
             return Promise.resolve(this.UserRepository.buildClientUsers(userEntity));
+        }
+        return Promise.reject(`Not found.`);
+    }
+
+    @Tags('User') @Security('jwt') @Get('/find-user-by-phone')
+    public async findUserByPhone(
+        @Query() find: string
+    ): Promise<MFindUserByPhone> {
+        let userEntity = await this.UserRepository.find({ phone: RegExp(find) });
+        if (userEntity.length > 1) {
+            let userFind: MFindUserByPhone = {
+                status: StatusFindByPhone.Exception,
+                user: null,
+            }
+            return userFind;
+        }
+        if (userEntity.length <= 0) {
+            let userFind: MFindUserByPhone = {
+                status: StatusFindByPhone.Fail,
+                user: null,
+            }
+            return userFind;
+        }
+        if (userEntity.length === 1) {
+            let userFind: MFindUserByPhone = {
+                status: StatusFindByPhone.Success,
+                user: {
+                    id: userEntity[0]._id,
+                    birthday: userEntity[0].birthday,
+                    email: userEntity[0].email,
+                    gender: userEntity[0].gender,
+                    houseHolder: userEntity[0].profileDefault.houseHolder,
+                    name: userEntity[0].name,
+                    phone: userEntity[0].phone
+                },
+            }
+            return userFind;
         }
         return Promise.reject(`Not found.`);
     }
