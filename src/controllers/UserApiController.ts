@@ -129,7 +129,7 @@ export class UserApiController extends ApiController {
                     birthday: userEntity[0].birthday,
                     email: userEntity[0].email,
                     gender: userEntity[0].gender,
-                    houseHolder: userEntity[0].profileDefault.houseHolder,
+                    houseHolder: userEntity[0].profileDefault ? userEntity[0].profileDefault.houseHolder : "",
                     name: userEntity[0].name,
                     phone: userEntity[0].phone
                 },
