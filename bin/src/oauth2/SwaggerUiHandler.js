@@ -40,7 +40,7 @@ class SwaggerUiHandler {
     }
     getSwaggerUiBundle(req, res, next) {
         if (this.swagger_ui_bundle_js) {
-            res.send(this.swagger_ui_bundle_js);
+            res.header("Content-Type", "text/javascript").send(this.swagger_ui_bundle_js);
         }
         else {
             const localIndex = path.join(__dirname, '../ui/swagger-ui-bundle.js');
@@ -50,7 +50,7 @@ class SwaggerUiHandler {
                         res.status(404).send(err);
                     }
                     else {
-                        res.send(this.swagger_ui_bundle_js = exists ? data.toString() : this.processSwaggerUiBundle(data.toString()));
+                        res.header("Content-Type", "text/javascript").send(this.swagger_ui_bundle_js = exists ? data.toString() : this.processSwaggerUiBundle(data.toString()));
                     }
                 });
             });
