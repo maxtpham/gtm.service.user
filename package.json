@@ -37,7 +37,7 @@
     "@types/mongoose": "^5.0.11",
     "@types/passport": "^0.4.5",
     "@types/passport-facebook-token": "^0.4.33",
-    "nodemon": "^1.17.3",
+    "nodemon": "^1.18.4",
     "ts-node": "^5.0.1",
     "typescript": "^2.8.3"
   },
@@ -50,7 +50,7 @@
     "cross-env": "^5.1.4",
     "deep-equal": "^1.0.1",
     "express": "^4.16.3",
-    "firebase-admin": "^5.12.0",
+    "firebase-admin": "^6.0.0",
     "if-env": "^1.0.4",
     "inversify": "^4.13.0",
     "inversify-express-utils": "^5.2.2",
