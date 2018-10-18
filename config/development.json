@@ -1,32 +1,22 @@
 {
-    "host": "sc.dev",
-    "port": 13001,
-    "https": {
-        "port": 3001,
-        "pfx": "../scg/ssl/sc.dev.pfx",
-        "passphrase": "123456"
-    },
+    "host": "localhost",
+    "port": 3101,
+    "https": null,
     "mongo": "mongodb://localhost/test",
-    "cors": [
-        "https://sc.dev:3000", "https://sc.dev:3001", "https://sc.dev:3002", "https://sc.dev:3003", "https://sc.dev:3004", "https://sc.dev:3005", "https://sc.dev:4000", "https://sc.dev:4001", "https://sc.dev:4002", "https://sc.dev:4003", "https://sc.dev:4004", "https://sc.dev:4005",
-        "http://sc.dev:13000", "http://sc.dev:13001", "http://sc.dev:13002", "http://sc.dev:13003", "http://sc.dev:13004", "http://sc.dev:13005", "http://sc.dev:14000", "http://sc.dev:14001", "http://sc.dev:14002", "http://sc.dev:14003", "http://sc.dev:14004", "http://sc.dev:14005"
-    ],
+    "cors": [ "http://localhost:3100", "http://localhost:3101", "http://localhost:3102", "http://localhost:3103", "http://localhost:3104", "http://localhost:3105", "http://localhost:4100", "http://localhost:4101", "http://localhost:4102", "http://localhost:4103", "http://localhost:4104", "http://localhost:4105" ],
+    "returnUrl": "http://localhost:3100/bin/dev/",
     "auth": {
         "google": {
             "options": {
-                "clientID": "1013727731420-3fo33ltlt2fpb9ali8jhealc2fi9bruo.apps.googleusercontent.com",
-                "clientSecret": "B4m3-npNl-up3Y-hH8QI00aU"
+                "clientID": "980942693683-uij086c1n3ar0cf8oin40ilunesb52au.apps.googleusercontent.com",
+                "clientSecret": "NzD7eOzkcEh-ortZSXaHm3Kd"
             }
         },
         "facebook": {
             "options": {
-                "clientID": "206182633479657",
-                "clientSecret": "adf012311422c2a78d20b7ff55b0b853"
+                "clientID": "1983328695283502",
+                "clientSecret": "cd595d42b38dbc0213e36f7eee740c88"
             }
         }
-    },
-    "services": {
-        "user": "https://sc.dev:3001",
-        "core": "https://sc.dev:3002"
     }
 }

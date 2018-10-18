@@ -1,0 +1,32 @@
+{
+    "host": "sc.dev",
+    "port": 13001,
+    "https": {
+        "port": 3001,
+        "pfx": "../scg/ssl/sc.dev.pfx",
+        "passphrase": "123456"
+    },
+    "mongo": "mongodb://localhost/test",
+    "cors": [
+        "https://sc.dev:3000", "https://sc.dev:3001", "https://sc.dev:3002", "https://sc.dev:3003", "https://sc.dev:3004", "https://sc.dev:3005", "https://sc.dev:4000", "https://sc.dev:4001", "https://sc.dev:4002", "https://sc.dev:4003", "https://sc.dev:4004", "https://sc.dev:4005",
+        "http://sc.dev:13000", "http://sc.dev:13001", "http://sc.dev:13002", "http://sc.dev:13003", "http://sc.dev:13004", "http://sc.dev:13005", "http://sc.dev:14000", "http://sc.dev:14001", "http://sc.dev:14002", "http://sc.dev:14003", "http://sc.dev:14004", "http://sc.dev:14005"
+    ],
+    "auth": {
+        "google": {
+            "options": {
+                "clientID": "1013727731420-3fo33ltlt2fpb9ali8jhealc2fi9bruo.apps.googleusercontent.com",
+                "clientSecret": "B4m3-npNl-up3Y-hH8QI00aU"
+            }
+        },
+        "facebook": {
+            "options": {
+                "clientID": "206182633479657",
+                "clientSecret": "adf012311422c2a78d20b7ff55b0b853"
+            }
+        }
+    },
+    "services": {
+        "user": "https://sc.dev:3001",
+        "core": "https://sc.dev:3002"
+    }
+}
