@@ -12,7 +12,6 @@ import { UserEntity, User, ProfileView, UserRole, UserAccount } from '../entitie
 import { MProfileView, MFCMView } from '../views/MProfileView';
 import { RoleType } from '../views/RoleView';
 import { RoleRepositoryTYPE, RoleRepository } from '../repositories/RoleRepository';
-import * as coreClient from '@scg/lib.client.core';
 import { Binary } from 'bson';
 import { AccountRepositoryTYPE, AccountRepository } from '../repositories/AccountRepository';
 import { MAvatarView } from '../views/MAvatarView';
