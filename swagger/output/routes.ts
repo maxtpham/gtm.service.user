@@ -4,7 +4,6 @@ import { iocContainer } from './../index';
 import { SystemApiController } from './../../src/controllers/SystemApiController';
 import { SessionApiController } from './../../src/controllers/SessionApiController';
 import { RoleApiController } from './../../src/controllers/RoleApiController';
-import { MessageApiController } from './../../src/controllers/MessageApiController';
 import { UserApiController } from './../../src/controllers/UserApiController';
 import { expressAuthentication } from './../index';
 
@@ -75,67 +74,6 @@ const models: TsoaRoute.Models = {
             "code": { "dataType": "string", "required": true },
             "scope": { "dataType": "string" },
             "status": { "ref": "RoleStatus" },
-        },
-    },
-    "MessageDetailView": {
-        "properties": {
-            "id": { "dataType": "string", "required": true },
-            "userId": { "dataType": "string", "required": true },
-            "userName": { "dataType": "string", "required": true },
-            "toUserId": { "dataType": "string", "required": true },
-            "toUserName": { "dataType": "string", "required": true },
-            "content": { "dataType": "string", "required": true },
-            "delivered": { "dataType": "double", "required": true },
-            "announced": { "dataType": "boolean" },
-            "created": { "dataType": "double", "required": true },
-            "updated": { "dataType": "double", "required": true },
-        },
-    },
-    "MessageViewWithPagination": {
-        "properties": {
-            "messages": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
-            "totalItems": { "dataType": "double", "required": true },
-        },
-    },
-    "MessageEntity": {
-        "properties": {
-            "_id": { "dataType": "any", "required": true },
-            "created": { "dataType": "double" },
-            "updated": { "dataType": "double" },
-            "deleted": { "dataType": "double" },
-            "userId": { "dataType": "string", "required": true },
-            "toUserId": { "dataType": "string", "required": true },
-            "content": { "dataType": "string", "required": true },
-            "delivered": { "dataType": "double" },
-            "announced": { "dataType": "boolean" },
-        },
-    },
-    "MessageDetailViewApp": {
-        "properties": {
-            "userId": { "dataType": "string", "required": true },
-            "userName": { "dataType": "string", "required": true },
-            "messageDetailView": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
-        },
-    },
-    "MessageViewWithPaginationApp": {
-        "properties": {
-            "messages": { "dataType": "array", "array": { "ref": "MessageDetailViewApp" }, "required": true },
-        },
-    },
-    "MessageViewWithPaginationAnUserApp": {
-        "properties": {
-            "userId": { "dataType": "string", "required": true },
-            "userName": { "dataType": "string", "required": true },
-            "messages": { "dataType": "array", "array": { "ref": "MessageDetailView" }, "required": true },
-        },
-    },
-    "MessageView": {
-        "properties": {
-            "userId": { "dataType": "string", "required": true },
-            "toUserId": { "dataType": "string", "required": true },
-            "content": { "dataType": "string", "required": true },
-            "delivered": { "dataType": "double" },
-            "announced": { "dataType": "boolean" },
         },
     },
     "MUserView": {
@@ -252,6 +190,7 @@ const models: TsoaRoute.Models = {
             "SUBTYPE_MD5": { "dataType": "double", "required": true },
             "SUBTYPE_USER_DEFINED": { "dataType": "double", "required": true },
             "buffer": { "dataType": "buffer", "required": true },
+            "sub_type": { "dataType": "double" },
             "subType": { "dataType": "double" },
         },
     },
@@ -367,7 +306,7 @@ const models: TsoaRoute.Models = {
 
 export function RegisterRoutes(app: any) {
     app.post('/api/user/v1/system/version',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
             };
@@ -386,7 +325,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/system/loggedin',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
@@ -406,7 +345,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/session/current',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
@@ -426,7 +365,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/session/entities',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 userId: { "in": "query", "name": "userId", "dataType": "string" },
@@ -450,7 +389,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/role',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 query: { "in": "query", "name": "query", "dataType": "string" },
@@ -474,7 +413,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/role/get-all',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
             };
@@ -493,7 +432,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/role/:id',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
@@ -513,7 +452,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/role',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 roleView: { "in": "body", "name": "roleView", "ref": "RoleView" },
@@ -533,7 +472,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/role/:id',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
@@ -554,7 +493,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.delete('/api/user/v1/role/:id',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
@@ -573,271 +512,8 @@ export function RegisterRoutes(app: any) {
             const promise = controller.deleteEntity.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/user/v1/Message',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                from: { "in": "query", "name": "from", "dataType": "string" },
-                to: { "in": "query", "name": "to", "dataType": "string" },
-                pageNumber: { "in": "query", "name": "pageNumber", "dataType": "double" },
-                itemCount: { "in": "query", "name": "itemCount", "dataType": "double" },
-                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
-                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.getEntities.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/Message/getbyid/:id',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.getEntity.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/Message/getforapp',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
-                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
-                req: { "in": "request", "name": "req", "dataType": "object" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.getListMessageForApp.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/Message/getforanuserapp',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                userIdToGetMessage: { "in": "query", "name": "userIdToGetMessage", "required": true, "dataType": "string" },
-                req: { "in": "request", "name": "req", "dataType": "object" },
-                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
-                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.getListMessageOfUser.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/Message/get-messages-for-current-user',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                sortName: { "in": "query", "name": "sortName", "dataType": "string" },
-                sortType: { "in": "query", "name": "sortType", "dataType": "double" },
-                req: { "in": "request", "name": "req", "dataType": "object" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.getListMessageForCurrentUser.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/Message/get-message-to-notification',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                req: { "in": "request", "name": "req", "dataType": "object" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.getMessageToNotification.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/Message/get-message-to-notification-update',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                req: { "in": "request", "name": "req", "dataType": "object" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.getMessageToNotificationUpdate.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.post('/api/user/v1/Message',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                messageView: { "in": "body", "name": "messageView", "required": true, "ref": "MessageView" },
-                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.createEntity.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.put('/api/user/v1/Message/:id',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-                messageView: { "in": "body", "name": "messageView", "required": true, "ref": "MessageView" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.updateEntity.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.delete('/api/user/v1/Message/:id',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.deleteEntity.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/Message/test-notifi-message',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                title: { "in": "query", "name": "title", "required": true, "dataType": "string" },
-                message: { "in": "query", "name": "message", "required": true, "dataType": "string" },
-                fcm: { "in": "query", "name": "fcm", "required": true, "dataType": "string" },
-                userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
-                screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "string" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.testNotifiForMessage.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/user/v1/Message/test-notifi-screen',
-        authenticateMiddleware([{ "name": "jwt" }]),
-        function(request: any, response: any, next: any) {
-            const args = {
-                title: { "in": "query", "name": "title", "required": true, "dataType": "string" },
-                message: { "in": "query", "name": "message", "required": true, "dataType": "string" },
-                fcm: { "in": "query", "name": "fcm", "required": true, "dataType": "string" },
-                matchId: { "in": "query", "name": "matchId", "required": true, "dataType": "string" },
-                borrowId: { "in": "query", "name": "borrowId", "required": true, "dataType": "string" },
-                screenID: { "in": "query", "name": "screenID", "required": true, "dataType": "string" },
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = iocContainer.get<MessageApiController>(MessageApiController);
-
-
-            const promise = controller.testNotifiForOpenScreen.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
     app.get('/api/user/v1/user/get-user-lite',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
             };
@@ -856,7 +532,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/getById/:id',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
@@ -876,7 +552,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-by-user-name',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 userName: { "in": "query", "name": "userName", "required": true, "dataType": "string" },
@@ -896,7 +572,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-lender-for-app',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 find: { "in": "query", "name": "find", "required": true, "dataType": "string" },
@@ -916,7 +592,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/find-user',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 find: { "in": "query", "name": "find", "required": true, "dataType": "string" },
@@ -936,7 +612,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/find-user-by-phone',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 find: { "in": "query", "name": "find", "required": true, "dataType": "string" },
@@ -956,7 +632,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/profile',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
@@ -976,7 +652,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/profile-for-mobile',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
@@ -996,7 +672,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/profile',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 profileView: { "in": "body", "name": "profileView", "required": true, "ref": "ProfileView" },
@@ -1017,7 +693,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-user-profiles',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 profile: { "in": "body", "name": "profile", "required": true, "ref": "MProfileView" },
@@ -1038,7 +714,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/set-fcm-for-mobile',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 fcms: { "in": "body", "name": "fcms", "required": true, "ref": "MFCMView" },
@@ -1059,7 +735,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-fcm-for-mobile',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
@@ -1079,7 +755,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-avatar',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 avatar: { "in": "body", "name": "avatar", "required": true, "ref": "MAvatarView" },
@@ -1100,7 +776,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/entities',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 status: { "in": "query", "name": "status", "dataType": "string" },
@@ -1125,7 +801,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/details/:id',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
@@ -1145,7 +821,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/create-or-update-role',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 userRoleView: { "in": "body", "name": "userRoleView", "required": true, "ref": "UserRoleView" },
@@ -1166,7 +842,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-user-details/:userId',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
@@ -1188,7 +864,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-user-account/:userId',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
@@ -1209,7 +885,7 @@ export function RegisterRoutes(app: any) {
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-user-account/:userId',
-        authenticateMiddleware([{ "name": "jwt" }]),
+        authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
                 req: { "in": "request", "name": "req", "required": true, "dataType": "object" },

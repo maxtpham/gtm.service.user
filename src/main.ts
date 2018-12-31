@@ -7,7 +7,7 @@ import * as common from "@gtm/lib.service";
 
 import * as controllers from "./controllers/index";
 import { default as config, IAppConfig } from './config/AppConfig';
-import { AuthService, AuthServiceTYPE } from "./services/AuthService";
+import { AuthService, AuthServiceTYPE, AuthServiceImpl } from "./services/AuthService";
 import { registerOAuth2 } from "./oauth2/register";
 import { CreateJwtTokenFunction } from "./oauth2/types";
 

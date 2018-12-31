@@ -20,6 +20,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var SystemApiController_1;
 const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
 const express = require("express");
@@ -58,4 +59,3 @@ SystemApiController = SystemApiController_1 = __decorate([
     tsoa_1.Route('api/user/v1/system')
 ], SystemApiController);
 exports.SystemApiController = SystemApiController;
-var SystemApiController_1;

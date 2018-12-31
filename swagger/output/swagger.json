@@ -1,5 +1,5 @@
 {
-	"basePath": "",
+	"basePath": "/",
 	"consumes": [
 		"application/json"
 	],
@@ -15,7 +15,7 @@
 			"properties": {
 				"name": {
 					"type": "string",
-					"description": "User's display name "
+					"description": "User's display name"
 				},
 				"session": {
 					"type": "string"
@@ -25,16 +25,16 @@
 				},
 				"roles": {
 					"$ref": "#/definitions/MapOfBoolean",
-					"description": "List of roles for quicky checking "
+					"description": "List of roles for quicky checking"
 				},
 				"scope": {
 					"$ref": "#/definitions/MapOfBoolean",
-					"description": "List of scope or null is all scope (*) "
+					"description": "List of scope or null is all scope (*)"
 				},
 				"expires": {
 					"type": "number",
 					"format": "double",
-					"description": "Valid until "
+					"description": "Valid until"
 				}
 			},
 			"required": [
@@ -56,7 +56,8 @@
 					"type": "string"
 				},
 				"refresh_token": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"expires_in": {
 					"type": "number",
@@ -92,25 +93,31 @@
 					"type": "array",
 					"items": {
 						"type": "string"
-					}
+					},
+					"x-nullable": true
 				},
 				"scope": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"expiresIn": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"provider": {
-					"$ref": "#/definitions/ProviderSession"
+					"$ref": "#/definitions/ProviderSession",
+					"x-nullable": true
 				},
 				"created": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"updated": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -157,10 +164,12 @@
 					"type": "string"
 				},
 				"scope": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"status": {
-					"$ref": "#/definitions/RoleStatus"
+					"$ref": "#/definitions/RoleStatus",
+					"x-nullable": true
 				},
 				"created": {
 					"type": "number",
@@ -202,213 +211,21 @@
 			"properties": {
 				"code": {
 					"type": "string",
-					"description": "role code "
+					"description": "role code"
 				},
 				"scope": {
 					"type": "string",
-					"description": "role scope "
+					"description": "role scope",
+					"x-nullable": true
 				},
 				"status": {
 					"$ref": "#/definitions/RoleStatus",
-					"description": "role status "
+					"description": "role status",
+					"x-nullable": true
 				}
 			},
 			"required": [
 				"code"
-			],
-			"type": "object"
-		},
-		"MessageDetailView": {
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"userId": {
-					"type": "string"
-				},
-				"userName": {
-					"type": "string"
-				},
-				"toUserId": {
-					"type": "string"
-				},
-				"toUserName": {
-					"type": "string"
-				},
-				"content": {
-					"type": "string"
-				},
-				"delivered": {
-					"type": "number",
-					"format": "double"
-				},
-				"announced": {
-					"type": "boolean"
-				},
-				"created": {
-					"type": "number",
-					"format": "double"
-				},
-				"updated": {
-					"type": "number",
-					"format": "double"
-				}
-			},
-			"required": [
-				"id",
-				"userId",
-				"userName",
-				"toUserId",
-				"toUserName",
-				"content",
-				"delivered",
-				"created",
-				"updated"
-			],
-			"type": "object"
-		},
-		"MessageViewWithPagination": {
-			"properties": {
-				"messages": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/MessageDetailView"
-					}
-				},
-				"totalItems": {
-					"type": "number",
-					"format": "double"
-				}
-			},
-			"required": [
-				"messages",
-				"totalItems"
-			],
-			"type": "object"
-		},
-		"MessageEntity": {
-			"properties": {
-				"_id": {
-					"type": "object"
-				},
-				"created": {
-					"type": "number",
-					"format": "double"
-				},
-				"updated": {
-					"type": "number",
-					"format": "double"
-				},
-				"deleted": {
-					"type": "number",
-					"format": "double"
-				},
-				"userId": {
-					"type": "string"
-				},
-				"toUserId": {
-					"type": "string"
-				},
-				"content": {
-					"type": "string"
-				},
-				"delivered": {
-					"type": "number",
-					"format": "double"
-				},
-				"announced": {
-					"type": "boolean"
-				}
-			},
-			"required": [
-				"_id",
-				"userId",
-				"toUserId",
-				"content"
-			],
-			"type": "object"
-		},
-		"MessageDetailViewApp": {
-			"properties": {
-				"userId": {
-					"type": "string"
-				},
-				"userName": {
-					"type": "string"
-				},
-				"messageDetailView": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/MessageDetailView"
-					}
-				}
-			},
-			"required": [
-				"userId",
-				"userName",
-				"messageDetailView"
-			],
-			"type": "object"
-		},
-		"MessageViewWithPaginationApp": {
-			"properties": {
-				"messages": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/MessageDetailViewApp"
-					}
-				}
-			},
-			"required": [
-				"messages"
-			],
-			"type": "object"
-		},
-		"MessageViewWithPaginationAnUserApp": {
-			"properties": {
-				"userId": {
-					"type": "string"
-				},
-				"userName": {
-					"type": "string"
-				},
-				"messages": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/MessageDetailView"
-					}
-				}
-			},
-			"required": [
-				"userId",
-				"userName",
-				"messages"
-			],
-			"type": "object"
-		},
-		"MessageView": {
-			"properties": {
-				"userId": {
-					"type": "string"
-				},
-				"toUserId": {
-					"type": "string"
-				},
-				"content": {
-					"type": "string"
-				},
-				"delivered": {
-					"type": "number",
-					"format": "double"
-				},
-				"announced": {
-					"type": "boolean"
-				}
-			},
-			"required": [
-				"userId",
-				"toUserId",
-				"content"
 			],
 			"type": "object"
 		},
@@ -427,7 +244,8 @@
 					"type": "string"
 				},
 				"houseHolder": {
-					"type": "object"
+					"type": "object",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -441,26 +259,33 @@
 		"MUserFindByPhone": {
 			"properties": {
 				"id": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"name": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"phone": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"birthday": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"email": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"gender": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"houseHolder": {
-					"type": "object"
+					"type": "object",
+					"x-nullable": true
 				}
 			},
 			"type": "object"
@@ -507,7 +332,8 @@
 			"properties": {
 				"balance": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"balanceGold": {
 					"type": "number",
@@ -515,7 +341,8 @@
 				},
 				"bonus": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -536,12 +363,12 @@
 				"x": {
 					"type": "number",
 					"format": "double",
-					"description": "longitude "
+					"description": "longitude"
 				},
 				"y": {
 					"type": "number",
 					"format": "double",
-					"description": "latitude "
+					"description": "latitude"
 				}
 			},
 			"required": [
@@ -590,71 +417,86 @@
 				},
 				"name": {
 					"type": "string",
-					"description": "Google/FB display name, ex: Thanh Pham "
+					"description": "Google/FB display name, ex: Thanh Pham"
 				},
 				"provider": {
 					"type": "string",
-					"description": "OAuth2 provider: google/facebook/builtin/.. "
+					"description": "OAuth2 provider: google/facebook/builtin/.."
 				},
 				"roles": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/UserRole"
 					},
-					"description": "Link to [role] table "
+					"description": "Link to [role] table",
+					"x-nullable": true
 				},
 				"account": {
 					"$ref": "#/definitions/UserAccount",
-					"description": "user account "
+					"description": "user account",
+					"x-nullable": true
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"x-nullable": true
 				},
 				"status": {
-					"$ref": "#/definitions/UserStatus"
+					"$ref": "#/definitions/UserStatus",
+					"x-nullable": true
 				},
 				"birthday": {
 					"type": "number",
 					"format": "double",
-					"description": "UTC tick only date without time component "
+					"description": "UTC tick only date without time component",
+					"x-nullable": true
 				},
 				"address": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"location": {
-					"$ref": "#/definitions/LocationView"
+					"$ref": "#/definitions/LocationView",
+					"x-nullable": true
 				},
 				"phone": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"email": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"language": {
 					"type": "string",
-					"description": "en, vn,.. "
+					"description": "en, vn,..",
+					"x-nullable": true
 				},
 				"gender": {
 					"type": "string",
-					"description": "male/female "
+					"description": "male/female",
+					"x-nullable": true
 				},
 				"timezone": {
 					"type": "number",
 					"format": "double",
-					"description": "+/- UTC time "
+					"description": "+/- UTC time",
+					"x-nullable": true
 				},
 				"fcmToken": {
 					"type": "string",
-					"description": "token FCM "
+					"description": "token FCM",
+					"x-nullable": true
 				},
 				"profileDefault": {
 					"$ref": "#/definitions/ProfileDefault",
-					"description": "profile.default "
+					"description": "profile.default",
+					"x-nullable": true
 				},
 				"isFirstLogin": {
 					"type": "boolean",
-					"description": "First Login "
+					"description": "First Login",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -680,7 +522,8 @@
 					"type": "string"
 				},
 				"localtion": {
-					"$ref": "#/definitions/LocationView"
+					"$ref": "#/definitions/LocationView",
+					"x-nullable": true
 				},
 				"identityCard": {
 					"type": "string"
@@ -689,20 +532,25 @@
 					"type": "string"
 				},
 				"job": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"bankRate": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"note": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"infos": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"houseHolder": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -727,6 +575,7 @@
 			"type": "object"
 		},
 		"Binary": {
+			"description": "A class representation of the BSON Binary type.",
 			"properties": {
 				"SUBTYPE_DEFAULT": {
 					"type": "number",
@@ -758,11 +607,20 @@
 				},
 				"buffer": {
 					"type": "string",
-					"format": "byte"
+					"format": "byte",
+					"description": "A buffer object containing the binary data"
+				},
+				"sub_type": {
+					"type": "number",
+					"format": "double",
+					"description": "Binary data subtype",
+					"x-nullable": true
 				},
 				"subType": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"description": "Binary data subtype",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -781,11 +639,11 @@
 			"properties": {
 				"media": {
 					"type": "string",
-					"description": "HTML Content-Type: image/png, image/jpeg, image/gif,..\r\nThis will be return to browser client to correctly load & show the image  "
+					"description": "HTML Content-Type: image/png, image/jpeg, image/gif,..\r\nThis will be return to browser client to correctly load & show the image"
 				},
 				"data": {
 					"$ref": "#/definitions/Binary",
-					"description": "Image raw/binary Content-Data will be stramming to browser client "
+					"description": "Image raw/binary Content-Data will be stramming to browser client"
 				}
 			},
 			"required": [
@@ -801,15 +659,18 @@
 				},
 				"created": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"updated": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"deleted": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"code": {
 					"type": "string",
@@ -817,71 +678,86 @@
 				},
 				"name": {
 					"type": "string",
-					"description": "Google/FB display name, ex: Thanh Pham "
+					"description": "Google/FB display name, ex: Thanh Pham"
 				},
 				"provider": {
 					"type": "string",
-					"description": "OAuth2 provider: google/facebook/builtin/.. "
+					"description": "OAuth2 provider: google/facebook/builtin/.."
 				},
 				"roles": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/UserRole"
 					},
-					"description": "Link to [role] table "
+					"description": "Link to [role] table",
+					"x-nullable": true
 				},
 				"account": {
 					"$ref": "#/definitions/UserAccount",
-					"description": "user account "
+					"description": "user account",
+					"x-nullable": true
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"x-nullable": true
 				},
 				"status": {
-					"$ref": "#/definitions/UserStatus"
+					"$ref": "#/definitions/UserStatus",
+					"x-nullable": true
 				},
 				"birthday": {
 					"type": "number",
 					"format": "double",
-					"description": "UTC tick only date without time component "
+					"description": "UTC tick only date without time component",
+					"x-nullable": true
 				},
 				"address": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"location": {
-					"$ref": "#/definitions/LocationView"
+					"$ref": "#/definitions/LocationView",
+					"x-nullable": true
 				},
 				"phone": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"email": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"language": {
 					"type": "string",
-					"description": "en, vn,.. "
+					"description": "en, vn,..",
+					"x-nullable": true
 				},
 				"gender": {
 					"type": "string",
-					"description": "male/female "
+					"description": "male/female",
+					"x-nullable": true
 				},
 				"timezone": {
 					"type": "number",
 					"format": "double",
-					"description": "+/- UTC time "
+					"description": "+/- UTC time",
+					"x-nullable": true
 				},
 				"fcmToken": {
 					"type": "string",
-					"description": "token FCM "
+					"description": "token FCM",
+					"x-nullable": true
 				},
 				"profileDefault": {
 					"$ref": "#/definitions/ProfileDefault",
-					"description": "profile.default "
+					"description": "profile.default",
+					"x-nullable": true
 				},
 				"isFirstLogin": {
 					"type": "boolean",
-					"description": "First Login "
+					"description": "First Login",
+					"x-nullable": true
 				},
 				"profiles": {
 					"type": "object",
@@ -889,7 +765,8 @@
 				},
 				"avatar": {
 					"$ref": "#/definitions/AttachmentView",
-					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login  "
+					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -920,7 +797,8 @@
 			"properties": {
 				"balance": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"balanceGold": {
 					"type": "number",
@@ -928,7 +806,8 @@
 				},
 				"bonus": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -944,70 +823,86 @@
 				},
 				"name": {
 					"type": "string",
-					"description": "Google/FB display name, ex: Thanh Pham "
+					"description": "Google/FB display name, ex: Thanh Pham"
 				},
 				"provider": {
 					"type": "string",
-					"description": "OAuth2 provider: google/facebook/builtin/.. "
+					"description": "OAuth2 provider: google/facebook/builtin/.."
 				},
 				"roles": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/UserRole"
 					},
-					"description": "Link to [role] table "
+					"description": "Link to [role] table",
+					"x-nullable": true
 				},
 				"account": {
-					"$ref": "#/definitions/AccountView"
+					"$ref": "#/definitions/AccountView",
+					"description": "user account",
+					"x-nullable": true
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process "
+					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"x-nullable": true
 				},
 				"status": {
-					"$ref": "#/definitions/UserStatus"
+					"$ref": "#/definitions/UserStatus",
+					"x-nullable": true
 				},
 				"birthday": {
 					"type": "number",
 					"format": "double",
-					"description": "UTC tick only date without time component "
+					"description": "UTC tick only date without time component",
+					"x-nullable": true
 				},
 				"address": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"location": {
-					"$ref": "#/definitions/LocationView"
+					"$ref": "#/definitions/LocationView",
+					"x-nullable": true
 				},
 				"phone": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"email": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"language": {
 					"type": "string",
-					"description": "en, vn,.. "
+					"description": "en, vn,..",
+					"x-nullable": true
 				},
 				"gender": {
 					"type": "string",
-					"description": "male/female "
+					"description": "male/female",
+					"x-nullable": true
 				},
 				"timezone": {
 					"type": "number",
 					"format": "double",
-					"description": "+/- UTC time "
+					"description": "+/- UTC time",
+					"x-nullable": true
 				},
 				"fcmToken": {
 					"type": "string",
-					"description": "token FCM "
+					"description": "token FCM",
+					"x-nullable": true
 				},
 				"profileDefault": {
 					"$ref": "#/definitions/ProfileDefault",
-					"description": "profile.default "
+					"description": "profile.default",
+					"x-nullable": true
 				},
 				"isFirstLogin": {
 					"type": "boolean",
-					"description": "First Login "
+					"description": "First Login",
+					"x-nullable": true
 				},
 				"profiles": {
 					"type": "object",
@@ -1015,7 +910,8 @@
 				},
 				"avatar": {
 					"$ref": "#/definitions/AttachmentView",
-					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login  "
+					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login",
+					"x-nullable": true
 				},
 				"id": {
 					"type": "string"
@@ -1088,17 +984,21 @@
 					"type": "string"
 				},
 				"phone": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"birthday": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"email": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"gender": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				},
 				"status": {
 					"$ref": "#/definitions/UserStatus"
@@ -1110,7 +1010,8 @@
 					}
 				},
 				"address": {
-					"type": "string"
+					"type": "string",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -1124,7 +1025,8 @@
 			"properties": {
 				"balance": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				},
 				"balanceGold": {
 					"type": "number",
@@ -1132,7 +1034,8 @@
 				},
 				"bonus": {
 					"type": "number",
-					"format": "double"
+					"format": "double",
+					"x-nullable": true
 				}
 			},
 			"required": [
@@ -1163,7 +1066,7 @@
 						}
 					}
 				},
-				"description": "Get current system version info ",
+				"description": "Get current system version info",
 				"tags": [
 					"System"
 				],
@@ -1189,7 +1092,7 @@
 						}
 					}
 				},
-				"description": "Check loggedin status ",
+				"description": "Check loggedin status",
 				"tags": [
 					"System"
 				],
@@ -1215,7 +1118,7 @@
 						}
 					}
 				},
-				"description": "Check current session info ",
+				"description": "Check current session info",
 				"tags": [
 					"Session"
 				],
@@ -1241,7 +1144,7 @@
 						}
 					}
 				},
-				"description": "Get sessions with pagination ",
+				"description": "Get sessions with pagination",
 				"tags": [
 					"Session"
 				],
@@ -1301,7 +1204,7 @@
 						}
 					}
 				},
-				"description": "Get Roles ",
+				"description": "Get Roles",
 				"tags": [
 					"Role"
 				],
@@ -1359,7 +1262,7 @@
 						}
 					}
 				},
-				"description": "Create New Role ",
+				"description": "Create New Role",
 				"tags": [
 					"Role"
 				],
@@ -1397,7 +1300,7 @@
 						}
 					}
 				},
-				"description": "Get all role entities ",
+				"description": "Get all role entities",
 				"tags": [
 					"Role"
 				],
@@ -1423,7 +1326,7 @@
 						}
 					}
 				},
-				"description": "Get Role by Id ",
+				"description": "Get Role by Id",
 				"tags": [
 					"Role"
 				],
@@ -1454,7 +1357,7 @@
 						}
 					}
 				},
-				"description": "Update Role ",
+				"description": "Update Role",
 				"tags": [
 					"Role"
 				],
@@ -1493,7 +1396,7 @@
 						}
 					}
 				},
-				"description": "Delete Role ",
+				"description": "Delete Role",
 				"tags": [
 					"Role"
 				],
@@ -1506,506 +1409,6 @@
 					{
 						"in": "path",
 						"name": "id",
-						"required": true,
-						"type": "string"
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message": {
-			"get": {
-				"operationId": "GetEntities",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageViewWithPagination"
-						}
-					}
-				},
-				"description": "Get Messages ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "from",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "to",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "pageNumber",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "itemCount",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					},
-					{
-						"in": "query",
-						"name": "sortName",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "sortType",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					}
-				]
-			},
-			"post": {
-				"operationId": "CreateEntity",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageEntity"
-						}
-					}
-				},
-				"description": "Create New Message ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "messageView",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/MessageView"
-						}
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message/getbyid/{id}": {
-			"get": {
-				"operationId": "GetEntity",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageEntity"
-						}
-					}
-				},
-				"description": "Get Message by Id ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"type": "string"
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message/getforapp": {
-			"get": {
-				"operationId": "GetListMessageForApp",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageViewWithPaginationApp"
-						}
-					}
-				},
-				"description": "Get List Messages For App",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "sortName",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "sortType",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message/getforanuserapp": {
-			"get": {
-				"operationId": "GetListMessageOfUser",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageViewWithPaginationAnUserApp"
-						}
-					}
-				},
-				"description": "Get List Messages with an user for App",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "userIdToGetMessage",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "sortName",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "sortType",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message/get-messages-for-current-user": {
-			"get": {
-				"operationId": "GetListMessageForCurrentUser",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/MessageDetailView"
-							}
-						}
-					}
-				},
-				"description": "Get List Messages for current user",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "sortName",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "sortType",
-						"required": false,
-						"format": "double",
-						"type": "number"
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message/get-message-to-notification": {
-			"get": {
-				"operationId": "GetMessageToNotification",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageViewWithPagination"
-						}
-					}
-				},
-				"description": "Get Messages to notification",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": []
-			}
-		},
-		"/api/user/v1/Message/get-message-to-notification-update": {
-			"get": {
-				"operationId": "GetMessageToNotificationUpdate",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageViewWithPagination"
-						}
-					}
-				},
-				"description": "Get Messages to notification update",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": []
-			}
-		},
-		"/api/user/v1/Message/{id}": {
-			"put": {
-				"operationId": "UpdateEntity",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"$ref": "#/definitions/MessageEntity"
-						}
-					}
-				},
-				"description": "Update Message ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "body",
-						"name": "messageView",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/MessageView"
-						}
-					}
-				]
-			},
-			"delete": {
-				"operationId": "DeleteEntity",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"204": {
-						"description": "No content"
-					}
-				},
-				"description": "Delete Message ",
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"type": "string"
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message/test-notifi-message": {
-			"get": {
-				"operationId": "TestNotifiForMessage",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"type": "string"
-						}
-					}
-				},
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "title",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "message",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "fcm",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "userId",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "screenID",
-						"required": true,
-						"type": "string"
-					}
-				]
-			}
-		},
-		"/api/user/v1/Message/test-notifi-screen": {
-			"get": {
-				"operationId": "TestNotifiForOpenScreen",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"type": "string"
-						}
-					}
-				},
-				"tags": [
-					"Message"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "title",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "message",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "fcm",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "matchId",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "borrowId",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"in": "query",
-						"name": "screenID",
 						"required": true,
 						"type": "string"
 					}
@@ -2029,7 +1432,7 @@
 						}
 					}
 				},
-				"description": "Get all user lite ",
+				"description": "Get all user lite",
 				"tags": [
 					"User"
 				],
@@ -2055,7 +1458,7 @@
 						}
 					}
 				},
-				"description": "Get user by Id ",
+				"description": "Get user by Id",
 				"tags": [
 					"User"
 				],
@@ -2126,7 +1529,7 @@
 						}
 					}
 				},
-				"description": "Get lend user for app ",
+				"description": "Get lend user for app",
 				"tags": [
 					"User"
 				],
@@ -2308,7 +1711,7 @@
 						}
 					}
 				},
-				"description": "Update user with profiles ",
+				"description": "Update user with profiles",
 				"tags": [
 					"User"
 				],
@@ -2343,7 +1746,7 @@
 						}
 					}
 				},
-				"description": "setFCMForMobile ",
+				"description": "setFCMForMobile",
 				"tags": [
 					"User"
 				],
@@ -2378,7 +1781,7 @@
 						}
 					}
 				},
-				"description": "getFCMForMobile ",
+				"description": "getFCMForMobile",
 				"tags": [
 					"User"
 				],
@@ -2411,7 +1814,7 @@
 						}
 					}
 				},
-				"description": "Update user with profiles ",
+				"description": "Update user with profiles",
 				"tags": [
 					"User"
 				],
@@ -2446,7 +1849,7 @@
 						}
 					}
 				},
-				"description": "Get users with pagination ",
+				"description": "Get users with pagination",
 				"tags": [
 					"User"
 				],
@@ -2512,7 +1915,7 @@
 						}
 					}
 				},
-				"description": "Get user details by Id ",
+				"description": "Get user details by Id",
 				"tags": [
 					"User"
 				],
@@ -2545,7 +1948,7 @@
 						}
 					}
 				},
-				"description": "Create or update User Role ",
+				"description": "Create or update User Role",
 				"tags": [
 					"User"
 				],
@@ -2580,7 +1983,7 @@
 						}
 					}
 				},
-				"description": "Update user details ",
+				"description": "Update user details",
 				"tags": [
 					"User"
 				],
@@ -2621,7 +2024,7 @@
 						}
 					}
 				},
-				"description": "Get user account ",
+				"description": "Get user account",
 				"tags": [
 					"User"
 				],
@@ -2654,7 +2057,7 @@
 						}
 					}
 				},
-				"description": "Update user account ",
+				"description": "Update user account",
 				"tags": [
 					"User"
 				],

@@ -20,6 +20,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var RoleApiController_1;
 const inversify_1 = require("inversify");
 const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
@@ -181,4 +182,3 @@ RoleApiController = RoleApiController_1 = __decorate([
     tsoa_1.Route('api/user/v1/role')
 ], RoleApiController);
 exports.RoleApiController = RoleApiController;
-var RoleApiController_1;

@@ -20,6 +20,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var AccountApiController_1;
 const inversify_1 = require("inversify");
 const lib_common_1 = require("@gtm/lib.common");
 const tsoa_1 = require("tsoa");
@@ -229,4 +230,3 @@ AccountApiController = AccountApiController_1 = __decorate([
     tsoa_1.Route('api/user/v1/account')
 ], AccountApiController);
 exports.AccountApiController = AccountApiController;
-var AccountApiController_1;
