@@ -1,13 +1,41 @@
 /* tslint:disable */
-import { Controller, ValidateParam, FieldErrors, ValidateError, TsoaRoute } from 'tsoa';
+import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute } from 'tsoa';
 import { iocContainer } from './../index';
+import { AccountApiController } from './../../src/controllers/AccountApiController';
 import { SystemApiController } from './../../src/controllers/SystemApiController';
 import { SessionApiController } from './../../src/controllers/SessionApiController';
 import { RoleApiController } from './../../src/controllers/RoleApiController';
 import { UserApiController } from './../../src/controllers/UserApiController';
 import { expressAuthentication } from './../index';
+import * as express from 'express';
 
 const models: TsoaRoute.Models = {
+    "AccountEntity": {
+        "properties": {
+            "_id": { "dataType": "any", "required": true },
+            "created": { "dataType": "double" },
+            "updated": { "dataType": "double" },
+            "deleted": { "dataType": "double" },
+            "userId": { "dataType": "string", "required": true },
+            "balance": { "dataType": "double", "required": true },
+            "balanceGold": { "dataType": "double", "required": true },
+            "bonus": { "dataType": "double" },
+        },
+    },
+    "MAccountView": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "balance": { "dataType": "double", "required": true },
+            "balanceGold": { "dataType": "double", "required": true },
+        },
+    },
+    "AccountView": {
+        "properties": {
+            "balance": { "dataType": "double" },
+            "balanceGold": { "dataType": "double", "required": true },
+            "bonus": { "dataType": "double" },
+        },
+    },
     "MapOfBoolean": {
         "additionalProperties": { "dataType": "boolean" },
     },
@@ -234,13 +262,6 @@ const models: TsoaRoute.Models = {
             "data": { "dataType": "string", "required": true },
         },
     },
-    "AccountView": {
-        "properties": {
-            "balance": { "dataType": "double" },
-            "balanceGold": { "dataType": "double", "required": true },
-            "bonus": { "dataType": "double" },
-        },
-    },
     "UserViewDetails": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -303,8 +324,172 @@ const models: TsoaRoute.Models = {
         },
     },
 };
+const validationService = new ValidationService(models);
 
-export function RegisterRoutes(app: any) {
+export function RegisterRoutes(app: express.Express) {
+    app.get('/api/user/v1/account/get-all',
+        authenticateMiddleware([{ "jwt": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
+
+
+            const promise = controller.getAccounts.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/account/get-by-id',
+        authenticateMiddleware([{ "jwt": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
+
+
+            const promise = controller.getById.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/account/get-by-user-id',
+        authenticateMiddleware([{ "jwt": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
+
+
+            const promise = controller.getByUserId.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/user/v1/account/my-account',
+        authenticateMiddleware([{ "jwt": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
+
+
+            const promise = controller.getMyAccount.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/account/add-balance',
+        authenticateMiddleware([{ "jwt": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+                accountView: { "in": "body", "name": "accountView", "required": true, "ref": "MAccountView" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
+
+
+            const promise = controller.addBalance.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/account/remove-balance',
+        authenticateMiddleware([{ "jwt": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+                accountView: { "in": "body", "name": "accountView", "required": true, "ref": "MAccountView" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
+
+
+            const promise = controller.removeBalance.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/user/v1/account/create',
+        authenticateMiddleware([{ "jwt": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
+                account: { "in": "body", "name": "account", "required": true, "ref": "AccountView" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = iocContainer.get<AccountApiController>(AccountApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
+
+
+            const promise = controller.addAccount.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
     app.post('/api/user/v1/system/version',
         authenticateMiddleware([{ "jwt": [] }]),
         function(request: any, response: any, next: any) {
@@ -319,9 +504,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<SystemApiController>(SystemApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getVersion.apply(controller, validatedArgs);
+            const promise = controller.getVersion.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/system/loggedin',
@@ -339,9 +527,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<SystemApiController>(SystemApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getLoggedin.apply(controller, validatedArgs);
+            const promise = controller.getLoggedin.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/session/current',
@@ -359,9 +550,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<SessionApiController>(SessionApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getCurrent.apply(controller, validatedArgs);
+            const promise = controller.getCurrent.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/session/entities',
@@ -383,9 +577,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<SessionApiController>(SessionApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getEntities.apply(controller, validatedArgs);
+            const promise = controller.getEntities.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/role',
@@ -407,9 +604,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<RoleApiController>(RoleApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getEntities.apply(controller, validatedArgs);
+            const promise = controller.getEntities.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/role/get-all',
@@ -426,9 +626,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<RoleApiController>(RoleApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getAllEntities.apply(controller, validatedArgs);
+            const promise = controller.getAllEntities.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/role/:id',
@@ -446,9 +649,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<RoleApiController>(RoleApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getEntity.apply(controller, validatedArgs);
+            const promise = controller.getEntity.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/role',
@@ -466,9 +672,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<RoleApiController>(RoleApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.createEntity.apply(controller, validatedArgs);
+            const promise = controller.createEntity.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/role/:id',
@@ -487,9 +696,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<RoleApiController>(RoleApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.updateEntity.apply(controller, validatedArgs);
+            const promise = controller.updateEntity.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.delete('/api/user/v1/role/:id',
@@ -507,9 +719,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<RoleApiController>(RoleApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.deleteEntity.apply(controller, validatedArgs);
+            const promise = controller.deleteEntity.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-user-lite',
@@ -526,9 +741,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getUserLite.apply(controller, validatedArgs);
+            const promise = controller.getUserLite.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/getById/:id',
@@ -546,9 +764,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getById.apply(controller, validatedArgs);
+            const promise = controller.getById.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-by-user-name',
@@ -566,9 +787,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getUserByName.apply(controller, validatedArgs);
+            const promise = controller.getUserByName.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-lender-for-app',
@@ -586,9 +810,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getLenderUserForApp.apply(controller, validatedArgs);
+            const promise = controller.getLenderUserForApp.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/find-user',
@@ -606,9 +833,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.findUser.apply(controller, validatedArgs);
+            const promise = controller.findUser.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/find-user-by-phone',
@@ -626,9 +856,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.findUserByPhone.apply(controller, validatedArgs);
+            const promise = controller.findUserByPhone.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/profile',
@@ -646,9 +879,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getProfileCurrent.apply(controller, validatedArgs);
+            const promise = controller.getProfileCurrent.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/profile-for-mobile',
@@ -666,9 +902,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getProfileCurrentForMobile.apply(controller, validatedArgs);
+            const promise = controller.getProfileCurrentForMobile.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/profile',
@@ -687,9 +926,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.updateProfileCurrent.apply(controller, validatedArgs);
+            const promise = controller.updateProfileCurrent.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-user-profiles',
@@ -708,9 +950,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.updateUserProfiles.apply(controller, validatedArgs);
+            const promise = controller.updateUserProfiles.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/set-fcm-for-mobile',
@@ -729,9 +974,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.setFCMForMobile.apply(controller, validatedArgs);
+            const promise = controller.setFCMForMobile.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-fcm-for-mobile',
@@ -749,9 +997,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getFCMForMobile.apply(controller, validatedArgs);
+            const promise = controller.getFCMForMobile.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-avatar',
@@ -770,9 +1021,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.updateAvatar.apply(controller, validatedArgs);
+            const promise = controller.updateAvatar.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/entities',
@@ -795,9 +1049,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getEntities.apply(controller, validatedArgs);
+            const promise = controller.getEntities.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/details/:id',
@@ -815,9 +1072,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getDetailViewById.apply(controller, validatedArgs);
+            const promise = controller.getDetailViewById.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/create-or-update-role',
@@ -836,9 +1096,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.createOrUpdateUserRole.apply(controller, validatedArgs);
+            const promise = controller.createOrUpdateUserRole.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-user-details/:userId',
@@ -858,9 +1121,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.updateUserDetail.apply(controller, validatedArgs);
+            const promise = controller.updateUserDetail.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/user/v1/user/get-user-account/:userId',
@@ -879,9 +1145,12 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.getUserAccount.apply(controller, validatedArgs);
+            const promise = controller.getUserAccount.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     app.post('/api/user/v1/user/update-user-account/:userId',
@@ -902,52 +1171,77 @@ export function RegisterRoutes(app: any) {
             }
 
             const controller = iocContainer.get<UserApiController>(UserApiController);
+            if (typeof controller['setStatus'] === 'function') {
+                (<any>controller).setStatus(undefined);
+            }
 
 
-            const promise = controller.updateUserAccount.apply(controller, validatedArgs);
+            const promise = controller.updateUserAccount.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
 
     function authenticateMiddleware(security: TsoaRoute.Security[] = []) {
-        return (request: any, response: any, next: any) => {
+        return (request: any, _response: any, next: any) => {
             let responded = 0;
             let success = false;
+
+            const succeed = function(user: any) {
+                if (!success) {
+                    success = true;
+                    responded++;
+                    request['user'] = user;
+                    next();
+                }
+            }
+
+            const fail = function(error: any) {
+                responded++;
+                if (responded == security.length && !success) {
+                    error.status = 401;
+                    next(error)
+                }
+            }
+
             for (const secMethod of security) {
-                expressAuthentication(request, secMethod.name, secMethod.scopes).then((user: any) => {
-                    // only need to respond once
-                    if (!success) {
-                        success = true;
-                        responded++;
-                        request['user'] = user;
-                        next();
+                if (Object.keys(secMethod).length > 1) {
+                    let promises: Promise<any>[] = [];
+
+                    for (const name in secMethod) {
+                        promises.push(expressAuthentication(request, name, secMethod[name]));
                     }
-                })
-                    .catch((error: any) => {
-                        responded++;
-                        if (responded == security.length && !success) {
-                            response.status(401);
-                            next(error)
-                        }
-                    })
+
+                    Promise.all(promises)
+                        .then((users) => { succeed(users[0]); })
+                        .catch(fail);
+                } else {
+                    for (const name in secMethod) {
+                        expressAuthentication(request, name, secMethod[name])
+                            .then(succeed)
+                            .catch(fail);
+                    }
+                }
             }
         }
+    }
+
+    function isController(object: any): object is Controller {
+        return 'getHeaders' in object && 'getStatus' in object && 'setStatus' in object;
     }
 
     function promiseHandler(controllerObj: any, promise: any, response: any, next: any) {
         return Promise.resolve(promise)
             .then((data: any) => {
                 let statusCode;
-                if (controllerObj instanceof Controller) {
-                    const controller = controllerObj as Controller
-                    const headers = controller.getHeaders();
+                if (isController(controllerObj)) {
+                    const headers = controllerObj.getHeaders();
                     Object.keys(headers).forEach((name: string) => {
                         response.set(name, headers[name]);
                     });
 
-                    statusCode = controller.getStatus();
+                    statusCode = controllerObj.getStatus();
                 }
 
-                if (typeof data !== 'undefined') {
+                if (data || data === false) { // === false allows boolean result
                     response.status(statusCode || 200).json(data);
                 } else {
                     response.status(statusCode || 204).end();
@@ -964,15 +1258,15 @@ export function RegisterRoutes(app: any) {
                 case 'request':
                     return request;
                 case 'query':
-                    return ValidateParam(args[key], request.query[name], models, name, fieldErrors);
+                    return validationService.ValidateParam(args[key], request.query[name], name, fieldErrors);
                 case 'path':
-                    return ValidateParam(args[key], request.params[name], models, name, fieldErrors);
+                    return validationService.ValidateParam(args[key], request.params[name], name, fieldErrors);
                 case 'header':
-                    return ValidateParam(args[key], request.header(name), models, name, fieldErrors);
+                    return validationService.ValidateParam(args[key], request.header(name), name, fieldErrors);
                 case 'body':
-                    return ValidateParam(args[key], request.body, models, name, fieldErrors, name + '.');
+                    return validationService.ValidateParam(args[key], request.body, name, fieldErrors, name + '.');
                 case 'body-prop':
-                    return ValidateParam(args[key], request.body[name], models, name, fieldErrors, 'body.');
+                    return validationService.ValidateParam(args[key], request.body[name], name, fieldErrors, 'body.');
             }
         });
         if (Object.keys(fieldErrors).length > 0) {
@@ -980,4 +1274,4 @@ export function RegisterRoutes(app: any) {
         }
         return values;
     }
-} 
+}

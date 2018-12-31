@@ -4,6 +4,94 @@
 		"application/json"
 	],
 	"definitions": {
+		"AccountEntity": {
+			"properties": {
+				"_id": {
+					"type": "object"
+				},
+				"created": {
+					"type": "number",
+					"format": "double",
+					"x-nullable": true
+				},
+				"updated": {
+					"type": "number",
+					"format": "double",
+					"x-nullable": true
+				},
+				"deleted": {
+					"type": "number",
+					"format": "double",
+					"x-nullable": true
+				},
+				"userId": {
+					"type": "string"
+				},
+				"balance": {
+					"type": "number",
+					"format": "double"
+				},
+				"balanceGold": {
+					"type": "number",
+					"format": "double"
+				},
+				"bonus": {
+					"type": "number",
+					"format": "double",
+					"x-nullable": true
+				}
+			},
+			"required": [
+				"_id",
+				"userId",
+				"balance",
+				"balanceGold"
+			],
+			"type": "object"
+		},
+		"MAccountView": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"balance": {
+					"type": "number",
+					"format": "double"
+				},
+				"balanceGold": {
+					"type": "number",
+					"format": "double"
+				}
+			},
+			"required": [
+				"userId",
+				"balance",
+				"balanceGold"
+			],
+			"type": "object"
+		},
+		"AccountView": {
+			"properties": {
+				"balance": {
+					"type": "number",
+					"format": "double",
+					"x-nullable": true
+				},
+				"balanceGold": {
+					"type": "number",
+					"format": "double"
+				},
+				"bonus": {
+					"type": "number",
+					"format": "double",
+					"x-nullable": true
+				}
+			},
+			"required": [
+				"balanceGold"
+			],
+			"type": "object"
+		},
 		"MapOfBoolean": {
 			"properties": {},
 			"type": "object",
@@ -438,7 +526,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
 					"x-nullable": true
 				},
 				"status": {
@@ -699,7 +787,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
 					"x-nullable": true
 				},
 				"status": {
@@ -761,11 +849,11 @@
 				},
 				"profiles": {
 					"type": "object",
-					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
+					"description": "With 3 sub-dcouments:\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
 				},
 				"avatar": {
 					"$ref": "#/definitions/AttachmentView",
-					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login",
+					"description": "The OAuth2 authentication process should auto\nload up the default user avatar at 1st user login",
 					"x-nullable": true
 				}
 			},
@@ -790,28 +878,6 @@
 			"required": [
 				"media",
 				"data"
-			],
-			"type": "object"
-		},
-		"AccountView": {
-			"properties": {
-				"balance": {
-					"type": "number",
-					"format": "double",
-					"x-nullable": true
-				},
-				"balanceGold": {
-					"type": "number",
-					"format": "double"
-				},
-				"bonus": {
-					"type": "number",
-					"format": "double",
-					"x-nullable": true
-				}
-			},
-			"required": [
-				"balanceGold"
 			],
 			"type": "object"
 		},
@@ -844,7 +910,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
 					"x-nullable": true
 				},
 				"status": {
@@ -906,11 +972,11 @@
 				},
 				"profiles": {
 					"type": "object",
-					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
+					"description": "With 3 sub-dcouments:\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
 				},
 				"avatar": {
 					"$ref": "#/definitions/AttachmentView",
-					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login",
+					"description": "The OAuth2 authentication process should auto\nload up the default user avatar at 1st user login",
 					"x-nullable": true
 				},
 				"id": {
@@ -1052,6 +1118,238 @@
 		}
 	},
 	"paths": {
+		"/api/user/v1/account/get-all": {
+			"get": {
+				"operationId": "GetAccounts",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/AccountEntity"
+							}
+						}
+					}
+				},
+				"description": "get all account",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/user/v1/account/get-by-id": {
+			"get": {
+				"operationId": "GetById",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "get account by id",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/account/get-by-user-id": {
+			"get": {
+				"operationId": "GetByUserId",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "get account by id",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/api/user/v1/account/my-account": {
+			"get": {
+				"operationId": "GetMyAccount",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "get my-account",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/user/v1/account/add-balance": {
+			"post": {
+				"operationId": "AddBalance",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "add balance of account",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "accountView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MAccountView"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/account/remove-balance": {
+			"post": {
+				"operationId": "RemoveBalance",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "remove balance of account",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "accountView",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MAccountView"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/v1/account/create": {
+			"post": {
+				"operationId": "AddAccount",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/AccountEntity"
+						}
+					}
+				},
+				"description": "add account",
+				"tags": [
+					"Account"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "account",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/AccountView"
+						}
+					}
+				]
+			}
+		},
 		"/api/user/v1/system/version": {
 			"post": {
 				"operationId": "GetVersion",

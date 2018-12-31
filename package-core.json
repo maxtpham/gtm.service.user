@@ -1,33 +1,35 @@
 {
   "devDependencies": {
     "@types/config": "0.0.34",
-    "@types/debug": "0.0.30",
     "@types/deep-equal": "^1.0.1",
-    "@types/express": "^4.11.1",
-    "@types/jsonwebtoken": "^7.2.7",
-    "@types/mongoose": "^5.0.11",
-    "@types/passport": "^0.4.5",
+    "@types/express": "^4.16.0",
+    "@types/jsonwebtoken": "^8.3.0",
+    "@types/mongoose": "^5.3.5",
+    "@types/passport": "^1.0.0",
     "@types/passport-facebook-token": "^0.4.33",
-    "nodemon": "^1.18.4",
-    "ts-node": "^5.0.1",
-    "typescript": "^2.8.3"
+    "nodemon": "^1.18.9",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
   },
   "dependencies": {
-    "config": "^1.30.0",
-    "cross-env": "^5.1.4",
+    "config": "^3.0.1",
+    "cross-env": "^5.2.0",
     "deep-equal": "^1.0.1",
-    "express": "^4.16.3",
-    "firebase-admin": "^6.0.0",
+    "express": "^4.16.4",
     "if-env": "^1.0.4",
-    "inversify": "^4.10.0",
-    "inversify-express-utils": "^5.2.2",
-    "jsonwebtoken": "^8.2.1",
-    "mongoose": "^5.0.17",
+    "inversify": "^5.0.1",
+    "inversify-express-utils": "^6.2.0",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.1",
     "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
     "passport-facebook-token": "^3.3.0",
+    "passport-google-oauth": "^1.0.0",
     "passport-jwt-google-auth-library": "^0.1.0",
     "reflect-metadata": "^0.1.12",
+    "request-promise-native": "^1.0.5",
     "rimraf": "^2.6.2",
-    "tsoa": "^2.1.4"
+    "swagger-ui-dist": "^3.20.4",
+    "tsoa": "^2.3.8"
   }
 }

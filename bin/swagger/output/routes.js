@@ -3,12 +3,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* tslint:disable */
 const tsoa_1 = require("tsoa");
 const index_1 = require("./../index");
+const AccountApiController_1 = require("./../../src/controllers/AccountApiController");
 const SystemApiController_1 = require("./../../src/controllers/SystemApiController");
 const SessionApiController_1 = require("./../../src/controllers/SessionApiController");
 const RoleApiController_1 = require("./../../src/controllers/RoleApiController");
 const UserApiController_1 = require("./../../src/controllers/UserApiController");
 const index_2 = require("./../index");
 const models = {
+    "AccountEntity": {
+        "properties": {
+            "_id": { "dataType": "any", "required": true },
+            "created": { "dataType": "double" },
+            "updated": { "dataType": "double" },
+            "deleted": { "dataType": "double" },
+            "userId": { "dataType": "string", "required": true },
+            "balance": { "dataType": "double", "required": true },
+            "balanceGold": { "dataType": "double", "required": true },
+            "bonus": { "dataType": "double" },
+        },
+    },
+    "MAccountView": {
+        "properties": {
+            "userId": { "dataType": "string", "required": true },
+            "balance": { "dataType": "double", "required": true },
+            "balanceGold": { "dataType": "double", "required": true },
+        },
+    },
+    "AccountView": {
+        "properties": {
+            "balance": { "dataType": "double" },
+            "balanceGold": { "dataType": "double", "required": true },
+            "bonus": { "dataType": "double" },
+        },
+    },
     "MapOfBoolean": {
         "additionalProperties": { "dataType": "boolean" },
     },
@@ -235,13 +262,6 @@ const models = {
             "data": { "dataType": "string", "required": true },
         },
     },
-    "AccountView": {
-        "properties": {
-            "balance": { "dataType": "double" },
-            "balanceGold": { "dataType": "double", "required": true },
-            "bonus": { "dataType": "double" },
-        },
-    },
     "UserViewDetails": {
         "properties": {
             "code": { "dataType": "string", "required": true },
@@ -304,7 +324,135 @@ const models = {
         },
     },
 };
+const validationService = new tsoa_1.ValidationService(models);
 function RegisterRoutes(app) {
+    app.get('/api/user/v1/account/get-all', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {
+        const args = {};
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
+        const promise = controller.getAccounts.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/account/get-by-id', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {
+        const args = {
+            id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
+        const promise = controller.getById.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/account/get-by-user-id', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {
+        const args = {
+            userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
+        const promise = controller.getByUserId.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/account/my-account', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {
+        const args = {
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
+        const promise = controller.getMyAccount.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.post('/api/user/v1/account/add-balance', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {
+        const args = {
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            accountView: { "in": "body", "name": "accountView", "required": true, "ref": "MAccountView" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
+        const promise = controller.addBalance.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.post('/api/user/v1/account/remove-balance', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {
+        const args = {
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            accountView: { "in": "body", "name": "accountView", "required": true, "ref": "MAccountView" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
+        const promise = controller.removeBalance.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.post('/api/user/v1/account/create', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {
+        const args = {
+            userId: { "in": "query", "name": "userId", "required": true, "dataType": "string" },
+            account: { "in": "body", "name": "account", "required": true, "ref": "AccountView" },
+        };
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(AccountApiController_1.AccountApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
+        const promise = controller.addAccount.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
     app.post('/api/user/v1/system/version', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {
         const args = {};
         let validatedArgs = [];
@@ -315,6 +463,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(SystemApiController_1.SystemApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getVersion.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -330,6 +481,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(SystemApiController_1.SystemApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getLoggedin.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -345,6 +499,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(SessionApiController_1.SessionApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getCurrent.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -364,6 +521,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(SessionApiController_1.SessionApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getEntities.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -383,6 +543,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(RoleApiController_1.RoleApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getEntities.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -396,6 +559,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(RoleApiController_1.RoleApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getAllEntities.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -411,6 +577,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(RoleApiController_1.RoleApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -426,6 +595,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(RoleApiController_1.RoleApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.createEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -442,6 +614,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(RoleApiController_1.RoleApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.updateEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -457,6 +632,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(RoleApiController_1.RoleApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.deleteEntity.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -470,6 +648,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getUserLite.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -485,6 +666,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getById.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -500,6 +684,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getUserByName.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -515,6 +702,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getLenderUserForApp.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -530,6 +720,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.findUser.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -545,6 +738,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.findUserByPhone.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -560,6 +756,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getProfileCurrent.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -575,6 +774,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getProfileCurrentForMobile.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -591,6 +793,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.updateProfileCurrent.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -607,6 +812,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.updateUserProfiles.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -623,6 +831,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.setFCMForMobile.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -638,6 +849,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getFCMForMobile.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -654,6 +868,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.updateAvatar.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -674,6 +891,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getEntities.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -689,6 +909,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getDetailViewById.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -705,6 +928,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.createOrUpdateUserRole.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -722,6 +948,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.updateUserDetail.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -738,6 +967,9 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.getUserAccount.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
@@ -756,46 +988,66 @@ function RegisterRoutes(app) {
             return next(err);
         }
         const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
         const promise = controller.updateUserAccount.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     function authenticateMiddleware(security = []) {
-        return (request, response, next) => {
+        return (request, _response, next) => {
             let responded = 0;
             let success = false;
-            for (const secMethod of security) {
-                index_2.expressAuthentication(request, secMethod.name, secMethod.scopes).then((user) => {
-                    // only need to respond once
-                    if (!success) {
-                        success = true;
-                        responded++;
-                        request['user'] = user;
-                        next();
-                    }
-                })
-                    .catch((error) => {
+            const succeed = function (user) {
+                if (!success) {
+                    success = true;
                     responded++;
-                    if (responded == security.length && !success) {
-                        response.status(401);
-                        next(error);
+                    request['user'] = user;
+                    next();
+                }
+            };
+            const fail = function (error) {
+                responded++;
+                if (responded == security.length && !success) {
+                    error.status = 401;
+                    next(error);
+                }
+            };
+            for (const secMethod of security) {
+                if (Object.keys(secMethod).length > 1) {
+                    let promises = [];
+                    for (const name in secMethod) {
+                        promises.push(index_2.expressAuthentication(request, name, secMethod[name]));
                     }
-                });
+                    Promise.all(promises)
+                        .then((users) => { succeed(users[0]); })
+                        .catch(fail);
+                }
+                else {
+                    for (const name in secMethod) {
+                        index_2.expressAuthentication(request, name, secMethod[name])
+                            .then(succeed)
+                            .catch(fail);
+                    }
+                }
             }
         };
+    }
+    function isController(object) {
+        return 'getHeaders' in object && 'getStatus' in object && 'setStatus' in object;
     }
     function promiseHandler(controllerObj, promise, response, next) {
         return Promise.resolve(promise)
             .then((data) => {
             let statusCode;
-            if (controllerObj instanceof tsoa_1.Controller) {
-                const controller = controllerObj;
-                const headers = controller.getHeaders();
+            if (isController(controllerObj)) {
+                const headers = controllerObj.getHeaders();
                 Object.keys(headers).forEach((name) => {
                     response.set(name, headers[name]);
                 });
-                statusCode = controller.getStatus();
+                statusCode = controllerObj.getStatus();
             }
-            if (typeof data !== 'undefined') {
+            if (data || data === false) { // === false allows boolean result
                 response.status(statusCode || 200).json(data);
             }
             else {
@@ -812,15 +1064,15 @@ function RegisterRoutes(app) {
                 case 'request':
                     return request;
                 case 'query':
-                    return tsoa_1.ValidateParam(args[key], request.query[name], models, name, fieldErrors);
+                    return validationService.ValidateParam(args[key], request.query[name], name, fieldErrors);
                 case 'path':
-                    return tsoa_1.ValidateParam(args[key], request.params[name], models, name, fieldErrors);
+                    return validationService.ValidateParam(args[key], request.params[name], name, fieldErrors);
                 case 'header':
-                    return tsoa_1.ValidateParam(args[key], request.header(name), models, name, fieldErrors);
+                    return validationService.ValidateParam(args[key], request.header(name), name, fieldErrors);
                 case 'body':
-                    return tsoa_1.ValidateParam(args[key], request.body, models, name, fieldErrors, name + '.');
+                    return validationService.ValidateParam(args[key], request.body, name, fieldErrors, name + '.');
                 case 'body-prop':
-                    return tsoa_1.ValidateParam(args[key], request.body[name], models, name, fieldErrors, 'body.');
+                    return validationService.ValidateParam(args[key], request.body[name], name, fieldErrors, 'body.');
             }
         });
         if (Object.keys(fieldErrors).length > 0) {
