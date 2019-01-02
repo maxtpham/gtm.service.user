@@ -7,13 +7,13 @@ RUN apk update && \
     pip install --upgrade pip setuptools && \
     mkdir /app && mkdir /app/config
 WORKDIR /app
-COPY trga.server.node/package.json .
+COPY package.json .
 # node_modules & cleanup
 RUN npm install && \
     apk del build-dependencies && \
     rm -r /root/.cache && \
     rm -rf /var/cache/apk/*
-COPY trga.server.node/config/development-docker.json ./config/development.json
+COPY config/development-docker.json ./config/development.json
 VOLUME [ "/app" ]
 EXPOSE 80
 # add `/app/node_modules/.bin` to $PATH

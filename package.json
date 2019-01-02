@@ -1,5 +1,5 @@
 {
-  "name": "@gtm/service.user",
+  "name": "@gtmservice/user",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,12 +9,16 @@
     "*.sh"
   ],
   "scripts": {
+    "build:docker:dev": "sh -c \". ../common.subscription/docker/.env-dev.sh && ../common.subscription/docker/build.sh\"",
+    "build:docker:prd": "sh -c \". ../common.subscription/docker/.env-prd.sh && ../common.subscription/docker/build.sh\"",
+    "start:docker:dev": "sh -c \". ../common.subscription/docker/.env-dev.sh && ../common.subscription/docker/start.sh\"",
+    "start:docker:prd": "sh -c \". ../common.subscription/docker/.env-prd.sh && ../common.subscription/docker/start.sh\"",
     "clean": "rimraf bin/*",
     "build": "npm run clean && npm install && tsc",
     "b": "npm run build",
     "debug": "ts-node --nolazy --inspect-brk=5858 src/index.ts",
     "start": "if-env NODE_ENV=production && npm run start:prd || npm run start:dev",
-    "start:dev": "cross-env-shell NODE_ENV=development \"nodemon --watch src/**/*.ts --watch swagger/**/*.ts --watch config/*.json --exec ts-node src/index.ts\"",
+    "start:dev": "cross-env-shell NODE_ENV=development \"nodemon --watch src/ --watch swagger/ --watch config/ --exec ts-node src/index.ts\"",
     "start:prd": "cross-env-shell NODE_ENV=production \"node bin/src/index.js\"",
     "test": "if-env NODE_ENV=production && npm run test:prd || npm run test:dev",
     "test:dev": "cross-env-shell NODE_ENV=development \"ts-node tests/index.ts\"",
