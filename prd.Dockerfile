@@ -23,6 +23,7 @@ ENV NODE_ENV=production
 
 FROM package as final
 COPY ./ .
-RUN npm run build
+RUN cp config/production-docker.json config/production.json && \
+    npm run build
 EXPOSE 80
 CMD [ "npm", "run", "start:prd" ]
