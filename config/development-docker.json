@@ -1,7 +1,7 @@
 {
     "port": 80,
     "https": null,
-    "mongo": "mongodb://mongo.mybestbook.dev/mbb_user",
+    "mongo": "mongodb://db00/mbb_user",
     "cors": [ "https://mybestbook.dev", "https://www.mybestbook.dev", "https://admin.mybestbook.dev", "https://tienganh3s.dev", "https://www.tienganh3s.dev" ],
     "rootUrl": "https://www.mybestbook.dev",
     "returnUrl": "https://www.mybestbook.dev",

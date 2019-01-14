@@ -14,7 +14,7 @@ RUN npm install && \
     rm -r /root/.cache && \
     rm -rf /var/cache/apk/*
 COPY config/development-docker.json ./config/development.json
-VOLUME [ "/app" ]
+VOLUME [ "/app", "/app/config", "/app/node_modules" ]
 EXPOSE 80
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
