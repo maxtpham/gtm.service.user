@@ -9,10 +9,10 @@
     "*.sh"
   ],
   "scripts": {
-    "build:docker:dev": "sh -c \". ../common.subscription/docker/.env-dev.sh && ../common.subscription/docker/build.sh\"",
-    "build:docker:prd": "sh -c \". ../common.subscription/docker/.env-prd.sh && ../common.subscription/docker/build.sh\"",
-    "start:docker:dev": "sh -c \". ../common.subscription/docker/.env-dev.sh && ../common.subscription/docker/start-dev.sh\"",
-    "start:docker:prd": "sh -c \". ../common.subscription/docker/.env-prd.sh && ../common.subscription/docker/start-prd.sh -e MONGO='mongodb://mongo.mybestbook.dev/mbb_user' -e ROOTURL='http://www.mybestbook.dev' -e RETURNURL='http://www.mybestbook.dev' -e AUTH_GOOGLE_OPTIONS_CLIENTID='980942693683-uij086c1n3ar0cf8oin40ilunesb52au.apps.googleusercontent.com' -e AUTH_GOOGLE_OPTIONS_CLIENTSECRET='NzD7eOzkcEh-ortZSXaHm3Kd' -e AUTH_FACEBOOK_OPTIONS_CLIENTID='1983328695283502' -e AUTH_FACEBOOK_OPTIONS_CLIENTSECRET='cd595d42b38dbc0213e36f7eee740c88' -e CORS='https://mybestbook.dev,https://www.mybestbook.dev,https://admin.mybestbook.dev,https://tienganh3s.dev,https://www.tienganh3s.dev' \"",
+    "build:docker:dev": "sh -c \". ../common.subscription/docker/.build/.env-dev.sh && ../common.subscription/docker/.build/build.sh\"",
+    "build:docker:prd": "sh -c \". ../common.subscription/docker/.build/.env-prd.sh && ../common.subscription/docker/.build/build.sh\"",
+    "start:docker:dev": "sh -c \". ../common.subscription/docker/.build/.env-dev.sh && ../common.subscription/docker/.build/start-dev.sh\"",
+    "start:docker:prd": "sh -c \". ../common.subscription/docker/.build/.env-prd.sh && ../common.subscription/docker/.build/start-prd.sh -e MONGO='mongodb://mongo.mybestbook.dev/mbb_user' -e ROOTURL='http://www.mybestbook.dev' -e RETURNURL='http://www.mybestbook.dev' -e AUTH_GOOGLE_OPTIONS_CLIENTID='980942693683-uij086c1n3ar0cf8oin40ilunesb52au.apps.googleusercontent.com' -e AUTH_GOOGLE_OPTIONS_CLIENTSECRET='NzD7eOzkcEh-ortZSXaHm3Kd' -e AUTH_FACEBOOK_OPTIONS_CLIENTID='1983328695283502' -e AUTH_FACEBOOK_OPTIONS_CLIENTSECRET='cd595d42b38dbc0213e36f7eee740c88' -e CORS='https://mybestbook.dev,https://www.mybestbook.dev,https://admin.mybestbook.dev,https://tienganh3s.dev,https://www.tienganh3s.dev' \"",
     "clean": "rimraf bin/*",
     "build": "npm run clean && npm install && tsc",
     "b": "npm run build",
