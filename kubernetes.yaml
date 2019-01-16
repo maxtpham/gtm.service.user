@@ -1,32 +1,32 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: gtm-service-user-svc
+  name: gtmservice-user-svc
   labels:
-    app: gtm-service-user-app
+    app: gtmservice-user-app
 spec:
   ports:
   - port: 80
     protocol: TCP
   selector:
-    app: gtm-service-user-app
-    service: gtm-service-user-svc
+    app: gtmservice-user-app
+    service: gtmservice-user-svc
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: gtm-service-user-dep
+  name: gtmservice-user-dep
 spec:
   replicas: 2
   template:
     metadata:
       labels:
-        app: gtm-service-user-app
-        service: gtm-service-user-svc
+        app: gtmservice-user-app
+        service: gtmservice-user-svc
     spec:
       containers:
-      - name: gtm-service-user-pod
-        image: ${NEXUS_HOST}/gtm-service-user:${IMAGE_VERSION}
+      - name: gtmservice-user-pod
+        image: ${NEXUS_HOST}/gtmservice-user:${IMAGE_VERSION}
         ports:
         - name: http
           containerPort: 80
@@ -39,7 +39,7 @@ spec:
           - name: MONGO
             valueFrom:
               secretKeyRef:
-                name: gtm-service-user-secret
+                name: gtmservice-user-secret
                 key: MONGO
           - name: ROOTURL
             value: "https://www.mybestbook.net"
@@ -48,32 +48,32 @@ spec:
           - name: AUTH_GOOGLE_OPTIONS_CLIENTID
             valueFrom:
               secretKeyRef:
-                name: gtm-service-user-secret
+                name: gtmservice-user-secret
                 key: AUTH_GOOGLE_OPTIONS_CLIENTID
           - name: AUTH_GOOGLE_OPTIONS_CLIENTSECRET
             valueFrom:
               secretKeyRef:
-                name: gtm-service-user-secret
+                name: gtmservice-user-secret
                 key: AUTH_GOOGLE_OPTIONS_CLIENTSECRET
           - name: AUTH_FACEBOOK_OPTIONS_CLIENTID
             valueFrom:
               secretKeyRef:
-                name: gtm-service-user-secret
+                name: gtmservice-user-secret
                 key: AUTH_FACEBOOK_OPTIONS_CLIENTID
           - name: AUTH_FACEBOOK_OPTIONS_CLIENTSECRET
             valueFrom:
               secretKeyRef:
-                name: gtm-service-user-secret
+                name: gtmservice-user-secret
                 key: AUTH_FACEBOOK_OPTIONS_CLIENTSECRET
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: gtm-service-user-nlb
+  name: gtmservice-user-nlb
 spec:
   type: LoadBalancer
   ports:
     - port: 80
-      nodePort: 30191
+      nodePort: 30101
   selector:
-    app: gtm-service-user-app
+    app: gtmservice-user-app
