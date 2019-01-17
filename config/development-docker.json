@@ -1,22 +1,8 @@
 {
     "port": 80,
     "https": null,
-    "mongo": "mongodb://db00/mbb_user",
-    "cors": [ "https://mybestbook.dev", "https://www.mybestbook.dev", "https://admin.mybestbook.dev", "https://tienganh3s.dev", "https://www.tienganh3s.dev" ],
-    "rootUrl": "https://www.mybestbook.dev",
-    "returnUrl": "https://www.mybestbook.dev",
     "auth": {
-        "google": {
-            "options": {
-                "clientID": "980942693683-uij086c1n3ar0cf8oin40ilunesb52au.apps.googleusercontent.com",
-                "clientSecret": "NzD7eOzkcEh-ortZSXaHm3Kd"
-            }
-        },
-        "facebook": {
-            "options": {
-                "clientID": "1983328695283502",
-                "clientSecret": "cd595d42b38dbc0213e36f7eee740c88"
-            }
-        }
+        "google": {},
+        "facebook": {}
     }
 }
