@@ -17,7 +17,7 @@ kind: Deployment
 metadata:
   name: gtmservice-user-dep
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
