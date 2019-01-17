@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: gtmservice-user-pod
-        image: ${NEXUS_HOST}/gtmservice-user:${IMAGE_VERSION}
+        image: ${REGISTRY}/gtmservice/user:${IMAGE_VERSION}
         ports:
         - name: http
           containerPort: 80
