@@ -31,6 +31,8 @@ export function normalizeOAuth2(config: IOAuth2Config): IOAuth2Config {
     if (!config.rootUrl) config.rootUrl = (!!config.https ? config.https._url : config._url) || config._url;
     if (!config.returnUrl) config.returnUrl = '/';
     if (!config.auth) config.auth = { google: <IOAuth2ProviderConfig>{}, facebook: <IOAuth2ProviderConfig>{} };
+
+    if (!config.auth.google && Object.getOwnPropertyNames(process.env).some(function(s: string) { return s.startsWith('AUTH_GOOGLE_'); })) config.auth.google = {} as any;
     if (config.auth.google) {
         if (!config.auth.google.authorizationUrl) config.auth.google.authorizationUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
         if (!config.auth.google.tokenUrl) config.auth.google.tokenUrl = 'https://www.googleapis.com/oauth2/v4/token';
@@ -40,6 +42,7 @@ export function normalizeOAuth2(config: IOAuth2Config): IOAuth2Config {
         if (typeof(process.env.AUTH_GOOGLE_OPTIONS_CLIENTID) === 'string') config.auth.google.options.clientID = process.env.AUTH_GOOGLE_OPTIONS_CLIENTID;
         if (typeof(process.env.AUTH_GOOGLE_OPTIONS_CLIENTSECRET) === 'string') config.auth.google.options.clientSecret = process.env.AUTH_GOOGLE_OPTIONS_CLIENTSECRET;
     }
+    if (!config.auth.facebook && Object.getOwnPropertyNames(process.env).some(function(s: string) { return s.startsWith('AUTH_FACEBOOK_'); })) config.auth.facebook = {} as any;
     if (config.auth.facebook) {
         if (!config.auth.facebook.authorizationUrl) config.auth.facebook.authorizationUrl = 'https://www.facebook.com/dialog/oauth';
         if (!config.auth.facebook.tokenUrl) config.auth.facebook.tokenUrl = 'https://graph.facebook.com/oauth/access_token';
@@ -50,7 +53,7 @@ export function normalizeOAuth2(config: IOAuth2Config): IOAuth2Config {
         if (typeof(process.env.AUTH_FACEBOOK_OPTIONS_CLIENTSECRET) === 'string') config.auth.facebook.options.clientSecret = process.env.AUTH_FACEBOOK_OPTIONS_CLIENTSECRET;
         if (!(config.auth.facebook.options as any).profileFields) (config.auth.facebook.options as any).profileFields = ["id", "displayName", "photos", "name", "about", "age_range", "birthday", "currency", "devices", "education", "email", "interested_in", "is_shared_login", "is_verified", "languages", "install_type", "installed", "link", "locale", "location", "meeting_for", "name_format", "payment_pricepoints", "political", "public_key", "quotes", "relationship_status", "religion", "security_settings", "shared_login_upgrade_required_by", "significant_other", "sports", "test_group", "third_party_id", "timezone", "updated_time", "verified", "video_upload_limits", "viewer_can_send_gift", "website", "work", "favorite_athletes", "favorite_teams", "gender", "hometown", "inspirational_people", "cover"];
     }
-    
+
     return config;
 }
 
