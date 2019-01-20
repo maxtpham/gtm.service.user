@@ -1,17 +1,17 @@
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: gtmservice-user-svc
-#   labels:
-#     app: gtmservice-user-app
-# spec:
-#   ports:
-#   - port: 80
-#     protocol: TCP
-#   selector:
-#     app: gtmservice-user-app
-#     service: gtmservice-user-svc
-# ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gtmservice-user-svc
+  labels:
+    app: gtmservice-user-app
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: gtmservice-user-app
+    service: gtmservice-user-svc
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -32,6 +32,8 @@ spec:
           containerPort: 80
           protocol: TCP
         env:
+          - name: HOST
+            value: "+"
           - name: PORT
             value: "80"
           - name: CORS
@@ -78,5 +80,4 @@ spec:
     - port: 80
       nodePort: 30101
   selector:
-    #app: gtmservice-user-app
-    app: gtmservice-user-dep
+    app: gtmservice-user-app
