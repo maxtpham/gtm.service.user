@@ -1,17 +1,17 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: gtmservice-user-svc
-  labels:
-    app: gtmservice-user-app
-spec:
-  ports:
-  - port: 80
-    protocol: TCP
-  selector:
-    app: gtmservice-user-app
-    service: gtmservice-user-svc
----
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: gtmservice-user-svc
+#   labels:
+#     app: gtmservice-user-app
+# spec:
+#   ports:
+#   - port: 80
+#     protocol: TCP
+#   selector:
+#     app: gtmservice-user-app
+#     service: gtmservice-user-svc
+# ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: gtmservice-user-pod
-        image: ${REGISTRY}/gtmservice/user:${IMAGE_VERSION}
+        image: ${REGISTRY}/${ORG}/${IMAGE}:${VERSION}
         ports:
         - name: http
           containerPort: 80
@@ -73,9 +73,10 @@ kind: Service
 metadata:
   name: gtmservice-user-nlb
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - port: 80
       nodePort: 30101
   selector:
-    app: gtmservice-user-app
+    #app: gtmservice-user-app
+    app: gtmservice-user-dep

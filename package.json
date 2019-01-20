@@ -9,8 +9,11 @@
     "*.sh"
   ],
   "scripts": {
-    "build:docker:dev": "sh -c \". ../common.subscription/docker/.build/.env-dev.sh && ../common.subscription/docker/.build/build.sh\"",
-    "build:docker:prd": "sh -c \". ../common.subscription/docker/.build/.env-prd.sh && ../common.subscription/docker/.build/build.sh\"",
+    "build:docker:dev": "sh -c \". ../../subscription/common.subscription/docker/.build/.env-dev.sh && ../../subscription/common.subscription/docker/.build/build.sh\"",
+    "build:docker:prd": "sh -c \". ../../subscription/common.subscription/docker/.build/.env-prd.sh && ../../subscription/common.subscription/docker/.build/build.sh\"",
+    "k8s:create": "sh -c \". ../../subscription/common.subscription/docker/.k8s/.env.sh && ../../subscription/common.subscription/docker/.k8s/create.sh\"",
+    "k8s:delete": "sh -c \". ../../subscription/common.subscription/docker/.k8s/.env.sh && ../../subscription/common.subscription/docker/.k8s/delete.sh\"",
+    "k8s:apply": "sh -c \". ../../subscription/common.subscription/docker/.k8s/.env.sh && ../../subscription/common.subscription/docker/.k8s/apply.sh\"",
     "build": "rm -rf bin && npm install && tsc",
     "b": "npm run build",
     "debug": "ts-node --nolazy --inspect-brk=5858 src/index.ts",
