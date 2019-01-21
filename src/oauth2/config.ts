@@ -28,7 +28,9 @@ export interface IOAuth2ProviderOptionConfig {
 }
 
 export function normalizeOAuth2(config: IOAuth2Config): IOAuth2Config {
+    if (typeof(process.env.ROOTURL) === 'string') config.rootUrl = process.env.ROOTURL;
     if (!config.rootUrl) config.rootUrl = (!!config.https ? config.https._url : config._url) || config._url;
+    if (typeof(process.env.RETURNURL) === 'string') config.returnUrl = process.env.RETURNURL;
     if (!config.returnUrl) config.returnUrl = '/';
     if (!config.auth) config.auth = { google: <IOAuth2ProviderConfig>{}, facebook: <IOAuth2ProviderConfig>{} };
 
