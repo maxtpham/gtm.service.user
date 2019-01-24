@@ -1,12 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function normalizeOAuth2(config) {
+    if (typeof (process.env.ROOTURL) === 'string')
+        config.rootUrl = process.env.ROOTURL;
     if (!config.rootUrl)
         config.rootUrl = (!!config.https ? config.https._url : config._url) || config._url;
+    if (typeof (process.env.RETURNURL) === 'string')
+        config.returnUrl = process.env.RETURNURL;
     if (!config.returnUrl)
         config.returnUrl = '/';
     if (!config.auth)
         config.auth = { google: {}, facebook: {} };
+    if (!config.auth.google && Object.getOwnPropertyNames(process.env).some(function (s) { return s.startsWith('AUTH_GOOGLE_'); }))
+        config.auth.google = {};
     if (config.auth.google) {
         if (!config.auth.google.authorizationUrl)
             config.auth.google.authorizationUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -23,6 +29,8 @@ function normalizeOAuth2(config) {
         if (typeof (process.env.AUTH_GOOGLE_OPTIONS_CLIENTSECRET) === 'string')
             config.auth.google.options.clientSecret = process.env.AUTH_GOOGLE_OPTIONS_CLIENTSECRET;
     }
+    if (!config.auth.facebook && Object.getOwnPropertyNames(process.env).some(function (s) { return s.startsWith('AUTH_FACEBOOK_'); }))
+        config.auth.facebook = {};
     if (config.auth.facebook) {
         if (!config.auth.facebook.authorizationUrl)
             config.auth.facebook.authorizationUrl = 'https://www.facebook.com/dialog/oauth';
