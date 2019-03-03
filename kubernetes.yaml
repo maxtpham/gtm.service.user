@@ -37,18 +37,18 @@ spec:
           - name: PORT
             value: "80"
           - name: CORS
-            value: "https://g.mybestbook.net,https://www-g.mybestbook.net,https://admin.mybestbook.net,https://tienganh3s.vn,https://www.tienganh3s.vn"
+            value: "https://mybestbook.net,https://www.mybestbook.net,https://admin.mybestbook.net,https://tienganh3s.vn,https://www.tienganh3s.vn"
           - name: MONGO
             valueFrom:
               secretKeyRef:
                 name: gtmservice-user-secret
                 key: MONGO
           - name: SERVICES
-            value: "https://www-g.mybestbook.net"
+            value: "https://www.mybestbook.net"
           - name: ROOTURL
-            value: "https://www-g.mybestbook.net"
+            value: "https://www.mybestbook.net"
           - name: RETURNURL
-            value: "https://www-g.mybestbook.net"
+            value: "https://www.mybestbook.net"
           - name: AUTH_GOOGLE_OPTIONS_CLIENTID
             valueFrom:
               secretKeyRef:
