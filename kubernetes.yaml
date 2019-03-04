@@ -37,7 +37,7 @@ spec:
           - name: PORT
             value: "80"
           - name: CORS
-            value: "https://mybestbook.net,https://www.mybestbook.net,https://admin.mybestbook.net,https://tienganh3s.vn,https://www.tienganh3s.vn"
+            value: "https://mybestbook.net,https://www.mybestbook.net,https://admin.mybestbook.net,https://tienganh3s.vn,https://www.tienganh3s.vn,http://localhost:4102"
           - name: MONGO
             valueFrom:
               secretKeyRef:
