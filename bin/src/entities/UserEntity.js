@@ -42,6 +42,10 @@ var User;
             view.phone = '';
         if (typeof (view.timezone) !== 'number')
             view.timezone = '';
+        if (typeof (view.language) !== 'string')
+            view.language = '';
+        if (typeof (view.email) !== 'string')
+            view.email = '';
         if (typeof (view.status) !== 'number')
             view.status = '';
         else {

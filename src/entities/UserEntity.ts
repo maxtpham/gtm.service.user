@@ -134,6 +134,8 @@ export module User {
         if (typeof(view.gender) !== 'string') view.gender = '';
         if (typeof(view.phone) !== 'string') view.phone = '';
         if (typeof(view.timezone) !== 'number') view.timezone = '';
+        if (typeof(view.language) !== 'string') view.language = '';
+        if (typeof(view.email) !== 'string') view.email = '';
         if (typeof(view.status) !== 'number') view.status = ''; else {
             switch (view.status) {
                 case UserStatus.InActive: view.status = 'inactive'; break;
