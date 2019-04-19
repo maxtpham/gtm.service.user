@@ -29,12 +29,9 @@ var User;
     function toExportableProfile(entity) {
         const _a = !!entity.toObject ? entity.toObject() : entity, { _id, __v, deleted, profiles, avatar, account, isFirstLogin, profileDefault, roles, location, fcmToken } = _a, view = __rest(_a, ["_id", "__v", "deleted", "profiles", "avatar", "account", "isFirstLogin", "profileDefault", "roles", "location", "fcmToken"]);
         view.id = entity._id;
-        if (!!view.created)
-            view.created = utility_1.toDateReadable(view.created);
-        if (!!view.updated)
-            view.updated = utility_1.toDateReadable(view.updated);
-        if (!!view.birthday)
-            view.birthday = utility_1.toDateReadable(view.birthday);
+        view.created = utility_1.toDateReadable(view.created);
+        view.updated = utility_1.toDateReadable(view.updated);
+        view.birthday = utility_1.toDateReadable(view.birthday);
         if (typeof (view.active) !== 'boolean')
             view.active = '';
         if (typeof (view.address) !== 'string')

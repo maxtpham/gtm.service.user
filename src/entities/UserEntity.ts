@@ -126,9 +126,9 @@ export module User {
     export function toExportableProfile(entity: UserEntity): ProfileView {
         const { _id, __v, deleted, profiles, avatar, account, isFirstLogin, profileDefault, roles, location, fcmToken, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
         view.id = entity._id;
-        if (!!view.created) view.created = toDateReadable(view.created) as any;
-        if (!!view.updated) view.updated = toDateReadable(view.updated) as any;
-        if (!!view.birthday) view.birthday = toDateReadable(view.birthday) as any;
+        view.created = toDateReadable(view.created) as any;
+        view.updated = toDateReadable(view.updated) as any;
+        view.birthday = toDateReadable(view.birthday) as any;
         if (typeof(view.active) !== 'boolean') view.active = '';
         if (typeof(view.address) !== 'string') view.address = '';
         if (typeof(view.gender) !== 'string') view.gender = '';
