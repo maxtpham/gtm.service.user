@@ -104,35 +104,6 @@ const models = {
             "status": { "ref": "RoleStatus" },
         },
     },
-    "MUserView": {
-        "properties": {
-            "id": { "dataType": "string", "required": true },
-            "name": { "dataType": "string", "required": true },
-            "phone": { "dataType": "string", "required": true },
-            "email": { "dataType": "string", "required": true },
-            "houseHolder": { "dataType": "any" },
-        },
-    },
-    "MUserFindByPhone": {
-        "properties": {
-            "id": { "dataType": "string" },
-            "name": { "dataType": "string" },
-            "phone": { "dataType": "string" },
-            "birthday": { "dataType": "double" },
-            "email": { "dataType": "string" },
-            "gender": { "dataType": "string" },
-            "houseHolder": { "dataType": "any" },
-        },
-    },
-    "StatusFindByPhone": {
-        "enums": ["1", "0", "2"],
-    },
-    "MFindUserByPhone": {
-        "properties": {
-            "user": { "ref": "MUserFindByPhone", "required": true },
-            "status": { "ref": "StatusFindByPhone", "required": true },
-        },
-    },
     "UserRole": {
         "properties": {
             "id": { "dataType": "any", "required": true },
@@ -185,6 +156,35 @@ const models = {
             "fcmToken": { "dataType": "string" },
             "profileDefault": { "ref": "ProfileDefault" },
             "isFirstLogin": { "dataType": "boolean" },
+        },
+    },
+    "MUserView": {
+        "properties": {
+            "id": { "dataType": "string", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "phone": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
+            "houseHolder": { "dataType": "any" },
+        },
+    },
+    "MUserFindByPhone": {
+        "properties": {
+            "id": { "dataType": "string" },
+            "name": { "dataType": "string" },
+            "phone": { "dataType": "string" },
+            "birthday": { "dataType": "double" },
+            "email": { "dataType": "string" },
+            "gender": { "dataType": "string" },
+            "houseHolder": { "dataType": "any" },
+        },
+    },
+    "StatusFindByPhone": {
+        "enums": ["1", "0", "2"],
+    },
+    "MFindUserByPhone": {
+        "properties": {
+            "user": { "ref": "MUserFindByPhone", "required": true },
+            "status": { "ref": "StatusFindByPhone", "required": true },
         },
     },
     "MProfileView": {
@@ -636,6 +636,22 @@ function RegisterRoutes(app) {
             controller.setStatus(undefined);
         }
         const promise = controller.deleteEntity.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    app.get('/api/user/v1/user/profiles/export', authenticateMiddleware([{ "jwt": ["admin"] }]), function (request, response, next) {
+        const args = {};
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request);
+        }
+        catch (err) {
+            return next(err);
+        }
+        const controller = index_1.iocContainer.get(UserApiController_1.UserApiController);
+        if (typeof controller['setStatus'] === 'function') {
+            controller.setStatus(undefined);
+        }
+        const promise = controller.exportProfiles.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     app.get('/api/user/v1/user/get-user-lite', authenticateMiddleware([{ "jwt": [] }]), function (request, response, next) {

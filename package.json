@@ -1,6 +1,6 @@
 {
   "name": "@gtmservice/user",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "files": [
@@ -47,7 +47,7 @@
   "dependencies": {
     "@gtm/lib.common": "^1.0.13",
     "@gtm/lib.service": "^1.0.41",
-    "@gtm/lib.service.auth": "^1.0.40",
+    "@gtm/lib.service.auth": "^1.0.42",
     "config": "^3.0.1",
     "cross-env": "^5.2.0",
     "deep-equal": "^1.0.1",

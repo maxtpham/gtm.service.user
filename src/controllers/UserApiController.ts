@@ -25,6 +25,12 @@ export class UserApiController extends ApiController {
     @inject(UserRepositoryTYPE) private UserRepository: UserRepository;
     @inject(RoleRepositoryTYPE) private RoleRepository: RoleRepository;
 
+    /** Export all users */
+    @Tags('User') @Security({'jwt': ['admin']}) @Get('/profiles/export')
+    public async exportProfiles(): Promise<ProfileView[]> {
+        return await this.UserRepository.exportProfiles();
+    }
+
     /** Get all user lite */
     @Tags('User') @Security('jwt') @Get('/get-user-lite')
     public async getUserLite(): Promise<MUserView[]> {

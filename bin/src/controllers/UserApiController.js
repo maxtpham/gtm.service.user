@@ -44,6 +44,12 @@ const RoleRepository_1 = require("../repositories/RoleRepository");
 const bson_1 = require("bson");
 var Mongoose = require('mongoose'), Schema = Mongoose.Schema;
 let UserApiController = UserApiController_1 = class UserApiController extends lib_service_1.ApiController {
+    /** Export all users */
+    exportProfiles() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.UserRepository.exportProfiles();
+        });
+    }
     /** Get all user lite */
     getUserLite() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -419,6 +425,12 @@ __decorate([
     inversify_1.inject(RoleRepository_1.RoleRepositoryTYPE),
     __metadata("design:type", Object)
 ], UserApiController.prototype, "RoleRepository", void 0);
+__decorate([
+    tsoa_2.Tags('User'), tsoa_2.Security({ 'jwt': ['admin'] }), tsoa_1.Get('/profiles/export'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserApiController.prototype, "exportProfiles", null);
 __decorate([
     tsoa_2.Tags('User'), tsoa_2.Security('jwt'), tsoa_1.Get('/get-user-lite'),
     __metadata("design:type", Function),

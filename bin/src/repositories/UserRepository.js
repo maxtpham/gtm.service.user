@@ -33,6 +33,12 @@ let UserRepositoryImpl = class UserRepositoryImpl extends lib_service_1.Reposito
     constructor(mongoclient) {
         super(mongoclient, "user", UserEntity_1.UserSchema);
     }
+    exportProfiles() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield this.find({});
+            return users.map(user => UserEntity_1.User.toExportableProfile(user));
+        });
+    }
     getByProfile(profile, profileExt) {
         return __awaiter(this, void 0, void 0, function* () {
             // Find & update the user by code (profile.id)

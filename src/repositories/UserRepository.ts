@@ -7,7 +7,7 @@ import { injectableSingleton } from "@gtm/lib.common";
 import { MongoClient } from "@gtm/lib.service";
 import { Repository, RepositoryImpl } from "@gtm/lib.service";
 import { DefaultMongoClientTYPE } from "@gtm/lib.service";
-import { UserEntity, UserSchema, UserRole, UserAccount } from '../entities/UserEntity';
+import { UserEntity, UserSchema, UserRole, UserAccount, ProfileView, User } from '../entities/UserEntity';
 import { MUserView, MUserFind, UserStatus } from "../views/MUserView";
 import { Utils } from "@gtm/lib.service.auth";
 import { OAuth2ProfileExt } from "../oauth2/types";
@@ -17,6 +17,7 @@ export interface UserDocument extends UserEntity, Document { }
 export const UserRepositoryTYPE = Symbol("UserRepository");
 
 export interface UserRepository extends Repository<UserEntity> {
+    exportProfiles(): Promise<ProfileView[]>;
     /** Get or create User by passport Profile. If User exists, compare and update changes */
     getByProfile(profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<UserEntity>;
     buildClientUser: (user: UserEntity) => MUserView;
@@ -32,6 +33,11 @@ export class UserRepositoryImpl extends RepositoryImpl<UserDocument> implements 
 
     constructor(@inject(DefaultMongoClientTYPE) mongoclient: MongoClient) {
         super(mongoclient, "user", UserSchema);
+    }
+
+    public async exportProfiles(): Promise<ProfileView[]> {
+        let users = await (<UserRepository>this).find({});
+        return users.map(user => User.toExportableProfile(user));
     }
 
     public async getByProfile(profile: passport.Profile, profileExt: OAuth2ProfileExt): Promise<UserEntity> {

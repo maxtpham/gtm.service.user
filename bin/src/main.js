@@ -23,7 +23,7 @@ function main(test) {
         iocContainer: lib_common_1.iocContainer,
         test,
         created,
-        healthzRootUrl: '/api/user'
+        apiRootUrl: '/api/user'
     });
 }
 exports.main = main;

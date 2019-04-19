@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 import { DbEntity, DbSchema, LocationView, AttachmentView, LocationSchema, AttachmentSchema } from "@gtm/lib.service"
 import { UserViewDetails, UserStatus, UserAccountView } from "../views/MUserView";
 import { AccountView } from "../views/AccountView";
+import { toDateReadable } from "../common/utility";
 
 export interface ProfileView {
     /** Google/FB profile id*/
@@ -120,6 +121,26 @@ export const UserSchema = {
 export module User {
     export function toProfileView(entity: UserEntity): ProfileView {
         const { _id, __v, created, deleted, updated, profiles, avatar, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
+        return view;
+    }
+    export function toExportableProfile(entity: UserEntity): ProfileView {
+        const { _id, __v, deleted, profiles, avatar, account, isFirstLogin, profileDefault, roles, location, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
+        view.id = entity._id;
+        if (!!view.created) view.created = toDateReadable(view.created) as any;
+        if (!!view.updated) view.updated = toDateReadable(view.updated) as any;
+        if (!!view.birthday) view.updated = toDateReadable(view.birthday) as any;
+        if (typeof(view.active) !== 'boolean') view.active = '';
+        if (typeof(view.address) !== 'string') view.address = '';
+        if (typeof(view.gender) !== 'string') view.gender = '';
+        if (typeof(view.phone) !== 'string') view.phone = '';
+        if (typeof(view.timezone) !== 'number') view.timezone = '';
+        if (typeof(view.status) !== 'number') view.status = ''; else {
+            switch (view.status) {
+                case UserStatus.InActive: view.status = 'InActive'; break;
+                case UserStatus.Active: view.status = 'Active'; break;
+                case UserStatus.New: view.status = 'New'; break;
+            }
+        }
         return view;
     }
     export function toProfileViewForMobile(entity: UserEntity): ProfileView {

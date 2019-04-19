@@ -317,90 +317,6 @@
 			],
 			"type": "object"
 		},
-		"MUserView": {
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"name": {
-					"type": "string"
-				},
-				"phone": {
-					"type": "string"
-				},
-				"email": {
-					"type": "string"
-				},
-				"houseHolder": {
-					"type": "object",
-					"x-nullable": true
-				}
-			},
-			"required": [
-				"id",
-				"name",
-				"phone",
-				"email"
-			],
-			"type": "object"
-		},
-		"MUserFindByPhone": {
-			"properties": {
-				"id": {
-					"type": "string",
-					"x-nullable": true
-				},
-				"name": {
-					"type": "string",
-					"x-nullable": true
-				},
-				"phone": {
-					"type": "string",
-					"x-nullable": true
-				},
-				"birthday": {
-					"type": "number",
-					"format": "double",
-					"x-nullable": true
-				},
-				"email": {
-					"type": "string",
-					"x-nullable": true
-				},
-				"gender": {
-					"type": "string",
-					"x-nullable": true
-				},
-				"houseHolder": {
-					"type": "object",
-					"x-nullable": true
-				}
-			},
-			"type": "object"
-		},
-		"StatusFindByPhone": {
-			"enum": [
-				"1",
-				"0",
-				"2"
-			],
-			"type": "string"
-		},
-		"MFindUserByPhone": {
-			"properties": {
-				"user": {
-					"$ref": "#/definitions/MUserFindByPhone"
-				},
-				"status": {
-					"$ref": "#/definitions/StatusFindByPhone"
-				}
-			},
-			"required": [
-				"user",
-				"status"
-			],
-			"type": "object"
-		},
 		"UserRole": {
 			"properties": {
 				"id": {
@@ -526,7 +442,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
 					"x-nullable": true
 				},
 				"status": {
@@ -591,6 +507,90 @@
 				"code",
 				"name",
 				"provider"
+			],
+			"type": "object"
+		},
+		"MUserView": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"houseHolder": {
+					"type": "object",
+					"x-nullable": true
+				}
+			},
+			"required": [
+				"id",
+				"name",
+				"phone",
+				"email"
+			],
+			"type": "object"
+		},
+		"MUserFindByPhone": {
+			"properties": {
+				"id": {
+					"type": "string",
+					"x-nullable": true
+				},
+				"name": {
+					"type": "string",
+					"x-nullable": true
+				},
+				"phone": {
+					"type": "string",
+					"x-nullable": true
+				},
+				"birthday": {
+					"type": "number",
+					"format": "double",
+					"x-nullable": true
+				},
+				"email": {
+					"type": "string",
+					"x-nullable": true
+				},
+				"gender": {
+					"type": "string",
+					"x-nullable": true
+				},
+				"houseHolder": {
+					"type": "object",
+					"x-nullable": true
+				}
+			},
+			"type": "object"
+		},
+		"StatusFindByPhone": {
+			"enum": [
+				"1",
+				"0",
+				"2"
+			],
+			"type": "string"
+		},
+		"MFindUserByPhone": {
+			"properties": {
+				"user": {
+					"$ref": "#/definitions/MUserFindByPhone"
+				},
+				"status": {
+					"$ref": "#/definitions/StatusFindByPhone"
+				}
+			},
+			"required": [
+				"user",
+				"status"
 			],
 			"type": "object"
 		},
@@ -787,7 +787,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
 					"x-nullable": true
 				},
 				"status": {
@@ -849,11 +849,11 @@
 				},
 				"profiles": {
 					"type": "object",
-					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
+					"description": "With 3 sub-dcouments:\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
 				},
 				"avatar": {
 					"$ref": "#/definitions/AttachmentView",
-					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login",
+					"description": "The OAuth2 authentication process should auto\nload up the default user avatar at 1st user login",
 					"x-nullable": true
 				}
 			},
@@ -910,7 +910,7 @@
 				},
 				"active": {
 					"type": "boolean",
-					"description": "[true] - active user\r\n[false] - inactive user\r\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
+					"description": "[true] - active user\n[false] - inactive user\n[<null>] - is un-approved user state with limited access to the system, this state is auto created by OAuth2 process",
 					"x-nullable": true
 				},
 				"status": {
@@ -972,11 +972,11 @@
 				},
 				"profiles": {
 					"type": "object",
-					"description": "With 3 sub-dcouments:\r\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\r\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\r\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
+					"description": "With 3 sub-dcouments:\n- user.profiles.google: Google profile (auto created by OAuth2 by Google)\n- user.profiles.facebook: FaceBook profile (auto created by OAuth2 by Google)\n- user.profiles.app: is an application specific profile, need to define a view: ScProfileView { balance: number; bonus: number; LaiXuatMacDinh: number; .. }"
 				},
 				"avatar": {
 					"$ref": "#/definitions/AttachmentView",
-					"description": "The OAuth2 authentication process should auto\r\nload up the default user avatar at 1st user login",
+					"description": "The OAuth2 authentication process should auto\nload up the default user avatar at 1st user login",
 					"x-nullable": true
 				},
 				"id": {
@@ -1112,7 +1112,7 @@
 	},
 	"info": {
 		"title": "@gtmservice/user",
-		"version": "1.0.0",
+		"version": "1.0.2",
 		"license": {
 			"name": "UNLICENSED"
 		}
@@ -1711,6 +1711,37 @@
 						"type": "string"
 					}
 				]
+			}
+		},
+		"/api/user/v1/user/profiles/export": {
+			"get": {
+				"operationId": "ExportProfiles",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/ProfileView"
+							}
+						}
+					}
+				},
+				"description": "Export all users",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": []
 			}
 		},
 		"/api/user/v1/user/get-user-lite": {

@@ -11,6 +11,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const lib_service_1 = require("@gtm/lib.service");
+const MUserView_1 = require("../views/MUserView");
+const utility_1 = require("../common/utility");
 exports.UserRoleSchema = {
     id: { type: mongoose.Schema.Types.String, required: true },
     code: { type: mongoose.Schema.Types.String, required: true },
@@ -24,6 +26,43 @@ var User;
         return view;
     }
     User.toProfileView = toProfileView;
+    function toExportableProfile(entity) {
+        const _a = !!entity.toObject ? entity.toObject() : entity, { _id, __v, deleted, profiles, avatar, account, isFirstLogin, profileDefault, roles, location } = _a, view = __rest(_a, ["_id", "__v", "deleted", "profiles", "avatar", "account", "isFirstLogin", "profileDefault", "roles", "location"]);
+        view.id = entity._id;
+        if (!!view.created)
+            view.created = utility_1.toDateReadable(view.created);
+        if (!!view.updated)
+            view.updated = utility_1.toDateReadable(view.updated);
+        if (!!view.birthday)
+            view.updated = utility_1.toDateReadable(view.birthday);
+        if (typeof (view.active) !== 'boolean')
+            view.active = '';
+        if (typeof (view.address) !== 'string')
+            view.address = '';
+        if (typeof (view.gender) !== 'string')
+            view.gender = '';
+        if (typeof (view.phone) !== 'string')
+            view.phone = '';
+        if (typeof (view.timezone) !== 'number')
+            view.timezone = '';
+        if (typeof (view.status) !== 'number')
+            view.status = '';
+        else {
+            switch (view.status) {
+                case MUserView_1.UserStatus.InActive:
+                    view.status = 'InActive';
+                    break;
+                case MUserView_1.UserStatus.Active:
+                    view.status = 'Active';
+                    break;
+                case MUserView_1.UserStatus.New:
+                    view.status = 'New';
+                    break;
+            }
+        }
+        return view;
+    }
+    User.toExportableProfile = toExportableProfile;
     function toProfileViewForMobile(entity) {
         const _a = !!entity.toObject ? entity.toObject() : entity, { _id, __v, created, deleted, profiles, updated, avatar } = _a, view = __rest(_a, ["_id", "__v", "created", "deleted", "profiles", "updated", "avatar"]);
         delete profiles.google;
