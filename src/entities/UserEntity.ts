@@ -124,11 +124,11 @@ export module User {
         return view;
     }
     export function toExportableProfile(entity: UserEntity): ProfileView {
-        const { _id, __v, deleted, profiles, avatar, account, isFirstLogin, profileDefault, roles, location, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
+        const { _id, __v, deleted, profiles, avatar, account, isFirstLogin, profileDefault, roles, location, fcmToken, ...view } = !!(<mongoose.Document><any>entity).toObject ? (<mongoose.Document><any>entity).toObject() : entity;
         view.id = entity._id;
         if (!!view.created) view.created = toDateReadable(view.created) as any;
         if (!!view.updated) view.updated = toDateReadable(view.updated) as any;
-        if (!!view.birthday) view.updated = toDateReadable(view.birthday) as any;
+        if (!!view.birthday) view.birthday = toDateReadable(view.birthday) as any;
         if (typeof(view.active) !== 'boolean') view.active = '';
         if (typeof(view.address) !== 'string') view.address = '';
         if (typeof(view.gender) !== 'string') view.gender = '';
@@ -136,9 +136,9 @@ export module User {
         if (typeof(view.timezone) !== 'number') view.timezone = '';
         if (typeof(view.status) !== 'number') view.status = ''; else {
             switch (view.status) {
-                case UserStatus.InActive: view.status = 'InActive'; break;
-                case UserStatus.Active: view.status = 'Active'; break;
-                case UserStatus.New: view.status = 'New'; break;
+                case UserStatus.InActive: view.status = 'inactive'; break;
+                case UserStatus.Active: view.status = 'active'; break;
+                case UserStatus.New: view.status = 'new'; break;
             }
         }
         return view;
